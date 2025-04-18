@@ -1,9 +1,12 @@
 import { gql } from '@apollo/client'
 
-export const LOGIN_USER = gql`
-    mutation SignIn($signinInput: AuthInput!) {
-        signin(input: $signinInput) {
-            accessToken
+
+export const GET_ALL_PROJECTS = gql`
+    query GetAllProjects {
+        getAllProjects {
+            id
+            name
+            goal
         }
     }
 `

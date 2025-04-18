@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client'
-import { GET_ALL_PROJECTS } from './graphql/Mutation/mutations'
+import { GET_ALL_PROJECTS } from '../graphql/Query/queries'
 
 export interface InterfaceProject {
     id: string
@@ -7,7 +7,7 @@ export interface InterfaceProject {
     goal: string
 }
 
-const LandingPage = () => {
+const DashBoard = () => {
     const { data: gqlData, loading, error } = useQuery(GET_ALL_PROJECTS)
 
     if (loading) return <p>Loading projects...</p>
@@ -29,4 +29,4 @@ const LandingPage = () => {
     )
 }
 
-export default LandingPage
+export default DashBoard;

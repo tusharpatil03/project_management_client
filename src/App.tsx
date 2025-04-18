@@ -1,5 +1,6 @@
-import LandingPage from './LandingPage'
-import { Login } from './login'
+import DashBoard from './screens/DashBoard'
+import LandingPage from './screens/LandingPage'
+import { SignPage } from './screens/LoginPage'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 function App() {
@@ -8,7 +9,8 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LandingPage />}></Route>
-                    <Route path="/login" element={<Login />}></Route>
+                    <Route path="/auth" element={<SignPage />}></Route>
+                    <Route path="/projects" element={<DashBoard />}></Route>
                 </Routes>
             </BrowserRouter>
         </>
