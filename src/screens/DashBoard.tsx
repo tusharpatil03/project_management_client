@@ -1,19 +1,19 @@
-import { useQuery } from '@apollo/client'
-import { GET_ALL_PROJECTS } from '../graphql/Query/queries'
+import { useQuery } from '@apollo/client';
+import { GET_ALL_PROJECTS } from '../graphql/Query/queries';
 
 export interface InterfaceProject {
-    id: string
-    name: string
-    goal: string
+    id: string;
+    name: string;
+    goal: string;
 }
 
-const DashBoard = () => {
-    const { data: gqlData, loading, error } = useQuery(GET_ALL_PROJECTS)
+const DashBoard = (): React.ReactElement => {
+    const { data: gqlData, loading, error } = useQuery(GET_ALL_PROJECTS);
 
-    if (loading) return <p>Loading projects...</p>
-    if (error) return <p>Error fetching projects: {error.message}</p>
+    if (loading) return <p>Loading projects...</p>;
+    if (error) return <p>Error fetching projects: {error.message}</p>;
 
-    const projects = gqlData?.getAllProjects ?? []
+    const projects = gqlData?.getAllProjects ?? [];
 
     return (
         <div>
@@ -26,7 +26,7 @@ const DashBoard = () => {
                 ))}
             </ul>
         </div>
-    )
-}
+    );
+};
 
 export default DashBoard;
