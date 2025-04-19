@@ -1,5 +1,4 @@
-import { gql } from '@apollo/client'
-
+import { gql } from '@apollo/client';
 
 export const GET_ALL_PROJECTS = gql`
     query GetAllProjects {
@@ -9,4 +8,4 @@ export const GET_ALL_PROJECTS = gql`
             goal
         }
     }
-`
+`;
