@@ -1,59 +1,63 @@
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { SIGNIN_USER, SIGNUP_USER } from '../graphql/Mutation/mutations'
-import { AuthInput, SignResponce } from '../types/types'
-import { useMutation } from '@apollo/client'
-import AuthInputField from '../components/auth/authinputFields'
-import AuthFormWrapper from '../components/auth/formWrapper'
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LOGIN_USER, SIGNUP_USER } from '../../graphql/Mutation/mutations';
+import { AuthInput, AuthResponce } from '../../types/types';
+import { useMutation } from '@apollo/client';
+import AuthInputField from './authinputFields';
+import AuthFormWrapper from './formWrapper';
 
-export function SignPage() {
+export function Auth() {
     const [formData, setFormData] = useState<AuthInput>({
         firstName: '',
         lastName: '',
         email: '',
         password: '',
         role: 'Admin',
-    })
+    });
 
-    const [tab, setTab] = useState<'SIGNIN' | 'SIGNUP'>('SIGNIN')
-    const navigate = useNavigate()
+    const [tab, setTab] = useState<'LOGIN' | 'SIGNUP'>('LOGIN');
 
-    const mutation = tab === 'SIGNIN' ? SIGNIN_USER : SIGNUP_USER
-    const [signUser, { loading, error }] = useMutation<SignResponce>(mutation)
+    const navigate = useNavigate();
+
+    const mutation = tab === 'LOGIN' ? LOGIN_USER : SIGNUP_USER;
+    const [signUser, { loading, error }] = useMutation<AuthResponce>(mutation);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target
-        setFormData((prev) => ({ ...prev, [name]: value }))
-    }
-    const [showPassword, setShowPassword] = useState<boolean>(false)
+        const { name, value } = e.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+    const [showPassword, setShowPassword] = useState<boolean>(false);
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
+        e.preventDefault();
         try {
-            const res = await signUser({ variables: { input: formData } })
+            const res = await signUser({ variables: { input: formData } });
             if (!res) {
-                throw new Error('Data not Recieved')
+                throw new Error('Data not Recieved');
             }
-            console.log(res)
-            const token = tab == "SIGNIN" ? res.data?.signin.accessToken : res.data?.signup.accessToken
+            console.log(res);
+            const token =
+                tab == 'LOGIN'
+                    ? res.data?.login.accessToken
+                    : res.data?.signup.accessToken;
 
             if (!token) {
-                throw new Error('Token not Recieved')
+                throw new Error('Token not Recieved');
             }
-            localStorage.setItem('token', token)
-            navigate('/projects')
+            localStorage.setItem('token', token);
+            navigate('/projects');
         } catch (err) {
-            console.error(`${tab} error:`, err)
+            console.error(`${tab} error:`, err);
         }
-    }
+    };
 
-    const isSignin = tab === 'SIGNIN'
+    const isLogin = tab === 'LOGIN';
 
     return (
-        <div >
-            <AuthFormWrapper title={isSignin ? 'Sign In' : 'Sign Up'}>
+        <div>
+            <AuthFormWrapper title={isLogin ? 'Login' : 'Register'}>
                 <form onSubmit={handleSubmit} className="space-y-5">
-                    {!isSignin && (
+                    {!isLogin && (
                         <>
                             <AuthInputField
                                 label="First Name"
@@ -82,7 +86,7 @@ export function SignPage() {
                     />
                     <AuthInputField
                         label="Password"
-                        type={showPassword ? "text": "password"}
+                        type={showPassword ? 'text' : 'password'}
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
@@ -90,7 +94,7 @@ export function SignPage() {
                         rightElement={
                             <button
                                 type="button"
-                                onClick={() => setShowPassword(prev => !prev)}
+                                onClick={() => setShowPassword((prev) => !prev)}
                                 className="text-sm text-gray-600 focus:outline-none"
                             >
                                 {showPassword ? 'Hide' : 'Show'}
@@ -104,22 +108,22 @@ export function SignPage() {
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 disabled:opacity-50"
                     >
                         {loading
-                            ? isSignin
-                                ? 'Signing in...'
+                            ? isLogin
+                                ? 'Loging in...'
                                 : 'Registering...'
-                            : isSignin
-                              ? 'Sign In'
-                              : 'Sign Up'}
+                            : isLogin
+                              ? 'Login'
+                              : 'Register'}
                     </button>
 
                     <button
                         type="button"
-                        onClick={() => setTab(isSignin ? 'SIGNUP' : 'SIGNIN')}
+                        onClick={() => setTab(isLogin ? 'SIGNUP' : 'LOGIN')}
                         className="w-full text-blue-600 hover:underline mt-2"
                     >
-                        {isSignin
-                            ? "Don't have an account? Sign Up"
-                            : 'Already have an account? Sign In'}
+                        {isLogin
+                            ? "Don't have an account? Register"
+                            : 'Already have an account? Log In'}
                     </button>
 
                     {error && (
@@ -130,5 +134,5 @@ export function SignPage() {
                 </form>
             </AuthFormWrapper>
         </div>
-    )
+    );
 }

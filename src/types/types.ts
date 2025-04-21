@@ -1,16 +1,16 @@
 export type AuthInput = {
-    firstName: string
-    lastName: string
-    email: string
-    password: string
-    role: 'Admin' | 'User'
-}
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    role: 'Admin' | 'User';
+};
 
-export type SignResponce = {
-    signin: {
-        accessToken: string
-    }
+export type AuthResponce = {
+    login: {
+        accessToken: string;
+    };
     signup: {
-        accessToken: string
-    }
-}
+        accessToken: string;
+    };
+};

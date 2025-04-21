@@ -1,15 +1,28 @@
-import { useState } from 'react'
-import { SignPage } from './LoginPage'
-import Navbar from '../components/navbar'
+import { useEffect, useState } from 'react';
+import { Auth } from '../../components/auth/AuthTab';
+import Navbar from '../../components/navbar';
+import Loader from '../../components/Loader';
 
 const LandingPage = () => {
-    const [tab, setTab] = useState<boolean>(false)
+    const [tab, setTab] = useState<boolean>(false);
 
     const handleClick = () => {
-        setTab((prev) => !prev)
-    }
+        setTab((prev) => !prev);
+    };
 
-    return (
+    const [loaderComponent, setLoaderComponent] = useState<boolean>(true);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setLoaderComponent(false);
+        }, 2000);
+    }, []);
+
+    return loaderComponent ? (
+        <div className="min-h-screen flex items-center justify-center bg-gray-100">
+            <Loader />
+        </div>
+    ) : (
         <div>
             <Navbar onChange={handleClick} />
             <div className="relative">
@@ -100,13 +113,13 @@ const LandingPage = () => {
                                     />
                                 </svg>
                             </button>
-                            <SignPage />
+                            <Auth />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default LandingPage
+export default LandingPage;
