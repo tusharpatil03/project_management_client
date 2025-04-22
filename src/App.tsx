@@ -1,4 +1,4 @@
-import DashBoard from './screens/DashBoard';
+import DashBoard from './screens/DashBoard/index';
 import LandingPage from './screens/LandingPage/LandingPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 

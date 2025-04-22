@@ -9,7 +9,7 @@ const Navbar = ({ onChange }: any) => {
 
     return (
         <nav className="bg-white border-b shadow-sm fixed top-0 w-full z-10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16 items-center">
                     {/* Logo */}
                     <Link to="/" className="text-2xl font-bold text-blue-600">
@@ -53,7 +53,14 @@ const Navbar = ({ onChange }: any) => {
                     </div>
 
                     {/* Mobile Menu Button */}
-                    <div className="md:hidden">
+                    <div className="flex md:hidden items-center space-x-8">
+                        <Link
+                            onClick={onChange}
+                            to="/"
+                            className="text-sm text-blue-600 border border-blue-600 px-4 py-2 rounded hover:bg-blue-50"
+                        >
+                            Sign In
+                        </Link>
                         <button
                             onClick={toggleMenu}
                             className="text-gray-700 focus:outline-none"

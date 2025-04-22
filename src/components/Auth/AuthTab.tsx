@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { LOGIN_USER, SIGNUP_USER } from '../../graphql/Mutation/mutations';
 import { AuthInput, AuthResponce } from '../../types/types';
 import { useMutation } from '@apollo/client';
-import AuthInputField from './authinputFields';
-import AuthFormWrapper from './formWrapper';
+import AuthInputField from './AuthinputFields';
+import AuthFormWrapper from './FormWrapper';
 
 export function Auth() {
     const [formData, setFormData] = useState<AuthInput>({
@@ -55,7 +55,7 @@ export function Auth() {
 
     return (
         <div>
-            <AuthFormWrapper title={isLogin ? 'Login' : 'Register'}>
+            <AuthFormWrapper title={isLogin ? 'Task Flow' : 'Task Flow'}>
                 <form onSubmit={handleSubmit} className="space-y-5">
                     {!isLogin && (
                         <>

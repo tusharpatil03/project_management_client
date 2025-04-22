@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Auth } from '../../components/auth/AuthTab';
-import Navbar from '../../components/navbar';
+import { Auth } from '../../components/Auth/AuthTab';
+import Navbar from '../../components/Navbar';
 import Loader from '../../components/Loader';
 
 const LandingPage = () => {
@@ -25,7 +25,7 @@ const LandingPage = () => {
     ) : (
         <div>
             <Navbar onChange={handleClick} />
-            <div className="relative">
+            <div className="relative z-0">
                 <div className="font-sans">
                     {/* Hero Section */}
                     <section className="bg-gradient-to-br from-blue-600 to-purple-600 text-white min-h-screen flex flex-col justify-center items-center text-center px-6">
