@@ -5,7 +5,23 @@ export const GET_ALL_PROJECTS = gql`
         getAllProjects {
             id
             name
-            goal
         }
     }
 `;
+
+export const GET_ALL_TASKS = gql`
+    query GetAllTasks($projectId: ID!) {
+  getAllTasks(projectId: $projectId) {
+    id
+    assignee {
+      id
+      profile {
+        firstName
+        lastName
+        avatar
+      }
+    }
+  }
+}
+
+`

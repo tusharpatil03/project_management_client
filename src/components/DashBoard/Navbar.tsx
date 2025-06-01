@@ -81,7 +81,7 @@ const UserMenuTab = ({ isOpen }: { isOpen: boolean }) => {
         <div
             className={
                 isOpen
-                    ? 'absolute top-full right-2 z-[100] my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-sm shadow-sm dark:bg-gray-700 dark:divide-gray-600'
+                    ? 'absolute top-full right-8 z-[100] my-4 text-base list-none bg-white divide-y divide-gray-100 rounded-md shadow-sm dark:bg-gray-700 dark:divide-gray-600 rad  '
                     : 'hidden'
             }
             id="dropdown-user"

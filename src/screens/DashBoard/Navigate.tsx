@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Navbar from '../../components/DashBoard/Navbar';
 import { Sidebar } from '../../components/DashBoard/Sidebar';
 
-function DashBoard() {
+function Navigate() {
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const toggleSidebar = () => {
         setIsOpen((prev) => !prev);
@@ -14,8 +14,11 @@ function DashBoard() {
         <div>
             <Navbar onChange={toggleSidebar} />
             <Sidebar isOpen={isOpen} />
+            
         </div>
     );
 }
 
-export default DashBoard;
+export default Navigate;
+
+

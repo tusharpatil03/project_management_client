@@ -1,10 +1,15 @@
-export type AuthInput = {
+export type SignupInput = {
     firstName: string;
     lastName: string;
+    username: string;
     email: string;
     password: string;
-    role: 'Admin' | 'User';
 };
+
+export type LoginInput = {
+    email: string;
+    password: string;
+}
 
 export type AuthResponce = {
     login: {
