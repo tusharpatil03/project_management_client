@@ -2,9 +2,15 @@ import { useQuery } from '@apollo/client';
 import { GET_ALL_PROJECTS } from '../../graphql/Query/queries';
 import Navigate from './Navigate';
 import { useEffect, useState } from 'react';
-interface InterfaceProject {
+import ProjectTable from '../../components/Project/AllProjects';
+
+export interface InterfaceProject {
     id: string;
     name: string;
+    description: string;
+    team?: string;
+    dueDate?: string;
+    createdAt: string;
     goal: string;
     updatedAt: string;
 }
@@ -43,9 +49,11 @@ const DashBoard = (): React.ReactElement => {
                 <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
                     <p>Projects</p>
                     <h2>
-                        {recentProject
-                            ? `Most recently updated project: ${recentProject.name}`
-                            : 'No recent project'}
+                        {recentProject ? (
+                            <ProjectTable projects={[recentProject]} />
+                        ) : (
+                            'No recent project'
+                        )}
                     </h2>
                 </div>
             </div>

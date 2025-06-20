@@ -27,17 +27,19 @@ export function Login() {
         e.preventDefault();
         try {
             const res = await signUser({ variables: { input: formData } });
+            console.log(res.data?.login.refreshToken);
             if (!res) {
                 throw new Error('Data not Recieved');
             }
-            console.log(res);
-            const token = res.data?.login.accessToken;
+            const accessToken = res.data?.login.accessToken;
+            const refreshToken = res.data?.login.refreshToken;
 
-            if (!token) {
+            if (!accessToken || !refreshToken) {
                 throw new Error('Token not Recieved');
             }
-            localStorage.setItem('token', token);
-            navigate('/projects');
+            localStorage.setItem('refreshToken', refreshToken);
+            localStorage.setItem('accessToken', accessToken);
+            navigate('/dashboard');
         } catch (err) {
             console.error(`Login error:`, err);
         }

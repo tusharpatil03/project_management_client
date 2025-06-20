@@ -1,6 +1,8 @@
-import DashBoard from './screens/DashBoard/DashBoard';
-import LandingPage from './screens/LandingPage/LandingPage';
+import { SignUp } from './components/Auth/SignupTab';
+import DashBoard from './pages/DashBoard/DashBoard';
+import LandingPage from './pages/LandingPage/LandingPage';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Project from './pages/DashBoard/Project/createProject';
 
 function App() {
     return (
@@ -8,8 +10,9 @@ function App() {
             <BrowserRouter>
                 <Routes>
                     <Route path="/" element={<LandingPage />}></Route>
-
-                    <Route path="/projects" element={<DashBoard />}></Route>
+                    <Route path="/register" element={<SignUp />}></Route>
+                    <Route path="/dashboard" element={<DashBoard />}></Route>
+                    <Route path="/project" element={<Project />}></Route>
                 </Routes>
             </BrowserRouter>
         </>

@@ -1,0 +1,334 @@
+type AuthData {
+  user: User!
+  userProfile: UserProfile!
+  accessToken: String!
+  refreshToken: String!
+}
+
+type ExtendSession {
+  accessToken: String
+  refreshToken: String
+}
+
+# User Type
+type User {
+  id: ID!
+  email: EmailAddress!
+  username: String!
+  role: Role
+  createdAt: DateTime
+  updatedAt: DateTime
+  projects: [Project]
+  sprints: [Sprint]
+  teams: [Team]
+  createdTeams: [Team]
+  createdTasks: [Task]
+  assignedTasks: [Task]
+  firstName: String
+  lastName: String
+  phone: String
+  gender: String
+  avatar: String
+  social: Social
+  userProfile: UserProfile
+}
+
+type UserProfile {
+  id: ID!
+  firstName: String!
+  lastName: String!
+  avatar: String
+  phone: String
+  gender: Gender
+  social: Social
+  createdAt: DateTime
+  updatedAt: DateTime
+  user: User
+}
+
+type Social {
+  id: ID!
+  github: String
+  facebook: String
+  twitter: String
+  linkedin: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type Project {
+  id: ID!
+  key: String!
+  name: String
+  description: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  tasks: [Task]
+  status: ProjectStatus
+  creatorId: String!
+}
+
+type ProjectTeam {
+  id: ID!
+  projectId: ID!
+  teamId: ID!
+  project: Project
+  team: Team
+  joinedAt: DateTime
+}
+
+type UserTeam {
+  id: ID!
+  userId: ID!
+  teamId: ID!
+  role: MemberRole
+  joinedAt: DateTime
+  user: User
+  team: Team
+}
+
+# Team Type
+type Team {
+  id: ID!
+  name: String
+  creatorId: String
+  members: [User]
+  projects: [Project]
+  createdAt: DateTime
+  updatedAt: DateTime
+}
+
+# Task Type
+type Task {
+  id: String!
+  title: String!
+  description: String
+  creator: TaskCreator
+  assignee: TaskAssignee
+  projectId: String
+  sprintId: String
+  createdAt: Date
+  updatedAt: Date
+  status: TaskStatus
+  dueDate: Date!
+}
+
+type TaskCreator {
+  id: ID!
+  firstName: String
+  lastName: String
+  email: String
+}
+
+type TaskAssignee {
+  id: ID!
+  firstName: String
+  lastName: String
+  username: String
+  email: String
+  avatar: String
+  createdAt: DateTime
+  updatedAt: DateTime
+  role: Role
+}
+
+# Sprint Type
+type Sprint {
+  id: ID!
+  title: String!
+  description: String
+  status: SprintStatus!
+  createdAt: DateTime
+  updatedAt: DateTime
+  dueDate: DateTime!
+  creator: User
+  project: Project
+  projectId: String
+  creatorId: String
+  tasks: [Task]!
+}
+
+type ResponseMessage {
+  success: Boolean!
+  status: Int
+  message: String
+}
+
+# Auth Type
+type Auth {
+  user: User
+  token: String
+  accessToken: String
+  expiresIn: Int
+  tokenType: String
+  scope: String
+  idToken: String
+  authData: AuthData
+  userId: String
+  email: String
+  role: Role
+  createdAt: DateTime
+  updatedAt: DateTime
+  firstName: String
+  lastName: String
+  phone: String
+}
+
+input LoginInput {
+  email: EmailAddress!
+  password: Password!
+}
+input SignupInput {
+  email: EmailAddress!
+  username: String!
+  password: Password!
+  firstName: String!
+  lastName: String!
+}
+input CreateProjectInput {
+  name: String!
+  key: String!
+  description: String
+}
+
+input CreateTeamInput {
+  name: String!
+}
+
+input CreateTaskInput {
+  title: String!
+  description: String
+  assigneeId: ID
+  projectId: ID!
+  dueDate: DateTime!
+  status: TaskStatus
+  sprintId: ID
+}
+
+input CreateSprintInput {
+  title: String!
+  description: String
+  projectId: ID!
+  dueDate: DateTime!
+  status: SprintStatus
+  tasks: [CreateTaskInput!]
+}
+
+input AssignTaskInput {
+  taskId: ID!
+  assigneeId: ID!
+  projectId: ID!
+}
+
+enum Role {
+  Admin
+  User
+}
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+enum SprintStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum ProjectStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+enum Gender {
+  Male
+  Female
+  Other
+}
+
+enum MemberRole {
+  Admin
+  Contributor
+  Viewer
+}
+
+scalar EmailAddress
+scalar DateTime
+scalar Json
+scalar Date
+scalar Password
+
+directive @auth on FIELD_DEFINITION
+
+directive @role(requires: Role) on FIELD_DEFINITION
+
+type Mutation {
+  createProject(input: CreateProjectInput!): Project! @auth
+
+  createTeam(input: CreateTeamInput!): Team! @auth
+
+  createTask(input: CreateTaskInput!): Task! @auth
+
+  createSprint(input: CreateSprintInput!): Sprint! @auth
+
+  updateTaskStatus(
+    projectId: ID!
+    taskId: ID!
+    status: TaskStatus!
+  ): ResponseMessage! @auth
+
+  assineTask(input: AssignTaskInput!): ResponseMessage! @auth
+
+  signup(input: SignupInput!): AuthData!
+
+  login(input: LoginInput!): AuthData!
+
+  removeProject(projectId: ID!): ResponseMessage @auth
+
+  removeTask(taskId: ID!, projectId: ID!): ResponseMessage @auth
+
+  removeSprint(sprintId: ID!, projectId: ID!): ResponseMessage @auth
+
+  removeAssineeOfTask(taskId: ID!): Task! @auth
+
+  removeTeam(teamId: ID!): ResponseMessage @auth
+
+  addTeamMember(memberId: ID!, teamId: ID!, role: String!): Team! @auth
+
+  logout: Boolean! @auth
+
+  removeTeamMember(memberId: ID!, teamId: ID!): Team! @auth
+
+  refreshToken(refreshToken: String): ExtendSession!
+}
+
+type Query {
+  healthCheck: ResponseMessage!
+  getUserById(userId: ID!): User! @auth
+  getProjectById(projectId: ID!): Project! @auth
+  getTeamById(teamId: ID!): Team! @auth
+  getTaskById(taskId: ID!): Task! @auth
+  getSprintById(id: ID!, projectId: ID!): Sprint! @auth
+  getAllProjects: [Project] @auth
+  getAllTasks(projectId: ID!): [Task]! @auth
+  getAllSprints(projectId: ID!): [Sprint]! @auth
+  getAllUserTeams(userId: ID!): [Team]!
+}
+
+interface Error {
+  message: String!
+}
+
+interface FieldError {
+  message: String!
+  path: [String!]!
+}
+
+type UnauthenticatedError implements Error {
+  message: String!
+}
+
+type UnauthorizedError implements Error {
+  message: String!
+}

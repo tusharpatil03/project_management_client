@@ -33,13 +33,14 @@ export function SignUp() {
             if (!res) {
                 throw new Error('Data not Recieved');
             }
-            console.log(res);
-            const token = res.data?.signup.accessToken;
+            const accessToken = res.data?.signup.accessToken;
+            const refreshToken = res.data?.signup.refreshToken;
 
-            if (!token) {
+            if (!accessToken || !refreshToken) {
                 throw new Error('Token not Recieved');
             }
-            localStorage.setItem('token', token);
+            sessionStorage.setItem("refreshToken", refreshToken)
+            sessionStorage.setItem("accessToken", accessToken)
             navigate('/projects');
         } catch (err) {
             console.error(`SingUp error:`, err);
