@@ -10,6 +10,7 @@ export type LoginInput = {
     email: string;
     password: string;
 }
+
 export type AuthResponce = {
     login: {
         accessToken: string;
@@ -17,16 +18,16 @@ export type AuthResponce = {
     };
     signup: {
         accessToken: string;
-         refreshToken: string;
+        refreshToken: string;
     };
 };
-
 
 export type CreateProjectInput = {
     name: string;
     key: string;
     description?: string;
 };
+
 export type CreateProjectResponse = {
     createProject: {
         id: string;
@@ -40,9 +41,103 @@ export type CreateProjectResponse = {
     };
 };
 
+export interface InterfaceUser {
+    id: string;
+    email: string;
+    username: string;
+    role: string;
+    createdAt: Date;
+    updatedAt: Date;
+    projects: InterfaceProject[];
+    sprints: InterfaceSprint[];
+    teams: InterfaceTeam[];
+    createdTeams: InterfaceTeam[];
+    createdTasks: InterfaceTask[];
+    assignedTasks: InterfaceTask[];
+    firstName: string;
+    lastName: string;
+    phone: string;
+    gender: string;
+    avatar: string;
+    social: Social;
+    userProfile: InterfaceUserProfile
+}
+
+interface Social {
+    id: string;
+    github: string;
+    facebook: string;
+    twitter: string;
+    linkedin: string;
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+interface InterfaceTeam {
+    id: string;
+    name: string;
+    creatorId: string;
+    members: InterfaceUser[];
+    projects: InterfaceProject[];
+    createdAt: Date;
+    updatedAt: Date;
+}
+
+interface InterfaceUserProfile {
+    id: string;
+    firstName: string;
+    lastName: string;
+    avatar: string;
+    phone: string;
+    gender: string;
+    social: Social;
+    createdAt: Date;
+    updatedAt: Date;
+    user: InterfaceUser;
+}
+
+export interface InterfaceTask {
+    id: string;
+    title: string;
+    description: String;
+    creator: InterfaceUser;
+    assignee: InterfaceUser;
+    projectId: string;
+    sprintId: string;
+    createdAt: Date;
+    updatedAt: Date;
+    status: string;
+    dueDate: Date;
+}
+
+export interface InterfaceProject {
+    id: string;
+    key: string;
+    name: string;
+    description?: string;
+    createdAt: string;
+    updatedAt: string;
+    status: string;
+    creatorId: string;
+    dueDate: string;
+    tasks?: InterfaceTask[];
+    sprints?: InterfaceSprint[];
+}
+
+
+export interface InterfaceSprint {
+    id: string;
+    title: string;
+    status: string;
+    description: string;
+    dueDate: string;
+    tasks: InterfaceTask[];
+}
+
 export type CreateTeamInput = {
     name: string;
 };
+
 export type CreateTeamResponse = {
     createTeam: {
         id: string;
@@ -55,15 +150,22 @@ export type CreateTeamResponse = {
     };
 };
 
+export enum TaskStatus {
+    "TODO",
+    "IN_PROGRESS",
+    "DONE",
+}
+
 export type CreateTaskInput = {
     title: string;
     description?: string;
     assigneeId?: string;
     projectId: string;
     dueDate: string;
-    status?: string;
+    status?: TaskStatus;
     sprintId?: string;
 };
+
 export type CreateTaskResponse = {
     createTask: {
         id: string;
@@ -81,17 +183,7 @@ export type CreateTaskResponse = {
             lastName?: string;
             email?: string;
         };
-        assignee?: {
-            id: string;
-            firstName?: string;
-            lastName?: string;
-            username?: string;
-            email?: string;
-            avatar?: string;
-            createdAt?: string;
-            updatedAt?: string;
-            role?: string;
-        };
+        assignee?: InterfaceUser;
     };
 };
 
@@ -100,9 +192,10 @@ export type CreateSprintInput = {
     description?: string;
     projectId: string;
     dueDate: string;
-    status?: string;
+    status?: TaskStatus;
     tasks?: CreateTaskInput[];
 };
+
 export type CreateSprintResponse = {
     createSprint: {
         id: string;

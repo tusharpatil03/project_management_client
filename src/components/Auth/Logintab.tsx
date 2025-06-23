@@ -27,7 +27,6 @@ export function Login() {
         e.preventDefault();
         try {
             const res = await signUser({ variables: { input: formData } });
-            console.log(res.data?.login.refreshToken);
             if (!res) {
                 throw new Error('Data not Recieved');
             }
@@ -47,15 +46,18 @@ export function Login() {
 
     return (
         <div>
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Email Input */}
                 <AuthInputField
                     label="Email"
                     type="email"
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="abc@gmail.com"
+                    placeholder="you@example.com"
                 />
+
+                {/* Password Input with Toggle */}
                 <AuthInputField
                     label="Password"
                     type={showPassword ? 'text' : 'password'}
@@ -67,23 +69,25 @@ export function Login() {
                         <button
                             type="button"
                             onClick={() => setShowPassword((prev) => !prev)}
-                            className="text-sm text-gray-600 focus:outline-none"
+                            className="text-sm text-blue-600 hover:underline focus:outline-none"
                         >
                             {showPassword ? 'Hide' : 'Show'}
                         </button>
                     }
                 />
 
+                {/* Submit Button */}
                 <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 disabled:opacity-50"
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition duration-200 disabled:opacity-50"
                 >
-                    {loading ? 'Loging in...' : 'Login'}
+                    {loading ? 'Logging in...' : 'Login'}
                 </button>
 
+                {/* Error Message */}
                 {error && (
-                    <p className="text-red-500 text-sm text-center">
+                    <p className="text-sm text-red-500 text-center mt-2">
                         {error.message}
                     </p>
                 )}

@@ -72,6 +72,38 @@ export const GET_USER_BY_ID = gql`
     }
 `;
 
+export const GET_RECENT_PROJECT = gql`
+query GetRecentProject {
+    getRecentProject {
+        id
+        key
+        name
+        description
+        createdAt
+        updatedAt
+        status
+        creatorId
+        tasks {
+            id
+            title
+            dueDate
+            status
+        }
+        sprints {
+            id
+            title
+            dueDate
+            status
+            tasks {
+                id
+                title
+                dueDate
+            }
+        }
+    }
+}
+`;
+
 export const GET_PROJECT_BY_ID = gql`
     query GetProjectById($projectId: ID!) {
         getProjectById(projectId: $projectId) {
