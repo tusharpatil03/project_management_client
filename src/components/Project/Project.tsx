@@ -14,7 +14,7 @@ const fields = [
     { key: 'creatorId', label: 'Creator ID' },
     { key: 'createdAt', label: 'Created At' },
     { key: 'updatedAt', label: 'Updated At' },
-    { key: 'tasks', label: 'Tasks' },
+    { key: 'issues', label: 'issues' },
 ];
 
 const formatDate = (date?: string) =>
@@ -25,25 +25,32 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
 
     const renderFieldValue = (fieldKey: string) => {
         if (fieldKey === 'createdAt' || fieldKey === 'updatedAt') {
-            return formatDate(project[fieldKey as keyof typeof project] as string);
+            return formatDate(
+                project[fieldKey as keyof typeof project] as string
+            );
         }
-        if (fieldKey === 'tasks') {
-            if (!project.tasks || project.tasks.length === 0) return <span>No tasks</span>;
+        if (fieldKey === 'issues') {
+            if (!project.issues || project.issues.length === 0)
+                return <span>No issues</span>;
             return (
                 <ul className="list-disc pl-5">
-                    {project.tasks.map((task) => (
-                        <li key={task.id}>{task.title}</li>
+                    {project.issues.map((issue) => (
+                        <li key={issue.id}>{issue.title}</li>
                     ))}
                 </ul>
             );
         }
         const value = project[fieldKey as keyof typeof project];
-        return typeof value === 'string' || typeof value === 'number' ? value : '-';
+        return typeof value === 'string' || typeof value === 'number'
+            ? value
+            : '-';
     };
 
     return (
         <div className="max-w-2xl mx-auto mt-8 bg-white rounded-xl shadow-lg p-6">
-            <h2 className="text-2xl font-bold mb-6 text-blue-700 text-center">Project Details</h2>
+            <h2 className="text-2xl font-bold mb-6 text-blue-700 text-center">
+                Project Details
+            </h2>
             <div className="flex flex-col md:flex-row gap-6">
                 {/* Field Selector */}
                 <div className="md:w-1/3">
@@ -80,6 +87,5 @@ const ProjectDetails: React.FC<ProjectDetailsProps> = ({ project }) => {
         </div>
     );
 };
-
 
 export default ProjectDetails;

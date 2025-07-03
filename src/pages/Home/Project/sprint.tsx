@@ -2,7 +2,7 @@ import React from 'react';
 import { InterfaceSprint } from '../../../types/types';
 
 interface ChildProps {
-    sprints: InterfaceSprint[] | undefined
+    sprints: InterfaceSprint[] | undefined;
 }
 
 const Sprints: React.FC<ChildProps> = ({ sprints }) => {
@@ -25,14 +25,14 @@ const Sprints: React.FC<ChildProps> = ({ sprints }) => {
                             <div className="text-sm text-gray-500">
                                 Status: {sprint.status || '-'}
                             </div>
-                            {sprint.tasks && sprint.tasks.length > 0 && (
+                            {sprint.issues && sprint.issues.length > 0 && (
                                 <ul className="ml-4 mt-2 list-disc">
-                                    {sprint.tasks.map((task) => (
-                                        <li key={task.id}>
-                                            {task.title} (
-                                            {task.dueDate
+                                    {sprint.issues.map((issue) => (
+                                        <li key={issue.id}>
+                                            {issue.title} (
+                                            {issue.dueDate
                                                 ? new Date(
-                                                      task.dueDate
+                                                      issue.dueDate
                                                   ).toLocaleDateString()
                                                 : '-'}
                                             )
@@ -49,6 +49,5 @@ const Sprints: React.FC<ChildProps> = ({ sprints }) => {
         </div>
     );
 };
-
 
 export default Sprints;

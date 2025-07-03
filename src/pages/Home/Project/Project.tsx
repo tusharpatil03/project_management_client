@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import TasksBoard from './tasks';
 import { useQuery } from '@apollo/client';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { GET_RECENT_PROJECT } from '../../../graphql/Query/queries';
 import { InterfaceProject } from '../../../types/types';
 import CreateTask from './createTask';
@@ -11,7 +11,11 @@ import CreateSprint from './createSprint';
 const TABS = ['tasks', 'sprints', 'timeline', 'progress'];
 
 const ProjectDashboard = () => {
-    const [activeTab, setActiveTab] = useState<string>('tasks');
+    const isProject = localStorage.getItem('projectId');
+    if (!isProject) {
+        return <Navigate to="/project/create" replace></Navigate>;
+    }
+    const [activeTab, setActiveTab] = useState<string>('issues');
     const [project, setProject] = useState<InterfaceProject | null>(null);
     const [createTab, setCreateTab] = useState<boolean>(false);
 
@@ -55,7 +59,7 @@ const ProjectDashboard = () => {
     const renderTab = () => {
         switch (activeTab) {
             case 'tasks':
-                return <TasksBoard tasks={project.tasks} />;
+                return <TasksBoard issues={project.issues} />;
             case 'sprints':
                 return <Sprints sprints={project.sprints} />;
             case 'timeline':
@@ -77,7 +81,7 @@ const ProjectDashboard = () => {
 
     const handleCreateTabs = () => {
         switch (activeTab) {
-            case 'tasks':
+            case 'issues':
                 return (
                     <CreateTask
                         projectId={project.id}
@@ -154,6 +158,7 @@ const ProjectDashboard = () => {
                     </main>
                 </div>
             )}
+            <Outlet />
         </div>
     );
 };

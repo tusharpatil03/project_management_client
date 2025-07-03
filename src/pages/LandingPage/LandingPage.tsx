@@ -6,10 +6,11 @@ import Demo from './Demo';
 import Footer from './Footer';
 import Features from './Features';
 import Hero from './Hero';
+import { useNavigate } from 'react-router-dom';
+import { BACKEND_URL } from '../../constant';
 
 const LandingPage = () => {
     const [tab, setTab] = useState<boolean>(false);
-
 
     const handleClick: React.MouseEventHandler<HTMLElement> = () => {
         setTab((prev) => !prev);
@@ -17,10 +18,32 @@ const LandingPage = () => {
 
     const [loaderComponent, setLoaderComponent] = useState<boolean>(true);
 
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const isLoggedIn = localStorage.getItem('IsLoggedIn');
+        if (isLoggedIn == 'TRUE') {
+            navigate('/project');
+        }
+        setLoaderComponent(false);
+    }, []);
+
     useEffect(() => {
         setTimeout(() => {
             setLoaderComponent(false);
         }, 2000);
+    }, []);
+
+    useEffect(() => {
+        async function loadResource(): Promise<void> {
+            try {
+                await fetch(BACKEND_URL as string);
+            } catch (error) {
+               console.log(error)
+            }
+        }
+
+        loadResource();
     }, []);
 
     return loaderComponent ? (

@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import Navbar from '../../components/DashBoard/Navbar';
+import { Outlet } from 'react-router-dom';
+import Navbar from '../../components/Navbar';
 import { Sidebar } from '../../components/DashBoard/Sidebar';
+import { useState } from 'react';
 
-function Navigate() {
+const DashBoard = (): React.ReactElement => {
     const [isOpen, setIsOpen] = useState<boolean>(true);
     const toggleSidebar = () => {
         setIsOpen((prev) => !prev);
@@ -14,11 +15,9 @@ function Navigate() {
         <div>
             <Navbar onChange={toggleSidebar} />
             <Sidebar isOpen={isOpen} />
-            
+            <Outlet/>
         </div>
     );
-}
+};
 
-export default Navigate;
-
-
+export default DashBoard;

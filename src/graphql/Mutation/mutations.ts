@@ -52,6 +52,7 @@ export const CREATE_TASK = gql`
                 id
                 firstName
                 lastName
+                username
                 email
             }
             assignee {
@@ -87,7 +88,7 @@ export const CREATE_SPRINT = gql`
                 id
                 name
             }
-            tasks {
+            issues {
                 id
                 title
                 status
@@ -96,18 +97,26 @@ export const CREATE_SPRINT = gql`
     }
 `;
 
-export const UPDATE_TASK_STATUS = gql`
-    mutation UpdateTaskStatus($projectId: ID!, $taskId: ID!, $status: TaskStatus!) {
-        updateTaskStatus(projectId: $projectId, taskId: $taskId, status: $status) {
-            success
-            status
+export const UPDATE_ISSUE_STATUS = gql`
+    mutation changeStatus(
+        $updateIssueStatusProjectId2: ID!
+        $updateIssueStatusIssueId2: ID!
+        $status: IssueStatus!
+    ) {
+        updateIssueStatus(
+            projectId: $updateIssueStatusProjectId2
+            issueId: $updateIssueStatusIssueId2
+            status: $status
+        ) {
             message
+            status
+            success
         }
     }
 `;
 
-export const ASSIGN_TASK = gql`
-    mutation AssineTask($input: AssignTaskInput!) {
+export const ASSIGN_ISSUE = gql`
+    mutation AssineIssue($input: AssignTaskInput!) {
         assineTask(input: $input) {
             success
             status
@@ -123,11 +132,13 @@ export const SIGNUP_USER = gql`
                 id
                 email
                 username
-            }
-            userProfile {
-                id
                 firstName
                 lastName
+            }
+            profile {
+                id
+                avatar
+                gender
             }
             accessToken
             refreshToken
@@ -138,15 +149,17 @@ export const SIGNUP_USER = gql`
 export const LOGIN_USER = gql`
     mutation Login($input: LoginInput!) {
         login(input: $input) {
-            user {
+           user {
                 id
                 email
                 username
-            }
-            userProfile {
-                id
                 firstName
                 lastName
+            }
+            profile {
+                id
+                avatar
+                gender
             }
             accessToken
             refreshToken
@@ -164,8 +177,8 @@ export const REMOVE_PROJECT = gql`
     }
 `;
 
-export const REMOVE_TASK = gql`
-    mutation RemoveTask($taskId: ID!, $projectId: ID!) {
+export const REMOVE_ISSUE = gql`
+    mutation RemoveIssue($taskId: ID!, $projectId: ID!) {
         removeTask(taskId: $taskId, projectId: $projectId) {
             success
             status
@@ -184,8 +197,8 @@ export const REMOVE_SPRINT = gql`
     }
 `;
 
-export const REMOVE_ASSIGNEE_OF_TASK = gql`
-    mutation RemoveAssineeOfTask($taskId: ID!) {
+export const REMOVE_ASSIGNEE_OF_ISSUE = gql`
+    mutation RemoveAssineeOfIssue($taskId: ID!) {
         removeAssineeOfTask(taskId: $taskId) {
             id
             title

@@ -6,7 +6,8 @@ import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
 
 export function SignUp() {
-    const [step, setStep] = useState<1 | 2>(1); // step control
+    const [step, setStep] = useState<1 | 2>(1);
+    
     const [formData, setFormData] = useState<SignupInput>({
         firstName: '',
         lastName: '',
@@ -18,35 +19,89 @@ export function SignUp() {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
-    const [signUser, { loading, error }] = useMutation<AuthResponce>(SIGNUP_USER);
+    const [signUser, { loading, error }] =
+        useMutation<AuthResponce>(SIGNUP_USER);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    const [showAlert, setShowAlert] = useState({
+        isStrongPassword: true,
+    });
+
+    const passwordValidationRegExp = {
+        lowercaseCharRegExp: new RegExp('[a-z]'),
+        uppercaseCharRegExp: new RegExp('[A-Z]'),
+        numericalValueRegExp: new RegExp('\\d'),
+        specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+    };
+
+    const validatePassword = (pass: string): boolean => {
+        const lowercaseChar =
+            passwordValidationRegExp.lowercaseCharRegExp.test(pass);
+        const uppercaseChar =
+            passwordValidationRegExp.uppercaseCharRegExp.test(pass);
+        const numericValue =
+            passwordValidationRegExp.numericalValueRegExp.test(pass);
+        const specialChar =
+            passwordValidationRegExp.specialCharRegExp.test(pass);
+
+        if (
+            pass.length > 8 &&
+            lowercaseChar &&
+            uppercaseChar &&
+            numericValue &&
+            specialChar
+        ) {
+            return true;
+        }
+        return false;
+    };
+
+    const handlePasswordCheck = (pass: string): void => {
+        setShowAlert({
+            isStrongPassword: validatePassword(pass),
+        });
+    };
+
+    const isFormValid = (): boolean => {
+        return step === 1
+            ? formData.email.trim() !== '' &&
+                  formData.password.trim() !== '' &&
+                  formData.username !== '' &&
+                  showAlert.isStrongPassword
+            : formData.firstName !== '' && formData.lastName !== '';
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         if (step === 1) {
-            setStep(2); // go to next phase
+            setStep(2);
             return;
         }
 
-        // Final submit on step 2
         try {
             const res = await signUser({ variables: { input: formData } });
 
-            if (!res?.data?.signup?.accessToken || !res?.data?.signup?.refreshToken) {
+            if (
+                !res?.data?.signup?.accessToken ||
+                !res?.data?.signup?.refreshToken
+            ) {
                 throw new Error('Token not received');
             }
 
-            sessionStorage.setItem("accessToken", res.data.signup.accessToken);
-            sessionStorage.setItem("refreshToken", res.data.signup.refreshToken);
+            sessionStorage.setItem('accessToken', res.data.signup.accessToken);
+            sessionStorage.setItem(
+                'refreshToken',
+                res.data.signup.refreshToken
+            );
 
             navigate('/projects');
         } catch (err) {
-            console.error("SignUp error:", err);
+            console.error('SignUp error:', err);
         }
     };
 
@@ -69,25 +124,36 @@ export function SignUp() {
                             name="username"
                             value={formData.username}
                             onChange={handleChange}
-                            placeholder="yourusername"
+                            placeholder="username"
                         />
                         <AuthInputField
                             label="Password"
                             type={showPassword ? 'text' : 'password'}
                             name="password"
                             value={formData.password}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                handleChange(e);
+                                handlePasswordCheck(e.target.value);
+                            }}
                             placeholder="••••••••"
                             rightElement={
                                 <button
                                     type="button"
-                                    onClick={() => setShowPassword((prev) => !prev)}
+                                    onClick={() =>
+                                        setShowPassword((prev) => !prev)
+                                    }
                                     className="text-sm text-blue-600 hover:underline"
                                 >
                                     {showPassword ? 'Hide' : 'Show'}
                                 </button>
                             }
                         />
+                        {!showAlert.isStrongPassword && formData.password && (
+                            <p className="text-sm text-red-500 mt-1">
+                                Password must contain uppercase, lowercase,
+                                number, and special character.
+                            </p>
+                        )}
                     </>
                 ) : (
                     <>
@@ -110,14 +176,14 @@ export function SignUp() {
 
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !isFormValid()}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition duration-200 disabled:opacity-50"
                 >
                     {step === 1
                         ? 'Next'
                         : loading
-                        ? 'Registering...'
-                        : 'Register'}
+                          ? 'Registering...'
+                          : 'Register'}
                 </button>
 
                 {error && (

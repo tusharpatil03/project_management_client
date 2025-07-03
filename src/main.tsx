@@ -5,7 +5,6 @@ import LandingPage from './App.tsx';
 import client from './apolloClient.ts';
 import { ApolloProvider } from '@apollo/client';
 
-
 const fallbackLoader = <div className="loader"></div>;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(

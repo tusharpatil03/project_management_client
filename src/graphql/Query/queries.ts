@@ -1,13 +1,26 @@
 import { gql } from '@apollo/client';
 
-export const HEALTH_CHECK = gql`
-    query HealthCheck {
-        healthCheck {
-            success
-            status
-            message
+export const CHECK_AUTH = gql`
+  query {
+    checkAuth {
+      id
+      firstName
+      lastName
+      createdAt
+      email
+      username
+      profile {
+        id
+        avatar
+        gender
+        social {
+            linkedin
+            facebook
+            twitter
         }
+      }
     }
+  }
 `;
 
 export const GET_USER_BY_ID = gql`
@@ -24,22 +37,20 @@ export const GET_USER_BY_ID = gql`
             phone
             gender
             avatar
-            social {
+            profile {
                 id
-                github
-                facebook
-                twitter
-                linkedin
-                createdAt
-                updatedAt
-            }
-            userProfile {
-                id
-                firstName
-                lastName
                 avatar
                 phone
                 gender
+                social {
+                    id
+                    github
+                    facebook
+                    twitter
+                    linkedin
+                    createdAt
+                    updatedAt
+                }
                 createdAt
                 updatedAt
             }
@@ -60,11 +71,11 @@ export const GET_USER_BY_ID = gql`
                 id
                 name
             }
-            createdTasks {
+            createdIssues {
                 id
                 title
             }
-            assignedTasks {
+            assignedIssues {
                 id
                 title
             }
@@ -73,35 +84,36 @@ export const GET_USER_BY_ID = gql`
 `;
 
 export const GET_RECENT_PROJECT = gql`
-query GetRecentProject {
-    getRecentProject {
-        id
-        key
-        name
-        description
-        createdAt
-        updatedAt
-        status
-        creatorId
-        tasks {
+    query GetRecentProject {
+        getRecentProject {
             id
-            title
-            dueDate
+            key
+            name
+            description
             status
-        }
-        sprints {
-            id
-            title
-            dueDate
-            status
-            tasks {
+            createdAt
+            updatedAt
+            creatorId
+            description
+            issues {
                 id
                 title
-                dueDate
+                type
+                status
+                assignee {
+                    id
+                    email
+                    username
+                    firstName
+                    lastName
+                    avatar
+                }
+                parent {
+                    id
+                }
             }
         }
     }
-}
 `;
 
 export const GET_PROJECT_BY_ID = gql`
@@ -115,7 +127,7 @@ export const GET_PROJECT_BY_ID = gql`
             updatedAt
             status
             creatorId
-            tasks {
+            issues {
                 id
                 title
             }
@@ -144,9 +156,9 @@ export const GET_TEAM_BY_ID = gql`
     }
 `;
 
-export const GET_TASK_BY_ID = gql`
-    query GetTaskById($taskId: ID!) {
-        getTaskById(taskId: $taskId) {
+export const GET_ISSUE_BY_ID = gql`
+    query GetIssueById($issueId: ID!) {
+        getIssueById(issueId: $issueId) {
             id
             title
             description
@@ -161,6 +173,7 @@ export const GET_TASK_BY_ID = gql`
                 firstName
                 lastName
                 email
+                username
             }
             assignee {
                 id
@@ -195,7 +208,7 @@ export const GET_SPRINT_BY_ID = gql`
                 id
                 name
             }
-            tasks {
+            issues {
                 id
                 title
                 status
@@ -219,9 +232,9 @@ export const GET_ALL_PROJECTS = gql`
     }
 `;
 
-export const GET_ALL_TASKS = gql`
-    query GetAllTasks($projectId: ID!) {
-        getAllTasks(projectId: $projectId) {
+export const GET_ALL_ISSUES = gql`
+    query GetAllIssues($projectId: ID!) {
+        getAllIssues(projectId: $projectId) {
             id
             title
             description
@@ -236,6 +249,7 @@ export const GET_ALL_TASKS = gql`
                 firstName
                 lastName
                 email
+                username
             }
             assignee {
                 id
@@ -270,7 +284,7 @@ export const GET_ALL_SPRINTS = gql`
                 id
                 name
             }
-            tasks {
+            issues {
                 id
                 title
                 status
@@ -299,4 +313,3 @@ export const GET_ALL_USER_TEAMS = gql`
         }
     }
 `;
-

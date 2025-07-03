@@ -1,4 +1,4 @@
-import { CreateSprintInput, TaskStatus } from '../../../types/types';
+import { CreateSprintInput, IssueStatus } from '../../../types/types';
 import { CREATE_SPRINT } from '../../../graphql/Mutation/mutations';
 import { CreateSprintResponse } from '../../../types/types';
 import React, { useState } from 'react';
@@ -13,7 +13,6 @@ const initialForm = {
     title: '',
     description: '',
     dueDate: '',
-    status: TaskStatus.TODO,
     tasks: [],
 };
 
@@ -152,17 +151,17 @@ const CreateSprint: React.FC<ChildProps> = ({
                         onChange={(e) =>
                             setFormData((prev) => ({
                                 ...prev,
-                                status: e.target.value as unknown as TaskStatus,
+                                status: e.target.value as unknown as IssueStatus,
                             }))
                         }
                         required
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     >
-                        <option value={TaskStatus.TODO}>TODO</option>
-                        <option value={TaskStatus.IN_PROGRESS}>
+                        <option value={IssueStatus.TODO}>TODO</option>
+                        <option value={IssueStatus.IN_PROGRESS}>
                             IN_PROGRESS
                         </option>
-                        <option value={TaskStatus.DONE}>DONE</option>
+                        <option value={IssueStatus.DONE}>DONE</option>
                     </select>
                 </div>
                 <button

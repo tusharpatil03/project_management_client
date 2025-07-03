@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_PROJECTS } from '../../../graphql/Query/queries';
 import { InterfaceProject } from '../../../types/types';
-import Navigate from '../Navigate';
 
 const ProjectTable: React.FC = () => {
     const { data, loading, error } = useQuery(GET_ALL_PROJECTS);
@@ -25,10 +24,10 @@ const ProjectTable: React.FC = () => {
             </div>
         );
     }
+    
 
     return (
         <div className="min-h-screen bg-gray-50">
-            <Navigate />
             <div className="p-4 sm:ml-64 mt-16">
                 <div className="max-w-7xl mx-auto space-y-6">
                     <div>

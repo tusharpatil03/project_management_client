@@ -1,16 +1,17 @@
 import { useState } from 'react';
-import { CreateTaskInput, CreateTaskResponse } from '../../../types/types';
+import { CreateIssueInput, CreateIssueResponse, IssueType } from '../../../types/types';
 import { useMutation } from '@apollo/client';
 import { CREATE_TASK } from '../../../graphql/Mutation/mutations';
-import { TaskStatus } from '../../../types/types';
+import { IssueStatus } from '../../../types/types';
 
-const initialForm: CreateTaskInput = {
+const initialForm: CreateIssueInput = {
     title: '',
     description: '',
+    type: IssueType.TASK,
     assigneeId: '',
     projectId: '',
     dueDate: '',
-    status: TaskStatus.TODO,
+    status: IssueStatus.TODO,
 };
 
 interface CreateTaskProps {
@@ -22,7 +23,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
     projectId,
     setCreateTaskTab,
 }) => {
-    const [formData, setFormData] = useState<CreateTaskInput>({
+    const [formData, setFormData] = useState<CreateIssueInput>({
         ...initialForm,
         projectId,
     });
@@ -30,7 +31,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
     const [formError, setFormError] = useState<string | null>(null);
 
     const [createTask, { loading, error }] =
-        useMutation<CreateTaskResponse>(CREATE_TASK);
+        useMutation<CreateIssueResponse>(CREATE_TASK);
 
     const handleChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -61,7 +62,7 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                     },
                 },
             });
-            if (!res?.data?.createTask) {
+            if (!res?.data?.createIssue) {
                 setFormError('Failed to create task. Please try again.');
                 return;
             }
@@ -170,18 +171,16 @@ const CreateTask: React.FC<CreateTaskProps> = ({
                         onChange={(e) => {
                             setFormData((prev) => ({
                                 ...prev,
-                                status: e.target.value as unknown as  TaskStatus,
+                                status: e.target.value as unknown as IssueStatus,
                             }));
                             console.log(e.target.value);
                         }}
                         required
                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
                     >
-                        <option value={"TODO"}>TODO</option>
-                        <option value={"IN_PROGRESS"}>
-                            IN_PROGRESS
-                        </option>
-                        <option value={"DONE"}>DONE</option>
+                        <option value={'TODO'}>TODO</option>
+                        <option value={'IN_PROGRESS'}>IN_PROGRESS</option>
+                        <option value={'DONE'}>DONE</option>
                     </select>
                 </div>
                 <button

@@ -23,6 +23,7 @@ export function Login() {
 
     const [showPassword, setShowPassword] = useState<boolean>(false);
 
+    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         try {
@@ -42,6 +43,13 @@ export function Login() {
         } catch (err) {
             console.error(`Login error:`, err);
         }
+    };
+
+    const isFormValid = (): boolean => {
+        return (
+            formData.email.trim() !== '' &&
+            formData.password.trim() !== ''
+        );
     };
 
     return (
@@ -79,7 +87,7 @@ export function Login() {
                 {/* Submit Button */}
                 <button
                     type="submit"
-                    disabled={loading}
+                    disabled={loading || !isFormValid()}
                     className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition duration-200 disabled:opacity-50"
                 >
                     {loading ? 'Logging in...' : 'Login'}

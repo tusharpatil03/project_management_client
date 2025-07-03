@@ -9,7 +9,7 @@ export type SignupInput = {
 export type LoginInput = {
     email: string;
     password: string;
-}
+};
 
 export type AuthResponce = {
     login: {
@@ -52,15 +52,15 @@ export interface InterfaceUser {
     sprints: InterfaceSprint[];
     teams: InterfaceTeam[];
     createdTeams: InterfaceTeam[];
-    createdTasks: InterfaceTask[];
-    assignedTasks: InterfaceTask[];
+    createdIssues: InterfaceIssue[];
+    assignedIssues: InterfaceIssue[];
     firstName: string;
     lastName: string;
     phone: string;
     gender: string;
     avatar: string;
     social: Social;
-    userProfile: InterfaceUserProfile
+    profile: InterfaceUserProfile;
 }
 
 interface Social {
@@ -85,8 +85,6 @@ interface InterfaceTeam {
 
 interface InterfaceUserProfile {
     id: string;
-    firstName: string;
-    lastName: string;
     avatar: string;
     phone: string;
     gender: string;
@@ -96,10 +94,11 @@ interface InterfaceUserProfile {
     user: InterfaceUser;
 }
 
-export interface InterfaceTask {
+export interface InterfaceIssue {
     id: string;
     title: string;
     description: String;
+    type: IssueType;
     creator: InterfaceUser;
     assignee: InterfaceUser;
     projectId: string;
@@ -120,10 +119,9 @@ export interface InterfaceProject {
     status: string;
     creatorId: string;
     dueDate: string;
-    tasks?: InterfaceTask[];
+    issues?: InterfaceIssue[];
     sprints?: InterfaceSprint[];
 }
-
 
 export interface InterfaceSprint {
     id: string;
@@ -131,7 +129,7 @@ export interface InterfaceSprint {
     status: string;
     description: string;
     dueDate: string;
-    tasks: InterfaceTask[];
+    issues?: InterfaceIssue[];
 }
 
 export type CreateTeamInput = {
@@ -150,24 +148,32 @@ export type CreateTeamResponse = {
     };
 };
 
-export enum TaskStatus {
-    "TODO",
-    "IN_PROGRESS",
-    "DONE",
+export enum IssueStatus {
+    'TODO',
+    'IN_PROGRESS',
+    'DONE',
 }
 
-export type CreateTaskInput = {
+export enum IssueType {
+    'TASK',
+    'BUG',
+    'EPIC',
+    'STORY'
+}
+
+export type CreateIssueInput = {
     title: string;
     description?: string;
+    type: IssueType;
     assigneeId?: string;
     projectId: string;
     dueDate: string;
-    status?: TaskStatus;
+    status?: IssueStatus;
     sprintId?: string;
 };
 
-export type CreateTaskResponse = {
-    createTask: {
+export type CreateIssueResponse = {
+    createIssue: {
         id: string;
         title: string;
         description?: string;
@@ -182,6 +188,7 @@ export type CreateTaskResponse = {
             firstName?: string;
             lastName?: string;
             email?: string;
+            username: string
         };
         assignee?: InterfaceUser;
     };
@@ -192,8 +199,8 @@ export type CreateSprintInput = {
     description?: string;
     projectId: string;
     dueDate: string;
-    status?: TaskStatus;
-    tasks?: CreateTaskInput[];
+    status?: IssueStatus;
+    issues?: CreateIssueInput[];
 };
 
 export type CreateSprintResponse = {
@@ -213,36 +220,35 @@ export type CreateSprintResponse = {
             id: string;
             name?: string;
         };
-        tasks: { id: string; title: string; status?: string }[];
+        issues: { id: string; title: string; status?: string }[];
     };
 };
 
-export type UpdateTaskStatusInput = {
+export type ChangeIssueStatusInput = {
     projectId: string;
-    taskId: string;
+    IssueId: string;
     status: string;
 };
-export type UpdateTaskStatusResponse = {
-    updateTaskStatus: {
+export type ChangeIssueStatusResponse = {
+    ChangeIssueStatus: {
         success: boolean;
         status?: number;
         message?: string;
     };
 };
 
-export type AssignTaskInput = {
-    taskId: string;
+export type AssignIssueInput = {
+    issueId: string;
     assigneeId: string;
     projectId: string;
 };
-export type AssignTaskResponse = {
-    assineTask: {
+export type AssignIssueResponse = {
+    assineIssue: {
         success: boolean;
         status?: number;
         message?: string;
     };
 };
-
 
 export type SignupResponse = {
     signup: {
@@ -250,17 +256,18 @@ export type SignupResponse = {
             id: string;
             email: string;
             username: string;
-        };
-        userProfile: {
-            id: string;
             firstName: string;
             lastName: string;
+        };
+        profile: {
+            id: string;
+            gender: string;
+            avatar: string;
         };
         accessToken: string;
         refreshToken: string;
     };
 };
-
 
 export type LoginResponse = {
     login: {
@@ -269,10 +276,10 @@ export type LoginResponse = {
             email: string;
             username: string;
         };
-        userProfile: {
+        profile: {
             id: string;
-            firstName: string;
-            lastName: string;
+            gender: string;
+            avatar: string;
         };
         accessToken: string;
         refreshToken: string;
@@ -290,12 +297,12 @@ export type RemoveProjectResponse = {
     };
 };
 
-export type RemoveTaskInput = {
-    taskId: string;
+export type RemoveIssueInput = {
+    issueId: string;
     projectId: string;
 };
-export type RemoveTaskResponse = {
-    removeTask: {
+export type RemoveIssueResponse = {
+    removeIssue: {
         success: boolean;
         status?: number;
         message?: string;
@@ -306,6 +313,7 @@ export type RemoveSprintInput = {
     sprintId: string;
     projectId: string;
 };
+
 export type RemoveSprintResponse = {
     removeSprint: {
         success: boolean;
@@ -314,11 +322,11 @@ export type RemoveSprintResponse = {
     };
 };
 
-export type RemoveAssigneeOfTaskInput = {
-    taskId: string;
+export type RemoveAssigneeOfIssueInput = {
+    IssueId: string;
 };
-export type RemoveAssigneeOfTaskResponse = {
-    removeAssineeOfTask: {
+export type RemoveAssigneeOfIssueResponse = {
+    removeAssineeOfIssue: {
         id: string;
         title: string;
         assignee?: {
@@ -408,10 +416,8 @@ export type GetUserByIdResponse = {
             createdAt: string;
             updatedAt: string;
         };
-        userProfile?: {
+        profile?: {
             id: string;
-            firstName: string;
-            lastName: string;
             avatar?: string;
             phone?: string;
             gender?: string;
@@ -422,8 +428,8 @@ export type GetUserByIdResponse = {
         sprints?: { id: string; title: string }[];
         teams?: { id: string; name?: string }[];
         createdTeams?: { id: string; name?: string }[];
-        createdTasks?: { id: string; title: string }[];
-        assignedTasks?: { id: string; title: string }[];
+        createdIssues?: { id: string; title: string }[];
+        assignedIssues?: { id: string; title: string }[];
     };
 };
 
@@ -441,7 +447,7 @@ export type GetProjectByIdResponse = {
         updatedAt?: string;
         status?: string;
         creatorId: string;
-        tasks?: { id: string; title: string }[];
+        issues?: { id: string; title: string }[];
     };
 };
 
@@ -465,8 +471,8 @@ export type GetTeamByIdVariables = {
     teamId: string;
 };
 
-export type GetTaskByIdResponse = {
-    getTaskById: {
+export type GetIssueByIdResponse = {
+    getIssueById: {
         id: string;
         title: string;
         description?: string;
@@ -481,6 +487,7 @@ export type GetTaskByIdResponse = {
             firstName?: string;
             lastName?: string;
             email?: string;
+            username: string;
         };
         assignee?: {
             id: string;
@@ -496,8 +503,8 @@ export type GetTaskByIdResponse = {
     };
 };
 
-export type GetTaskByIdVariables = {
-    taskId: string;
+export type GetIssueByIdVariables = {
+    IssueId: string;
 };
 
 export type GetSprintByIdResponse = {
@@ -517,7 +524,7 @@ export type GetSprintByIdResponse = {
             id: string;
             name?: string;
         };
-        tasks: { id: string; title: string; status?: string }[];
+        issues: { id: string; title: string; status?: string }[];
     };
 };
 
@@ -539,8 +546,8 @@ export type GetAllProjectsResponse = {
     }[];
 };
 
-export type GetAllTasksResponse = {
-    getAllTasks: {
+export type GetAllIssuesResponse = {
+    getAllIssues: {
         id: string;
         title: string;
         description?: string;
@@ -555,6 +562,7 @@ export type GetAllTasksResponse = {
             firstName?: string;
             lastName?: string;
             email?: string;
+            username: string;
         };
         assignee?: {
             id: string;
@@ -570,7 +578,7 @@ export type GetAllTasksResponse = {
     }[];
 };
 
-export type GetAllTasksVariables = {
+export type GetAllIssuesVariables = {
     projectId: string;
 };
 
@@ -591,7 +599,7 @@ export type GetAllSprintsResponse = {
             id: string;
             name?: string;
         };
-        tasks: { id: string; title: string; status?: string }[];
+        issues?: { id: string; title: string; status?: string }[];
     }[];
 };
 
@@ -613,4 +621,4 @@ export type GetAllUserTeamsResponse = {
 
 export type GetAllUserTeamsVariables = {
     userId: string;
-}
+};
