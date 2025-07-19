@@ -6,202 +6,188 @@ import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
 
 export function SignUp() {
-    const [step, setStep] = useState<1 | 2>(1);
-    
-    const [formData, setFormData] = useState<SignupInput>({
-        firstName: '',
-        lastName: '',
-        username: '',
-        email: '',
-        password: '',
+  const [step, setStep] = useState<1 | 2>(1);
+
+  const [formData, setFormData] = useState<SignupInput>({
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+  });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+
+  const [signUser, { loading, error }] = useMutation<AuthResponce>(SIGNUP_USER);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const [showAlert, setShowAlert] = useState({
+    isStrongPassword: true,
+  });
+
+  const passwordValidationRegExp = {
+    lowercaseCharRegExp: new RegExp('[a-z]'),
+    uppercaseCharRegExp: new RegExp('[A-Z]'),
+    numericalValueRegExp: new RegExp('\\d'),
+    specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
+  };
+
+  const validatePassword = (pass: string): boolean => {
+    const lowercaseChar =
+      passwordValidationRegExp.lowercaseCharRegExp.test(pass);
+    const uppercaseChar =
+      passwordValidationRegExp.uppercaseCharRegExp.test(pass);
+    const numericValue =
+      passwordValidationRegExp.numericalValueRegExp.test(pass);
+    const specialChar = passwordValidationRegExp.specialCharRegExp.test(pass);
+
+    if (
+      pass.length > 8 &&
+      lowercaseChar &&
+      uppercaseChar &&
+      numericValue &&
+      specialChar
+    ) {
+      return true;
+    }
+    return false;
+  };
+
+  const handlePasswordCheck = (pass: string): void => {
+    setShowAlert({
+      isStrongPassword: validatePassword(pass),
     });
+  };
 
-    const [showPassword, setShowPassword] = useState(false);
-    const navigate = useNavigate();
+  const isFormValid = (): boolean => {
+    return step === 1
+      ? formData.email.trim() !== '' &&
+          formData.password.trim() !== '' &&
+          formData.username !== '' &&
+          showAlert.isStrongPassword
+      : formData.firstName !== '' && formData.lastName !== '';
+  };
 
-    const [signUser, { loading, error }] =
-        useMutation<AuthResponce>(SIGNUP_USER);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
+    if (step === 1) {
+      setStep(2);
+      return;
+    }
 
-    const [showAlert, setShowAlert] = useState({
-        isStrongPassword: true,
-    });
+    try {
+      const res = await signUser({ variables: { input: formData } });
 
-    const passwordValidationRegExp = {
-        lowercaseCharRegExp: new RegExp('[a-z]'),
-        uppercaseCharRegExp: new RegExp('[A-Z]'),
-        numericalValueRegExp: new RegExp('\\d'),
-        specialCharRegExp: new RegExp('[!@#$%^&*()_+{}\\[\\]:;<>,.?~\\\\/-]'),
-    };
+      if (!res.data?.signup.success) {
+        throw new Error('Internal Server Error');
+      }
 
-    const validatePassword = (pass: string): boolean => {
-        const lowercaseChar =
-            passwordValidationRegExp.lowercaseCharRegExp.test(pass);
-        const uppercaseChar =
-            passwordValidationRegExp.uppercaseCharRegExp.test(pass);
-        const numericValue =
-            passwordValidationRegExp.numericalValueRegExp.test(pass);
-        const specialChar =
-            passwordValidationRegExp.specialCharRegExp.test(pass);
+      localStorage.setItem('email', formData.email);
 
-        if (
-            pass.length > 8 &&
-            lowercaseChar &&
-            uppercaseChar &&
-            numericValue &&
-            specialChar
-        ) {
-            return true;
-        }
-        return false;
-    };
+      navigate('/auth/verify');
+    } catch (err) {
+      console.error('SignUp error:', err);
+      throw new Error('Internal Server Error');
+    }
+  };
 
-    const handlePasswordCheck = (pass: string): void => {
-        setShowAlert({
-            isStrongPassword: validatePassword(pass),
-        });
-    };
-
-    const isFormValid = (): boolean => {
-        return step === 1
-            ? formData.email.trim() !== '' &&
-                  formData.password.trim() !== '' &&
-                  formData.username !== '' &&
-                  showAlert.isStrongPassword
-            : formData.firstName !== '' && formData.lastName !== '';
-    };
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
-        if (step === 1) {
-            setStep(2);
-            return;
-        }
-
-        try {
-            const res = await signUser({ variables: { input: formData } });
-
-            if (
-                !res?.data?.signup?.accessToken ||
-                !res?.data?.signup?.refreshToken
-            ) {
-                throw new Error('Token not received');
-            }
-
-            sessionStorage.setItem('accessToken', res.data.signup.accessToken);
-            sessionStorage.setItem(
-                'refreshToken',
-                res.data.signup.refreshToken
-            );
-
-            navigate('/projects');
-        } catch (err) {
-            console.error('SignUp error:', err);
-        }
-    };
-
-    return (
-        <div>
-            <form onSubmit={handleSubmit} className="space-y-4">
-                {step === 1 ? (
-                    <>
-                        <AuthInputField
-                            label="Email"
-                            type="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            placeholder="you@example.com"
-                        />
-                        <AuthInputField
-                            label="Username"
-                            type="text"
-                            name="username"
-                            value={formData.username}
-                            onChange={handleChange}
-                            placeholder="username"
-                        />
-                        <AuthInputField
-                            label="Password"
-                            type={showPassword ? 'text' : 'password'}
-                            name="password"
-                            value={formData.password}
-                            onChange={(e) => {
-                                handleChange(e);
-                                handlePasswordCheck(e.target.value);
-                            }}
-                            placeholder="••••••••"
-                            rightElement={
-                                <button
-                                    type="button"
-                                    onClick={() =>
-                                        setShowPassword((prev) => !prev)
-                                    }
-                                    className="text-sm text-blue-600 hover:underline"
-                                >
-                                    {showPassword ? 'Hide' : 'Show'}
-                                </button>
-                            }
-                        />
-                        {!showAlert.isStrongPassword && formData.password && (
-                            <p className="text-sm text-red-500 mt-1">
-                                Password must contain uppercase, lowercase,
-                                number, and special character.
-                            </p>
-                        )}
-                    </>
-                ) : (
-                    <>
-                        <AuthInputField
-                            label="First Name"
-                            type="text"
-                            name="firstName"
-                            value={formData.firstName}
-                            onChange={handleChange}
-                        />
-                        <AuthInputField
-                            label="Last Name"
-                            type="text"
-                            name="lastName"
-                            value={formData.lastName}
-                            onChange={handleChange}
-                        />
-                    </>
-                )}
-
+  return (
+    <div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        {step === 1 ? (
+          <>
+            <AuthInputField
+              label="Email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="you@example.com"
+            />
+            <AuthInputField
+              label="Username"
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              placeholder="username"
+            />
+            <AuthInputField
+              label="Password"
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              value={formData.password}
+              onChange={(e) => {
+                handleChange(e);
+                handlePasswordCheck(e.target.value);
+              }}
+              placeholder="••••••••"
+              rightElement={
                 <button
-                    type="submit"
-                    disabled={loading || !isFormValid()}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition duration-200 disabled:opacity-50"
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="text-sm text-blue-600 hover:underline"
                 >
-                    {step === 1
-                        ? 'Next'
-                        : loading
-                          ? 'Registering...'
-                          : 'Register'}
+                  {showPassword ? 'Hide' : 'Show'}
                 </button>
+              }
+            />
+            {!showAlert.isStrongPassword && formData.password && (
+              <p className="text-sm text-red-500 mt-1">
+                Password must contain uppercase, lowercase, number, and special
+                character.
+              </p>
+            )}
+          </>
+        ) : (
+          <>
+            <AuthInputField
+              label="First Name"
+              type="text"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+            <AuthInputField
+              label="Last Name"
+              type="text"
+              name="lastName"
+              value={formData.lastName}
+              onChange={handleChange}
+            />
+          </>
+        )}
 
-                {error && (
-                    <p className="text-sm text-red-500 text-center mt-2">
-                        {error.message}
-                    </p>
-                )}
+        <button
+          type="submit"
+          disabled={loading || !isFormValid()}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 rounded-md transition duration-200 disabled:opacity-50"
+        >
+          {step === 1 ? 'Next' : loading ? 'Registering...' : 'Register'}
+        </button>
 
-                {step === 2 && (
-                    <button
-                        type="button"
-                        onClick={() => setStep(1)}
-                        className="w-full text-sm text-blue-600 hover:underline text-center mt-2"
-                    >
-                        ← Back to credentials
-                    </button>
-                )}
-            </form>
-        </div>
-    );
+        {error && (
+          <p className="text-sm text-red-500 text-center mt-2">
+            {error.message}
+          </p>
+        )}
+
+        {step === 2 && (
+          <button
+            type="button"
+            onClick={() => setStep(1)}
+            className="w-full text-sm text-blue-600 hover:underline text-center mt-2"
+          >
+            ← Back to credentials
+          </button>
+        )}
+      </form>
+    </div>
+  );
 }

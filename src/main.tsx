@@ -8,9 +8,9 @@ import { ApolloProvider } from '@apollo/client';
 const fallbackLoader = <div className="loader"></div>;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-    <Suspense fallback={fallbackLoader}>
-        <ApolloProvider client={client}>
-            <LandingPage />
-        </ApolloProvider>
-    </Suspense>
+  <Suspense fallback={fallbackLoader}>
+    <ApolloProvider client={client}>
+      <LandingPage />
+    </ApolloProvider>
+  </Suspense>
 );
