@@ -70,12 +70,7 @@ const ProjectTable: React.FC = () => {
                         </th>
                         <td className="px-6 py-4">{project.description}</td>
                         <td className="px-6 py-4">
-                          {/* Team info placeholder */}-
-                        </td>
-                        <td className="px-6 py-4">
-                          {project.dueDate
-                            ? new Date(project.dueDate).toLocaleDateString()
-                            : '-'}
+                         
                         </td>
                       </tr>
                     ))
@@ -85,7 +80,7 @@ const ProjectTable: React.FC = () => {
             </div>
             {selectedProject && (
               <div className="mt-8">
-                {/* <ProjectDetails project={selectedProject} /> */}
+               
               </div>
             )}
           </div>

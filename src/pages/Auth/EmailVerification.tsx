@@ -29,23 +29,19 @@ const EmailVerification: React.FC = () => {
         const result = response.data.verifyUser;
 
         if (result.user.isVerified) {
-          localStorage.setItem('accessToken', result.accessToken);
-          localStorage.setItem('refreshToken', result.refreshToken);
-          localStorage.setItem('id', result.user.id);
-          localStorage.setItem('email', result.user.email);
-          localStorage.setItem('username', result.user.username);
-          localStorage.setItem('FirstName', result.user.firstName);
-          localStorage.setItem('LastName', result.user.lastName);
           localStorage.setItem(
             'name',
             `${result.user.firstName} ${result.user.lastName}`
           );
-          localStorage.setItem('avatar', result.user.profile.avatar);
+          localStorage.setItem('id', result.user.id);
+          localStorage.setItem('email', result.user.email);
           localStorage.setItem('IsLoggedIn', 'TRUE');
+          localStorage.setItem('avtar', result.user.profile.avatar);
+          localStorage.setItem('username', result.user.username);
 
           setStatus('success');
           setMessage('Email verified successfully! Redirecting...');
-          setTimeout(() => navigate('/dashboard/project'), 1000);
+          setTimeout(() => navigate('/dashboard/projects'), 1000);
         } else {
           throw new Error('User verification failed');
         }

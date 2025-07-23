@@ -14,6 +14,7 @@ export type LoginInput = {
 export type AuthResponce = {
   login: {
     user: InterfaceUser;
+    profile: InterfaceUserProfile;
     accessToken: string;
     refreshToken: string;
   };
@@ -112,6 +113,12 @@ export interface InterfaceIssue {
   dueDate: Date;
 }
 
+export enum SprintStatus {
+  ACTIVE,
+  PLANNED,
+  COMPLETE
+}
+
 export interface InterfaceProject {
   id: string;
   key: string;
@@ -119,9 +126,8 @@ export interface InterfaceProject {
   description?: string;
   createdAt: string;
   updatedAt: string;
-  status: string;
+  status: SprintStatus;
   creatorId: string;
-  dueDate: string;
   issues?: InterfaceIssue[];
   sprints?: InterfaceSprint[];
 }
@@ -131,6 +137,7 @@ export interface InterfaceSprint {
   title: string;
   status: string;
   description: string;
+  projectId: string;
   dueDate: string;
   issues?: InterfaceIssue[];
 }
@@ -172,7 +179,7 @@ export type CreateIssueInput = {
   projectId: string;
   dueDate: string;
   status?: IssueStatus;
-  sprintId?: string;
+  sprintId: string | null;
 };
 
 export type CreateIssueResponse = {

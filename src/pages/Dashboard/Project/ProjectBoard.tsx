@@ -1,30 +1,24 @@
 import { useEffect, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { GET_RECENT_PROJECT } from '../../../graphql/Query/queries';
 import { InterfaceProject } from '../../../types/types';
 import CreateIssue from './CreateIssue';
-import Sprints from './sprint';
-import CreateSprint from './CreateSprint';
+import SprintsView from './sprint';
 import IssueBoard from './issues';
 import Loader from '../../../components/Loader';
 
 const TABS = ['issues', 'sprints', 'timeline', 'progress'];
 
 const ProjectBoard = () => {
-  const [activeTab, setActiveTab] = useState<string>('issues');
+  const [activeTab, setActiveTab] = useState<string>('sprints');
   const [project, setProject] = useState<InterfaceProject | null>(null);
   const [createTab, setCreateTab] = useState<boolean>(false);
 
-  const navigate = useNavigate();
 
   const { data, loading, error } = useQuery(GET_RECENT_PROJECT);
 
   useEffect(() => {
-    const isProject = localStorage.getItem('project');
-    if (!isProject) {
-      navigate('/project/new');
-    }
     if (data?.getRecentProject) {
       setProject(data.getRecentProject);
     }
@@ -39,9 +33,6 @@ const ProjectBoard = () => {
   }
 
   if (error) {
-    if (error.message === 'UnauthenticatedError') {
-      navigate('/auth');
-    }
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div>{error.message}</div>
@@ -62,7 +53,11 @@ const ProjectBoard = () => {
       case 'issues':
         return <IssueBoard projectId={project.id} />;
       case 'sprints':
-        return <Sprints projectId={project.id} />;
+        return (
+          <SprintsView
+            projectId={project.id}
+          />
+        );
       case 'timeline':
         return (
           <div className="p-6 bg-white rounded-lg shadow">
@@ -81,20 +76,15 @@ const ProjectBoard = () => {
   };
 
   const handleCreateTabs = () => {
-    switch (activeTab) {
-      case 'issues':
-        return (
-          <CreateIssue projectId={project.id} setCreateTaskTab={setCreateTab} />
-        );
-      case 'sprints':
-        return (
-          <CreateSprint
-            projectId={project.id}
-            setCreatSprintTab={setCreateTab}
-          />
-        );
-      default:
-        return null;
+    if (createTab) {
+      return (
+        <CreateIssue
+          projectId={project.id}
+          sprintId=''
+          setCreateTaskTab={setCreateTab}
+          onSuccess={()=>{}}
+        />
+      );
     }
   };
 

@@ -89,6 +89,31 @@ export const CREATE_SPRINT = gql`
   }
 `;
 
+export const GET_ACTIVE_SPRINT = gql`
+  query GetActiveSprint($getActiveSprintProjectId2: ID!) {
+    getActiveSprint(projectId: $getActiveSprintProjectId2) {
+      id
+      title
+      status
+      dueDate
+      issues {
+        id
+        title
+        status
+        type
+        dueDate
+        assignee {
+          id
+          email
+          firstName
+          lastName
+          avatar
+        }
+      }
+    }
+  }
+`;
+
 export const UPDATE_ISSUE_STATUS = gql`
   mutation changeStatus(
     $updateIssueStatusProjectId2: ID!
@@ -136,11 +161,10 @@ export const LOGIN_USER = gql`
         username
         firstName
         lastName
+        isVerified
       }
       profile {
-        id
         avatar
-        gender
       }
       accessToken
       refreshToken

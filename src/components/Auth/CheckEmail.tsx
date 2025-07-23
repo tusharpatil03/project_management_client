@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MailCheck } from 'lucide-react';
 import { SEND_VERIFICATION_LINK } from '../../graphql/Mutation/mutations';
 import { useMutation } from '@apollo/client';
@@ -23,6 +23,10 @@ const CheckEmail: React.FC = () => {
       setMessage('Failed to send verification email.');
     }
   };
+
+  useEffect(() => {
+    handleSend();
+  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">

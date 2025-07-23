@@ -1,7 +1,7 @@
 // import { SignUp } from './components/Auth/SignupTab';
 import DashBoard from './pages/Dashboard/DashBoard';
 import LandingPage from './pages/LandingPage/LandingPage';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Auth from './pages/Auth/Auth';
 import ProjectTable from './pages/Dashboard/Project/Projects';
 import ProjectBoard from './pages/Dashboard/Project/ProjectBoard';
@@ -18,49 +18,42 @@ function App() {
   const { data, loading, error } = useQuery(CHECK_AUTH);
 
   useEffect(() => {
-    if (!data) {
-      return;
-    }
-    if (data.checkAuth.isVerified) {
+    if (data) {
       localStorage.setItem(
         'name',
         `${data.checkAuth.firstName} ${data.checkAuth.lastName}`
       );
-      localStorage.setItem('id', data.checkAuth._id);
+      localStorage.setItem('id', data.checkAuth.id);
       localStorage.setItem('email', data.checkAuth.email);
       localStorage.setItem('IsLoggedIn', 'TRUE');
-      localStorage.setItem('FirstName', data.checkAuth.firstName);
-      localStorage.setItem('LastName', data.checkAuth.lastName);
-      localStorage.setItem('avtar', data.checkAuth.profile.image);
+      localStorage.setItem('avtar', data.checkAuth.profile.avatar);
       localStorage.setItem('username', data.checkAuth.username);
     }
   }, [data, loading, error]);
 
   return (
     <>
-      <BrowserRouter>
-        <Routes>
-          {/* Public Routes */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/auth/verify" element={<EmailVerification />} />
+      <Routes>
+        {/* Public Routes */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/auth/verify" element={<EmailVerification />} />
 
-          <Route element={<SecuredRoutes />}>
-            <Route path="/dashboard" element={<DashBoard />}>
-              {/* Project Routes */}
-              <Route path="projects" element={<ProjectBoard />} />
-              <Route path="projects/all" element={<ProjectTable />} />
-              <Route path="projects/new" element={<CreateProject />} />
+        <Route element={<SecuredRoutes />}>
+          <Route path="/dashboard" element={<DashBoard />}>
+            {/* Project Routes */}
+            <Route path="projects" element={<ProjectBoard />} />
+            <Route path="projects/all" element={<ProjectTable />} />
+            <Route path="projects/new" element={<CreateProject />} />
 
-              {/* User Routes */}
-              <Route path="users" element={<UserBoard />} />
+            {/* User Routes */}
+            <Route path="users" element={<UserBoard />} />
 
-              {/* Team Routes */}
-              <Route path="teams" element={<TeamBoard />} />
-            </Route>
+            {/* Team Routes */}
+            <Route path="teams" element={<TeamBoard />} />
           </Route>
-        </Routes>
-      </BrowserRouter>
+        </Route>
+      </Routes>
     </>
   );
 }

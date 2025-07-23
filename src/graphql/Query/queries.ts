@@ -6,19 +6,11 @@ export const CHECK_AUTH = gql`
       id
       firstName
       lastName
-      createdAt
       email
       isVerified
       username
       profile {
-        id
         avatar
-        gender
-        social {
-          linkedin
-          facebook
-          twitter
-        }
       }
     }
   }
@@ -265,6 +257,7 @@ export const GET_ALL_SPRINTS = gql`
       description
       status
       dueDate
+      projectId
       createdAt
       updatedAt
       creator {
@@ -279,6 +272,12 @@ export const GET_ALL_SPRINTS = gql`
         id
         title
         status
+        dueDate
+        type
+        assignee{
+          firstName
+          lastName
+        }
       }
     }
   }

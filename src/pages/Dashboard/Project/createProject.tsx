@@ -5,6 +5,7 @@ import {
   CreateProjectInput,
   CreateProjectResponse,
 } from '../../../types/types';
+import { useNavigate } from 'react-router-dom';
 
 interface CreateProjectProps {
   onProjectCreated?: (project: CreateProjectResponse['createProject']) => void;
@@ -32,6 +33,12 @@ const CreateProject: React.FC<CreateProjectProps> = () => {
     setSuccess(false);
   };
 
+  const navigate = useNavigate();
+
+  const setProjectData = (data: any) => {
+    localStorage.setItem('projectId', data.id);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -41,6 +48,8 @@ const CreateProject: React.FC<CreateProjectProps> = () => {
       if (data?.createProject) {
         setForm(initialForm);
         setSuccess(true);
+        setProjectData(data.createProject);
+        navigate('/dashboard/projects');
       }
     } catch {
       setSuccess(false);

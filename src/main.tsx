@@ -1,16 +1,19 @@
 import * as ReactDOM from 'react-dom/client';
 import { Suspense } from 'react';
 import './index.css';
-import LandingPage from './App.tsx';
 import client from './apolloClient.ts';
 import { ApolloProvider } from '@apollo/client';
+import App from './App.tsx';
+import { BrowserRouter } from 'react-router-dom';
 
 const fallbackLoader = <div className="loader"></div>;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <Suspense fallback={fallbackLoader}>
     <ApolloProvider client={client}>
-      <LandingPage />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
     </ApolloProvider>
   </Suspense>
 );

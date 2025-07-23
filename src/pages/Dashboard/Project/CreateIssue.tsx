@@ -6,36 +6,49 @@ import {
 } from '../../../types/types';
 import { useMutation } from '@apollo/client';
 import { CREATE_ISSUE } from '../../../graphql/Mutation/mutations';
-import { IssueStatus } from '../../../types/types';
+import CreateTab from '../../../components/CreateTab/CreateTab';
+import InputField from '../../../components/InputFiled/InputField';
 
 const initialForm: CreateIssueInput = {
   title: '',
   description: '',
   type: IssueType.TASK,
+  sprintId: '',
   assigneeId: '',
   projectId: '',
   dueDate: '',
-  status: IssueStatus.TODO,
 };
 
 interface CreateIssueProps {
   projectId: string;
+  sprintId: string | null;
   setCreateTaskTab: (value: boolean) => void;
+  onSuccess: () => void;
 }
 
 const CreateIssue: React.FC<CreateIssueProps> = ({
   projectId,
+  sprintId,
   setCreateTaskTab,
+  onSuccess,
 }) => {
   const [formData, setFormData] = useState<CreateIssueInput>({
     ...initialForm,
     projectId,
+    sprintId,
   });
+
   const [success, setSuccess] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
 
-  const [createTask, { loading, error }] =
-    useMutation<CreateIssueResponse>(CREATE_ISSUE);
+  const [createTask, { loading, error }] = useMutation<CreateIssueResponse>(
+    CREATE_ISSUE,
+    {
+      onCompleted: () => {
+        onSuccess?.();
+      },
+    }
+  );
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -79,141 +92,74 @@ const CreateIssue: React.FC<CreateIssueProps> = ({
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white rounded-xl shadow-md p-8 mt-8 relative">
-      {/* Cross button */}
-      <button
-        type="button"
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
-        onClick={() => setCreateTaskTab(false)}
-        aria-label="Close"
-      >
-        &times;
-      </button>
-      <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">
-        Create New Task
-      </h2>
+    <CreateTab title="Create New Task" onClose={() => setCreateTaskTab(false)}>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="title"
-          >
-            Title <span className="text-red-500">*</span>
-          </label>
-          <input
-            name="title"
+          <InputField
+            label="title"
             type="text"
-            id="title"
+            name="title"
             value={formData.title}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
             placeholder="Task Title"
           />
         </div>
         <div>
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="description"
-          >
-            Description <span className="text-red-500">*</span>
-          </label>
-          <textarea
+          <InputField
+            label="description"
+            type="text"
             name="description"
-            id="description"
-            value={formData.description}
+            value={formData.description || ''}
             onChange={handleChange}
             required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none resize-y min-h-[80px]"
-            placeholder="Describe the task..."
+            placeholder="Description"
           />
         </div>
         <div>
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="assigneeId"
-          >
-            Assignee ID
-          </label>
-          <input
-            name="assigneeId"
+          <InputField
+            label="Assignee"
             type="text"
-            id="assigneeId"
-            value={formData.assigneeId}
+            name="Assignee"
+            value={formData.assigneeId || ''}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-            placeholder="Assignee User ID"
+            required
+            placeholder="Assignee"
           />
         </div>
         <div>
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="dueDate"
-          >
-            Due Date
-          </label>
-          <input
-            name="dueDate"
+          <InputField
+            label="DueDate"
             type="datetime-local"
-            id="dueDate"
+            name="dueDate"
             value={formData.dueDate}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
+            required
+            placeholder="Date"
           />
         </div>
         <div>
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="type"
-          >
-            Type <span className="text-red-500">*</span>
-          </label>
-          <select
-            name="type"
-            id="type"
-            value={formData.type}
-            onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                type: e.target.value as IssueType,
-              }));
-              console.log(e.target.value);
-            }}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-          >
+          <select>
+            <InputField
+              label="Type"
+              type="type"
+              name="type"
+              value={formData.type}
+              onChange={(e) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  type: e.target.value as IssueType,
+                }));
+              }}
+              required
+            />
             <option value={'BUG'}>BUG</option>
             <option value={'TASK'}>TASK</option>
             <option value={'STORY'}>STORY</option>
             <option value={'EPIC'}>EPIC</option>
           </select>
         </div>
-        <div>
-          <label
-            className="block text-gray-700 font-semibold mb-2"
-            htmlFor="status"
-          >
-            Status <span className="text-red-500">*</span>
-          </label>
-          <select
-            name="status"
-            id="status"
-            value={formData.status}
-            onChange={(e) => {
-              setFormData((prev) => ({
-                ...prev,
-                status: e.target.value as IssueStatus,
-              }));
-              console.log(e.target.value);
-            }}
-            required
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-400 focus:outline-none"
-          >
-            <option value={'TODO'}>TODO</option>
-            <option value={'IN_PROGRESS'}>IN_PROGRESS</option>
-            <option value={'DONE'}>DONE</option>
-          </select>
-        </div>
+
         <button
           type="submit"
           disabled={loading}
@@ -232,7 +178,7 @@ const CreateIssue: React.FC<CreateIssueProps> = ({
           </div>
         )}
       </form>
-    </div>
+    </CreateTab>
   );
 };
 

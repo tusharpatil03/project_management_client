@@ -26,7 +26,8 @@ export function Login() {
     e.preventDefault();
     try {
       const res = await signUser({ variables: { input: formData } });
-      if (!res) {
+      const data = res.data?.login;
+      if (!data) {
         throw new Error('Data not Recieved');
       }
       const accessToken = res.data?.login.accessToken;
@@ -35,13 +36,23 @@ export function Login() {
       if (!accessToken || !refreshToken) {
         throw new Error('Token not Recieved');
       }
+
+      localStorage.setItem(
+        'name',
+        `${data.user.firstName} ${data.user.lastName}`
+      );
+      localStorage.setItem('id', data.user.id);
+      localStorage.setItem('email', data.user.email);
+      localStorage.setItem('IsLoggedIn', 'TRUE');
+      localStorage.setItem('avatar', data.profile.avatar);
+      localStorage.setItem('username', data.user.username);
+      localStorage.setItem('token', accessToken);
       localStorage.setItem('refreshToken', refreshToken);
-      localStorage.setItem('accessToken', accessToken);
-      if (res.data?.login.user.isVerified) {
-        navigate('/dashboard');
-      } else {
+
+      if (!data.user.isVerified) {
         navigate('/auth/verify');
       }
+      navigate('/dashboard/projects');
     } catch (err) {
       console.error(`Login error:`, err);
     }
