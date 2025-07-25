@@ -39,5 +39,4 @@ const TabNavigation: React.FC<{
   );
 };
 
-
 export default TabNavigation;

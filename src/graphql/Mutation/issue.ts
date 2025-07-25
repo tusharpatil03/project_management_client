@@ -1,15 +1,13 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const CREATE_ISSUE = gql`
   mutation CreateIssue($input: CreateIssueInput!) {
     createIssue(input: $input) {
-      message,
+      message
       success
     }
   }
 `;
-
-
 
 export const UPDATE_ISSUE_STATUS = gql`
   mutation changeStatus(

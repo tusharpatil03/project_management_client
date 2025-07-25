@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const GET_SPRINT_BY_ID = gql`
   query GetSprintById($id: ID!, $projectId: ID!) {
@@ -26,7 +26,6 @@ export const GET_SPRINT_BY_ID = gql`
     }
   }
 `;
-
 
 export const GET_ALL_SPRINTS = gql`
   query GetAllSprints($projectId: ID!) {
@@ -62,4 +61,3 @@ export const GET_ALL_SPRINTS = gql`
     }
   }
 `;
-

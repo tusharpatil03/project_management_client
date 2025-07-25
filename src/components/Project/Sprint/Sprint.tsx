@@ -50,7 +50,7 @@ const Sprint: React.FC<ChildProps> = ({ sprint, refetch }) => {
           }}
           size="md"
           variant="secondary"
-          children='+ create'
+          children="+ create"
         />
       </div>
     </div>

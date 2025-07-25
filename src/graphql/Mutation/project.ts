@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const CREATE_PROJECT = gql`
   mutation CreateProject($input: CreateProjectInput!) {
@@ -14,7 +14,6 @@ export const CREATE_PROJECT = gql`
     }
   }
 `;
-
 
 export const REMOVE_PROJECT = gql`
   mutation RemoveProject($projectId: ID!) {

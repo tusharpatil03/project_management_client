@@ -8,7 +8,7 @@ interface ChildProps {
 
 const IssueTable: React.FC<ChildProps> = ({ issues }) => {
   // const [action, setAction] = useState('');
-  
+
   const issueColumns = [
     {
       label: 'Title',
@@ -33,7 +33,14 @@ const IssueTable: React.FC<ChildProps> = ({ issues }) => {
     {
       label: 'Action',
       render: (issue: InterfaceIssue) => (
-        <button onClick={()=>{issue.id}} className="text-blue-600 hover:underline">...</button>
+        <button
+          onClick={() => {
+            issue.id;
+          }}
+          className="text-blue-600 hover:underline"
+        >
+          ...
+        </button>
       ),
     },
   ];

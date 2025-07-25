@@ -34,7 +34,7 @@ export const refreshToken = async (): Promise<Boolean> => {
     console.error('Invalid response structure in RefreshTokenMutation :', data);
     return false;
   }
-  console.log("refresh token success");
+  console.log('refresh token success');
   localStorage.setItem('token', data.refreshToken.accessToken);
   localStorage.setItem('refreshToken', data.refreshToken.refreshToken);
 

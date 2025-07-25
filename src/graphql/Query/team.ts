@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const GET_ALL_MEMBERS = gql`
   query GetProjectTeamsMembers($projectId: ID!) {
@@ -13,7 +13,6 @@ export const GET_ALL_MEMBERS = gql`
     }
   }
 `;
-
 
 export const GET_TEAM_BY_ID = gql`
   query GetTeamById($teamId: ID!) {
@@ -35,4 +34,3 @@ export const GET_TEAM_BY_ID = gql`
     }
   }
 `;
-
