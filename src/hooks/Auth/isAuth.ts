@@ -1,4 +1,6 @@
+import { authState } from "../../utils/logout";
+
 export const useAuth = () => {
-  const isLoggedIn = localStorage.getItem('IsLoggedIn') === 'TRUE';
+  const isLoggedIn =  authState.isAuthenticated ? true : false;
   return isLoggedIn;
 };

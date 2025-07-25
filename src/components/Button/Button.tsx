@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import Loader from '../Loader';
 
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonVariant = 'primary' | 'secondary' | 'tab' | 'danger';
@@ -33,6 +34,7 @@ const Button: React.FC<ButtonProps> = ({
   loading = false,
   disabled,
   fullWidth = false,
+  onClick,
   className,
   ...rest
 }) => {
@@ -47,12 +49,12 @@ const Button: React.FC<ButtonProps> = ({
   );
 
   return (
-    <button
+    <button onClick={onClick}
       className={combinedClassName}
       disabled={disabled || loading}
       {...rest}
     >
-      {loading ? 'Creating...' : children}
+      {loading ? <Loader/> : children}
     </button>
   );
 };

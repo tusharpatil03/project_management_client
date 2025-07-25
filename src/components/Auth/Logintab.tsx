@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LOGIN_USER } from '../../graphql/Mutation/mutations';
+import { LOGIN_USER } from '../../graphql/Mutation/user';
 import { LoginInput, AuthResponce } from '../../types/types';
 import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
+import { authState } from '../../utils/logout';
 
 export function Login() {
   const [formData, setFormData] = useState<LoginInput>({
@@ -52,6 +53,9 @@ export function Login() {
       if (!data.user.isVerified) {
         navigate('/auth/verify');
       }
+      authState.isAuthenticated = true;
+      authState.skipAuth = true;
+
       navigate('/dashboard/projects');
     } catch (err) {
       console.error(`Login error:`, err);

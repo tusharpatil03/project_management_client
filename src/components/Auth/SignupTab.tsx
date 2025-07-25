@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { SIGNUP_USER } from '../../graphql/Mutation/mutations';
+import { SIGNUP_USER } from '../../graphql/Mutation/user';
 import { SignupInput, AuthResponce } from '../../types/types';
 import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';

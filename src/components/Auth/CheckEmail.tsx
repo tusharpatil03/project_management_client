@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { MailCheck } from 'lucide-react';
-import { SEND_VERIFICATION_LINK } from '../../graphql/Mutation/mutations';
+import { SEND_VERIFICATION_LINK } from '../../graphql/Mutation/user';
 import { useMutation } from '@apollo/client';
 
 const CheckEmail: React.FC = () => {

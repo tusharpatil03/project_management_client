@@ -1,6 +1,6 @@
 import { JSX, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { GET_RECENT_PROJECT } from '../../graphql/Query/queries';
+import { GET_RECENT_PROJECT } from '../../graphql/Query/project';
 import { useQuery } from '@apollo/client';
 
 const ProjectRoutes = (): JSX.Element => {

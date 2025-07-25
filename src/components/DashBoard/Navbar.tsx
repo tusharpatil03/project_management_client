@@ -76,7 +76,7 @@ const UserMenuTab = ({ isOpen }: { isOpen: boolean }) => {
           { label: 'Dashboard', path: '/' },
           { label: 'Settings', path: '/' },
           { label: 'Earnings', path: '/' },
-          { label: 'Sign out', path: '/' },
+          { label: 'Sign out', path: '/logout' },
         ].map((item) => (
           <Link
             key={item.label}

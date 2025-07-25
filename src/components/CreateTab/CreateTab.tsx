@@ -6,23 +6,30 @@ interface CreateTabProps {
 
 const CreateTab: React.FC<CreateTabProps> = ({ title, onClose, children }) => {
   return (
-    <div className="max-w-lg mx-auto bg-white rounded-xl shadow-md p-8 mt-8 relative">
-      {/* Cross button */}
-      <button
-        type="button"
-        className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
-        onClick={onClose}
-        aria-label="Close"
-      >
-        &times;
-      </button>
-      <h2 className="text-2xl font-bold mb-6 text-center text-blue-700">
-        {title}
-      </h2>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      tabIndex={-1}
+    >
+      <div className="relative w-full max-w-xl max-h-[90vh] bg-white p-6 sm:p-8 overflow-y-auto rounded-xl shadow-xl animate-fadeIn">
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-700 text-2xl font-bold focus:outline-none"
+          aria-label="Close"
+        >
+          &times;
+        </button>
 
-      {children}
+        {/* Title */}
+        <h2 className="text-xl font-semibold text-center text-blue-800 mb-4 sm:mb-6">
+          {title}
+        </h2>
+
+        {children}
+      </div>
     </div>
   );
 };
-
 export default CreateTab;

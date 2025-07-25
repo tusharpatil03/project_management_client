@@ -1,0 +1,65 @@
+import { gql } from "@apollo/client";
+
+export const GET_SPRINT_BY_ID = gql`
+  query GetSprintById($id: ID!, $projectId: ID!) {
+    getSprintById(id: $id, projectId: $projectId) {
+      id
+      title
+      description
+      status
+      dueDate
+      createdAt
+      updatedAt
+      creator {
+        id
+        username
+      }
+      project {
+        id
+        name
+      }
+      issues {
+        id
+        title
+        status
+      }
+    }
+  }
+`;
+
+
+export const GET_ALL_SPRINTS = gql`
+  query GetAllSprints($projectId: ID!) {
+    getAllSprints(projectId: $projectId) {
+      id
+      title
+      description
+      status
+      dueDate
+      projectId
+      createdAt
+      updatedAt
+      creator {
+        id
+        username
+      }
+      project {
+        id
+        name
+      }
+      issues {
+        id
+        title
+        status
+        dueDate
+        type
+        assignee {
+          id
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
+

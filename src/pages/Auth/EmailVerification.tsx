@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import CheckEmail from '../../components/Auth/CheckEmail';
 import { useMutation } from '@apollo/client';
-import { VERIFY_USER } from '../../graphql/Mutation/mutations';
+import { VERIFY_USER } from '../../graphql/Mutation/user';
 
 const EmailVerification: React.FC = () => {
   const [status, setStatus] = useState<'verifying' | 'success' | 'error'>(
