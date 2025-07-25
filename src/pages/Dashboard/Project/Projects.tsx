@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_ALL_PROJECTS } from '../../../graphql/Query/queries';
+import { GET_ALL_PROJECTS } from '../../../graphql/Query/project';
 import { InterfaceProject } from '../../../types/types';
 
 const ProjectTable: React.FC = () => {

@@ -171,10 +171,12 @@ export enum IssueType {
   STORY = 'STORY',
 }
 
+
 export type CreateIssueInput = {
   title: string;
   description?: string;
   type: IssueType;
+  parent?: string;
   assigneeId?: string;
   projectId: string;
   dueDate: string;
@@ -184,23 +186,8 @@ export type CreateIssueInput = {
 
 export type CreateIssueResponse = {
   createIssue: {
-    id: string;
-    title: string;
-    description?: string;
-    status?: string;
-    dueDate: string;
-    createdAt?: string;
-    updatedAt?: string;
-    projectId?: string;
-    sprintId?: string;
-    creator?: {
-      id: string;
-      firstName?: string;
-      lastName?: string;
-      email?: string;
-      username: string;
-    };
-    assignee?: InterfaceUser;
+    message: string;
+    sucess: boolean
   };
 };
 

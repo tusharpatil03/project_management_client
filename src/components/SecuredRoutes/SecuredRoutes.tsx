@@ -26,7 +26,7 @@ setInterval(() => {
     console.warn('Kindly relogin as sessison has expired');
 
     window.location.href = '/';
-    localStorage.setItem('IsLoggedIn', 'FALSE');
+    // localStorage.setItem('IsLoggedIn', 'FALSE');
   }
 }, inactiveIntervalMilsec);
 

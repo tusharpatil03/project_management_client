@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { CREATE_PROJECT } from '../../../graphql/Mutation/mutations';
+import { CREATE_PROJECT } from '../../../graphql/Mutation/project';
 import {
   CreateProjectInput,
   CreateProjectResponse,

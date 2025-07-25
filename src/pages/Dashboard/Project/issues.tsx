@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { InterfaceIssue } from '../../../types/types';
-import { GET_ALL_ISSUES } from '../../../graphql/Query/queries';
+import { GET_ALL_ISSUES } from '../../../graphql/Query/issue';
 import { useQuery } from '@apollo/client';
 import Loader from '../../../components/Loader';
 import IssueTable from '../../../components/Issues/IssuesTable';
@@ -24,7 +24,9 @@ const IssueBoard: React.FC<{ projectId: string }> = ({ projectId }) => {
       const allIssues = res.data.getAllIssues || [];
 
       await Promise.all([delay]);
-      setIssues(allIssues);
+      if (allIssues.length > 0) {
+        setIssues(allIssues);
+      }
     } catch (err) {
       console.error('Failed to fetch issues:', err);
     } finally {
