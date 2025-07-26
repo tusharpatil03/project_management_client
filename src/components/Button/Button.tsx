@@ -19,10 +19,8 @@ const sizeClasses: Record<ButtonSize, string> = {
 };
 
 const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50',
-  secondary:
-    'bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50',
+  primary: 'bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50',
+  secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50',
   tab: `pb-2 border-b-2 text-sm transition`,
   danger: 'bg-red-600 text-white hover:bg-red-700 disabled:opacity-50',
 };
@@ -49,12 +47,13 @@ const Button: React.FC<ButtonProps> = ({
   );
 
   return (
-    <button onClick={onClick}
+    <button
+      onClick={onClick}
       className={combinedClassName}
       disabled={disabled || loading}
       {...rest}
     >
-      {loading ? <Loader/> : children}
+      {loading ? <Loader /> : children}
     </button>
   );
 };

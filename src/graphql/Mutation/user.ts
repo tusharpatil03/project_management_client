@@ -1,6 +1,4 @@
-import { gql } from "@apollo/client";
-
-
+import { gql } from '@apollo/client';
 
 export const SIGNUP_USER = gql`
   mutation Signup($input: SignupInput!) {
@@ -67,16 +65,11 @@ export const VERIFY_USER = gql`
   }
 `;
 
-
-
 export const LOGOUT = gql`
   mutation Logout {
     logout
   }
 `;
-
-
-
 
 export const REFRESH_TOKEN = gql`
   mutation RefreshToken($refreshToken: String) {

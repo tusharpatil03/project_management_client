@@ -13,8 +13,8 @@
 // }
 
 export const authState = {
-    isAuthenticated: !!localStorage.getItem('token'),
-    skipAuth: false,
+  isAuthenticated: !!localStorage.getItem('token'),
+  skipAuth: false,
 };
 
 export const triggerGlobalLogout = () => {

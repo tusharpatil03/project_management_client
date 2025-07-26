@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const CREATE_TEAM = gql`
   mutation CreateTeam($input: CreateTeamInput!) {
@@ -30,7 +30,6 @@ export const REMOVE_TEAM = gql`
     }
   }
 `;
-
 
 export const ADD_TEAM_MEMBER = gql`
   mutation AddTeamMember($memberId: ID!, $teamId: ID!, $role: String!) {

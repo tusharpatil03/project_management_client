@@ -57,17 +57,14 @@ const Members: React.FC<ChildProps> = ({
     );
   }
 
-  const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let value = e.target.value;
     onSearchChange(value);
   };
 
   if (filteredMembers.length === 0) {
     return (
-      <div
-        onChange={handleChange}
-        className="text-center py-8"
-      >
+      <div onChange={handleChange} className="text-center py-8">
         <Search className="w-12 h-12 text-gray-300 mx-auto mb-3" />
         <p className="text-gray-500 text-sm">No members match your search</p>
       </div>

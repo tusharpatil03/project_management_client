@@ -49,6 +49,10 @@ const IssueBoard: React.FC<{ projectId: string }> = ({ projectId }) => {
       <div className="text-center text-red-500">Failed to load issues.</div>
     );
 
-  return <IssueTable issues={issues} />;
+  return (
+    <div>
+      <IssueTable issues={issues} projectId={projectId}/>
+    </div>
+  );
 };
 export default IssueBoard;

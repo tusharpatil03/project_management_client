@@ -16,6 +16,7 @@ import EmailVerification from './pages/Auth/EmailVerification';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
 import { useEffect } from 'react';
 import { authState } from './utils/logout';
+import { ErrorAlert } from './components/ErrorAlert';
 
 function App() {
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ function App() {
         </Route>
         <Route path="*" element={<PageNotFound />}></Route>
       </Routes>
+      <ErrorAlert/>
     </>
   );
 }

@@ -7,9 +7,10 @@ import Button from '../../Button/Button';
 interface ChildProps {
   sprint: InterfaceSprint;
   refetch: () => void;
+  projectId: string;
 }
 
-const Sprint: React.FC<ChildProps> = ({ sprint, refetch }) => {
+const Sprint: React.FC<ChildProps> = ({ sprint, refetch, projectId }) => {
   const [createTab, setCreateTab] = useState<boolean>(false);
 
   const onSuccess = () => {
@@ -42,7 +43,7 @@ const Sprint: React.FC<ChildProps> = ({ sprint, refetch }) => {
       <div className="text-sm text-gray-500">
         Status: {sprint.status || '-'}
       </div>
-      {sprint.issues ? <IssueTable issues={sprint.issues} /> : ''}
+      {sprint.issues ? <IssueTable issues={sprint.issues} projectId={projectId}/> : ''}
       <div>
         <Button
           onClick={() => {
@@ -50,7 +51,7 @@ const Sprint: React.FC<ChildProps> = ({ sprint, refetch }) => {
           }}
           size="md"
           variant="secondary"
-          children='+ create'
+          children="+ create"
         />
       </div>
     </div>

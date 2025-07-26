@@ -42,12 +42,12 @@ const errorLink = onError(
                   authorization: 'Bearer ' + accessToken,
                 },
               });
-              window.location.replace("/dashboard/projects");
+              window.location.replace('/dashboard/projects');
               return forward(operation);
             } else {
               localStorage.clear();
               triggerGlobalLogout();
-              window.location.replace("/");
+              window.location.replace('/');
             }
           });
         }

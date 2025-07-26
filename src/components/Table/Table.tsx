@@ -1,17 +1,20 @@
 import React from 'react';
 
 interface Column<T> {
-  label: string;
+  label: string | React.ReactNode;
   render: (item: T) => React.ReactNode;
+  handleClick?: (value: string) => void;
 }
 
 interface TableProps<T> {
   data: T[];
   columns: Column<T>[];
   getRowKey: (item: T) => string | number;
+  selectedIds?: string[];
+  onSelectChange?: (ids: string[]) => void;
 }
 
-function Table<T>({ data, columns, getRowKey }: TableProps<T>) {
+function Table<T>({ data, columns, getRowKey}: TableProps<T>) {
   return (
     <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table className="w-full text-sm text-left text-gray-500">
@@ -37,23 +40,15 @@ function Table<T>({ data, columns, getRowKey }: TableProps<T>) {
                 key={getRowKey(item)}
                 className="bg-white border-b hover:bg-gray-50"
               >
-                <td className="w-4 p-4">
-                  <div className="flex items-center">
-                    <input
-                      id={`checkbox-table-search-${getRowKey(item)}`}
-                      type="checkbox"
-                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                    />
-                    <label
-                      htmlFor={`checkbox-table-search-${getRowKey(item)}`}
-                      className="sr-only"
-                    >
-                      checkbox
-                    </label>
-                  </div>
-                </td>
                 {columns.map((col, colIdx) => (
-                  <td key={colIdx} className="px-6 py-4 whitespace-nowrap">
+                  <td
+                    onClick={() => {
+                      col.handleClick &&
+                        col.handleClick(getRowKey(item).toString());
+                    }}
+                    key={colIdx}
+                    className="px-6 py-4 whitespace-nowrap cursor-pointer"
+                  >
                     {col.render(item)}
                   </td>
                 ))}
@@ -65,5 +60,6 @@ function Table<T>({ data, columns, getRowKey }: TableProps<T>) {
     </div>
   );
 }
+
 
 export default Table;

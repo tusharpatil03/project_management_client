@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
 
 export const CREATE_SPRINT = gql`
   mutation CreateSprint($input: CreateSprintInput!) {
@@ -51,7 +51,6 @@ export const GET_ACTIVE_SPRINT = gql`
     }
   }
 `;
-
 
 export const REMOVE_SPRINT = gql`
   mutation RemoveSprint($sprintId: ID!, $projectId: ID!) {

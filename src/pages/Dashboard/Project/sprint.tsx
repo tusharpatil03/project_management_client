@@ -66,6 +66,7 @@ const SprintsView: React.FC<ChildProps> = ({ projectId }) => {
         key={activeSprint.id}
         sprint={activeSprint}
         refetch={handleIssueCreated}
+        projectId={projectId}
       />
     ) : (
       <EmptyState message="No active sprints" />
@@ -79,6 +80,7 @@ const SprintsView: React.FC<ChildProps> = ({ projectId }) => {
             key={sprint.id}
             sprint={sprint}
             refetch={handleIssueCreated}
+            projectId={projectId}
           />
         ))}
       </div>
@@ -94,6 +96,7 @@ const SprintsView: React.FC<ChildProps> = ({ projectId }) => {
             key={sprint.id}
             sprint={sprint}
             refetch={handleIssueCreated}
+            projectId={projectId}
           />
         ))}
       </div>

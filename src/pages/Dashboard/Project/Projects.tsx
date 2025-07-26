@@ -69,20 +69,14 @@ const ProjectTable: React.FC = () => {
                           {project.name}
                         </th>
                         <td className="px-6 py-4">{project.description}</td>
-                        <td className="px-6 py-4">
-                         
-                        </td>
+                        <td className="px-6 py-4"></td>
                       </tr>
                     ))
                   )}
                 </tbody>
               </table>
             </div>
-            {selectedProject && (
-              <div className="mt-8">
-               
-              </div>
-            )}
+            {selectedProject && <div className="mt-8"></div>}
           </div>
         </div>
       </div>

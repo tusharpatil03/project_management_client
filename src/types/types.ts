@@ -116,7 +116,7 @@ export interface InterfaceIssue {
 export enum SprintStatus {
   ACTIVE,
   PLANNED,
-  COMPLETE
+  COMPLETE,
 }
 
 export interface InterfaceProject {
@@ -171,7 +171,6 @@ export enum IssueType {
   STORY = 'STORY',
 }
 
-
 export type CreateIssueInput = {
   title: string;
   description?: string;
@@ -187,7 +186,7 @@ export type CreateIssueInput = {
 export type CreateIssueResponse = {
   createIssue: {
     message: string;
-    sucess: boolean
+    sucess: boolean;
   };
 };
 
