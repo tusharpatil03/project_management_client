@@ -11,7 +11,6 @@ export function SignUp() {
   const [formData, setFormData] = useState<SignupInput>({
     firstName: '',
     lastName: '',
-    username: '',
     email: '',
     password: '',
   });
@@ -68,7 +67,6 @@ export function SignUp() {
     return step === 1
       ? formData.email.trim() !== '' &&
           formData.password.trim() !== '' &&
-          formData.username !== '' &&
           showAlert.isStrongPassword
       : formData.firstName !== '' && formData.lastName !== '';
   };
@@ -89,7 +87,6 @@ export function SignUp() {
       }
 
       localStorage.setItem('email', formData.email);
-
       navigate('/auth/verify');
     } catch (err) {
       console.error('SignUp error:', err);
@@ -110,14 +107,7 @@ export function SignUp() {
               onChange={handleChange}
               placeholder="you@example.com"
             />
-            <AuthInputField
-              label="Username"
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="username"
-            />
+
             <AuthInputField
               label="Password"
               type={showPassword ? 'text' : 'password'}

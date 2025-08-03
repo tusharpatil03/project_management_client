@@ -1,7 +1,11 @@
+import { ApolloError } from "@apollo/client";
+
 interface ChildProps {
   handleDelete: () => void;
   setDeleteTab: (value: boolean) => void;
   loading: any;
+  error?: ApolloError | undefined,
+  message: string,
 }
 
 const DeleteTab: React.FC<ChildProps> = ({

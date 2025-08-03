@@ -28,7 +28,7 @@ const ProjectTable: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="p-4 sm:ml-64 mt-16">
-        <div className="max-w-7xl mx-auto space-y-6">
+        <div className="mx-auto space-y-6">
           <div>
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">

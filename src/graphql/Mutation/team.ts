@@ -9,7 +9,6 @@ export const CREATE_TEAM = gql`
       members {
         id
         email
-        username
       }
       projects {
         id
@@ -38,7 +37,6 @@ export const ADD_TEAM_MEMBER = gql`
       name
       members {
         id
-        username
         email
       }
     }
@@ -52,7 +50,6 @@ export const REMOVE_TEAM_MEMBER = gql`
       name
       members {
         id
-        username
         email
       }
     }

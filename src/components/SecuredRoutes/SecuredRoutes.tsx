@@ -1,10 +1,10 @@
-import { JSX } from 'react';
-import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from '../../hooks/Auth/isAuth';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
+import { authState } from '../../authManager';
+import { useEffect } from 'react';
 
-const SecuredRoutes = (): JSX.Element => {
-  const isLoggedIn = useAuth();
-  return isLoggedIn ? <Outlet /> : <Navigate to="/" replace />;
+const SecuredRoutes: React.FC = () => {
+  const isAuthenticated = authState.isAuthenticated;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 const timeoutMinutes = 15;
@@ -26,7 +26,6 @@ setInterval(() => {
     console.warn('Kindly relogin as sessison has expired');
 
     window.location.href = '/';
-    // localStorage.setItem('IsLoggedIn', 'FALSE');
   }
 }, inactiveIntervalMilsec);
 

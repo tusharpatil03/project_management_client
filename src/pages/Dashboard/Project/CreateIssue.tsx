@@ -265,7 +265,7 @@ const CreateIssue: React.FC<CreateIssueProps> = ({
               </div>
             </div>
 
-            <Button fullWidth={true} size="md" loading={loading} type="submit">
+            <Button maxWidth={true} size="md" loading={loading} type="submit">
               Create Issue
             </Button>
 

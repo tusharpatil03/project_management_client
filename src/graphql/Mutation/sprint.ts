@@ -3,26 +3,8 @@ import { gql } from '@apollo/client';
 export const CREATE_SPRINT = gql`
   mutation CreateSprint($input: CreateSprintInput!) {
     createSprint(input: $input) {
-      id
-      title
-      description
-      status
-      dueDate
-      createdAt
-      updatedAt
-      creator {
-        id
-        username
-      }
-      project {
-        id
-        name
-      }
-      issues {
-        id
-        title
-        status
-      }
+      message
+      success
     }
   }
 `;

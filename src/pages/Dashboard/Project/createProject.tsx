@@ -35,10 +35,6 @@ const CreateProject: React.FC<CreateProjectProps> = () => {
 
   const navigate = useNavigate();
 
-  const setProjectData = (data: any) => {
-    localStorage.setItem('projectId', data.id);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -48,7 +44,6 @@ const CreateProject: React.FC<CreateProjectProps> = () => {
       if (data?.createProject) {
         setForm(initialForm);
         setSuccess(true);
-        setProjectData(data.createProject);
         navigate('/dashboard/projects');
       }
     } catch {

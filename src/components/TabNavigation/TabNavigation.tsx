@@ -6,7 +6,7 @@ const TabNavigation: React.FC<{
   setCreateTab: (value: boolean) => void;
 }> = ({ tabs, activeTab, onTabChange, showCreateTab, setCreateTab }) => {
   return (
-    <nav className="border-b border-gray-200 max-w-7xl mx-auto px-6 mt-4">
+    <nav className="border-b border-gray-200 mx-auto px-6 mt-4">
       <ul className="flex flex-row space-x-6 text-sm font-medium text-gray-600">
         {tabs.map((tab) => (
           <li key={tab}>

@@ -8,7 +8,6 @@ export const CHECK_AUTH = gql`
       lastName
       email
       isVerified
-      username
       profile {
         avatar
       }

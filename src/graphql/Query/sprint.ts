@@ -12,7 +12,6 @@ export const GET_SPRINT_BY_ID = gql`
       updatedAt
       creator {
         id
-        username
       }
       project {
         id
@@ -32,6 +31,7 @@ export const GET_ALL_SPRINTS = gql`
     getAllSprints(projectId: $projectId) {
       id
       title
+      key
       description
       status
       dueDate
@@ -40,7 +40,6 @@ export const GET_ALL_SPRINTS = gql`
       updatedAt
       creator {
         id
-        username
       }
       project {
         id

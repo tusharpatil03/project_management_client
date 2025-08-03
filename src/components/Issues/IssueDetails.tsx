@@ -7,6 +7,7 @@ import { InterfaceIssue } from '../../types/types';
 interface ChildProps {
   issueId: string;
   setIssueTab: (value: boolean) => void;
+  onIssueUpdates?: ()=> void
 }
 const IssueDetails: React.FC<ChildProps> = ({ issueId, setIssueTab }) => {
   const { loading, error, data } = useQuery(GET_ISSUE_BY_ID, {

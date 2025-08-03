@@ -23,7 +23,6 @@ export const GET_TEAM_BY_ID = gql`
       members {
         id
         email
-        username
       }
       projects {
         id

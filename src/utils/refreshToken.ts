@@ -1,42 +1,57 @@
-export const refreshToken = async (): Promise<Boolean> => {
-  const refreshToken = localStorage.getItem('refreshToken');
+import authManager from "../authManager";
+
+export const refresh = async () => {
+  const refreshToken = localStorage.getItem("refreshToken");
   if (!refreshToken) {
-    console.error('Refresh Token not found');
-    return false;
+    console.error('Refresh Token not found in localStorage');
+    return null;
   }
 
-  const res = await fetch('http://localhost:4000/graphql', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${refreshToken}`,
-    },
-    body: JSON.stringify({
-      query: `mutation RefreshToken($refreshToken: String!) {
-                refreshToken(refreshToken: $refreshToken) {
-                    accessToken
-                    refreshToken
-                }
-            }`,
-      variables: {
-        refreshToken,
+  try {
+    const res = await fetch('http://localhost:4000/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${refreshToken}`,
       },
-    }),
-  });
+      body: JSON.stringify({
+        query: `
+            mutation RefreshToken($refreshToken: String!) {
+              refreshToken(refreshToken: $refreshToken) {
+                accessToken
+                refreshToken
+              }
+            }
+          `,
+        variables: { refreshToken: refreshToken },
+      }),
+    });
 
-  const { data, errors } = await res.json();
-  if (errors) {
-    console.error('Error refreshing token:', errors);
-    return false;
+    const { data, errors } = await res.json();
+
+    if (errors) {
+      console.error('Error refreshing token:', errors);
+      return null;
+    }
+
+    const {
+      accessToken,
+      refreshToken: newRefreshToken,
+    } = data?.refreshToken ?? {};
+
+    if (!accessToken || !newRefreshToken) {
+      console.error('Invalid refreshToken mutation response:', data);
+      return null;
+    }
+
+    // Update auth state
+    authManager.setAuth(accessToken, undefined)
+
+    console.log('Token refreshed successfully');
+    return accessToken;
+  } catch (err) {
+    console.error('Refresh token request failed:', err);
+    localStorage.clear();
+    return null;
   }
-
-  if (!data.refreshToken.accessToken || !data.refreshToken.refreshToken) {
-    console.error('Invalid response structure in RefreshTokenMutation :', data);
-    return false;
-  }
-  console.log('refresh token success');
-  localStorage.setItem('token', data.refreshToken.accessToken);
-  localStorage.setItem('refreshToken', data.refreshToken.refreshToken);
-
-  return true;
 };

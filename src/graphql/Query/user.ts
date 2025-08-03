@@ -9,7 +9,6 @@ export const GET_ALL_USER_TEAMS = gql`
       members {
         id
         email
-        username
       }
       projects {
         id
@@ -26,7 +25,6 @@ export const GET_USER_BY_ID = gql`
     getUserById(userId: $userId) {
       id
       email
-      username
       role
       createdAt
       updatedAt

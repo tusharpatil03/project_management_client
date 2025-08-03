@@ -1,10 +1,10 @@
 import * as ReactDOM from 'react-dom/client';
 import { Suspense } from 'react';
 import './index.css';
-import client from './apolloClient.ts';
-import { ApolloProvider } from '@apollo/client';
 import App from './App.tsx';
 import { BrowserRouter } from 'react-router-dom';
+import { ApolloProvider } from '@apollo/client';
+import client from './apolloClient.tsx';
 
 const fallbackLoader = <div className="loader"></div>;
 

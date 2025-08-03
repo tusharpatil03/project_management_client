@@ -9,7 +9,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: ButtonSize;
   variant?: ButtonVariant;
   loading?: boolean;
-  fullWidth?: boolean;
+  maxWidth?: boolean;
 }
 
 const sizeClasses: Record<ButtonSize, string> = {
@@ -31,7 +31,7 @@ const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
   loading = false,
   disabled,
-  fullWidth = false,
+  maxWidth = false,
   onClick,
   className,
   ...rest
@@ -42,7 +42,7 @@ const Button: React.FC<ButtonProps> = ({
     'rounded-md font-semibold transition duration-200',
     !isTab && sizeClasses[size],
     variantClasses[variant],
-    fullWidth && 'w-full',
+    maxWidth && 'w-80',
     className
   );
 

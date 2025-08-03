@@ -53,7 +53,6 @@ export const REMOVE_ASSIGNEE_OF_ISSUE = gql`
       title
       assignee {
         id
-        username
       }
     }
   }

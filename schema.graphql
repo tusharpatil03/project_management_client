@@ -22,7 +22,6 @@ type ExtendSession {
 type User {
   id: ID!
   email: EmailAddress!
-  username: String!
   createdAt: DateTime
   updatedAt: DateTime
   projects: [Project]
@@ -129,7 +128,6 @@ type IssueAssignee {
   id: ID!
   firstName: String
   lastName: String
-  username: String
   email: String
   avatar: String
   createdAt: DateTime
@@ -182,7 +180,6 @@ input LoginInput {
 
 input SignupInput {
   email: EmailAddress!
-  username: String!
   password: Password!
   firstName: String!
   lastName: String!

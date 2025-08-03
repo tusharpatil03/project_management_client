@@ -1,4 +1,3 @@
-// import { SignUp } from './components/Auth/SignupTab';
 import DashBoard from './pages/Dashboard/DashBoard';
 import LandingPage from './pages/LandingPage/LandingPage';
 import { Routes, Route, useNavigate } from 'react-router-dom';
@@ -8,15 +7,19 @@ import ProjectBoard from './pages/Dashboard/Project/ProjectBoard';
 import SecuredRoutes from './components/SecuredRoutes/SecuredRoutes';
 // import { useQuery } from '@apollo/client';
 // import { CHECK_AUTH } from './graphql/Query/queries';
-// import { useEffect } from 'react';
 import CreateProject from './pages/Dashboard/Project/createProject';
 import UserBoard from './pages/Dashboard/User/UserBoard';
 import TeamBoard from './pages/Dashboard/Team/TeamBoard';
 import EmailVerification from './pages/Auth/EmailVerification';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
-import { useEffect } from 'react';
-import { authState } from './utils/logout';
 import { ErrorAlert } from './components/ErrorAlert';
+import { useEffect } from 'react';
+import { authState } from './authManager';
+// import { useEffect } from 'react';
+// import { useQuery } from '@apollo/client';
+// import { CHECK_AUTH } from './graphql/Query/queries';
+// import { InterfaceUser } from './types/types';
+// import Loader from './components/Loader';
 
 function App() {
   const navigate = useNavigate();
@@ -31,10 +34,13 @@ function App() {
     return () => window.removeEventListener('app:logout', handleLogout);
   }, [navigate]);
 
+  // if (loading) {
+  //   <Loader size="lg" />;
+  // }
+
   return (
     <>
       <Routes>
-        {/* Public Routes */}
         <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/auth/verify" element={<EmailVerification />} />
@@ -55,7 +61,7 @@ function App() {
         </Route>
         <Route path="*" element={<PageNotFound />}></Route>
       </Routes>
-      <ErrorAlert/>
+      <ErrorAlert />
     </>
   );
 }

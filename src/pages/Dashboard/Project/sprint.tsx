@@ -31,7 +31,8 @@ const SprintsView: React.FC<ChildProps> = ({ projectId }) => {
       setLoader(true);
       const delay = new Promise((resolve) => setTimeout(resolve, 500));
       const res = await refetch();
-      if (res.data.getAllSprints.length > 0) {
+
+      if (res.data.getAllSprints) {
         setSprints(res.data.getAllSprints);
       }
       await Promise.all([delay]);
@@ -141,7 +142,7 @@ const SprintsView: React.FC<ChildProps> = ({ projectId }) => {
         setCreateTab={setCreateTab}
       />
 
-      <main className="max-w-7xl mx-auto px-6 py-6">
+      <main className="mx-auto px-6 py-6">
         {activeTab === 'ACTIVE' && renderActiveTab()}
         {activeTab === 'ALL' && renderAllTab()}
         {activeTab === 'COMPLETE' && renderCompletedTab()}

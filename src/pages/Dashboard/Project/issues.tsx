@@ -1,13 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { InterfaceIssue } from '../../../types/types';
+import { InterfaceIssue, InterfaceProject } from '../../../types/types';
 import { GET_ALL_ISSUES } from '../../../graphql/Query/issue';
 import { useQuery } from '@apollo/client';
 import Loader from '../../../components/Loader';
 import IssueTable from '../../../components/Issues/IssuesTable';
 
-const IssueBoard: React.FC<{ projectId: string }> = ({ projectId }) => {
+interface ChildProps {
+  project: InterfaceProject;
+}
+const IssueBoard: React.FC<ChildProps> = ({ project }) => {
   const [issues, setIssues] = useState<InterfaceIssue[]>([]);
   const [loader, setLoader] = useState(true);
+
+  const projectId = project.id;
 
   const { error, refetch } = useQuery<{ getAllIssues: InterfaceIssue[] }>(
     GET_ALL_ISSUES,

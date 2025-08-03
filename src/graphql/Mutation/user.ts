@@ -16,13 +16,12 @@ export const LOGIN_USER = gql`
       user {
         id
         email
-        username
         firstName
         lastName
         isVerified
+         profile {
+         avatar
       }
-      profile {
-        avatar
       }
       accessToken
       refreshToken
@@ -51,7 +50,6 @@ export const VERIFY_USER = gql`
       refreshToken
       user {
         email
-        username
         firstName
         lastName
         isVerified
@@ -65,11 +63,6 @@ export const VERIFY_USER = gql`
   }
 `;
 
-export const LOGOUT = gql`
-  mutation Logout {
-    logout
-  }
-`;
 
 export const REFRESH_TOKEN = gql`
   mutation RefreshToken($refreshToken: String) {

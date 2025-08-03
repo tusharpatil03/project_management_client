@@ -1,7 +1,6 @@
 export type SignupInput = {
   firstName: string;
   lastName: string;
-  username: string;
   email: string;
   password: string;
 };
@@ -11,13 +10,14 @@ export type LoginInput = {
   password: string;
 };
 
+export interface InterfaceAuth {
+  user: InterfaceUser;
+  accessToken: string;
+  refreshToken: string;
+}
+
 export type AuthResponce = {
-  login: {
-    user: InterfaceUser;
-    profile: InterfaceUserProfile;
-    accessToken: string;
-    refreshToken: string;
-  };
+  login: InterfaceAuth;
   signup: {
     message: string;
     success: boolean;
@@ -47,7 +47,6 @@ export type CreateProjectResponse = {
 export interface InterfaceUser {
   id: string;
   email: string;
-  username: string;
   isVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -107,6 +106,7 @@ export interface InterfaceIssue {
   assignee?: InterfaceUser;
   projectId?: string;
   sprintId?: string;
+  sprint: InterfaceSprint;
   createdAt: Date;
   updatedAt: Date;
   status: string;
@@ -119,6 +119,20 @@ export enum SprintStatus {
   COMPLETE,
 }
 
+export enum ProjectStatus {
+  ACTIVE,
+  PLANNED,
+  COMPLETE,
+}
+
+export interface InterfaceProjectTeam {
+  id: string;
+  projectId: string;
+  teamId: string;
+  Project: InterfaceProject;
+  Team: InterfaceTeam;
+}
+
 export interface InterfaceProject {
   id: string;
   key: string;
@@ -126,15 +140,17 @@ export interface InterfaceProject {
   description?: string;
   createdAt: string;
   updatedAt: string;
-  status: SprintStatus;
+  status: ProjectStatus;
   creatorId: string;
   issues?: InterfaceIssue[];
   sprints?: InterfaceSprint[];
+  teams: InterfaceProjectTeam[];
 }
 
 export interface InterfaceSprint {
   id: string;
   title: string;
+  key: string;
   status: string;
   description: string;
   projectId: string;
@@ -151,7 +167,6 @@ export type CreateTeamResponse = {
     id: string;
     name?: string;
     creatorId?: string;
-    members?: { id: string; email: string; username: string }[];
     projects?: { id: string; name?: string }[];
     createdAt?: string;
     updatedAt?: string;
@@ -209,7 +224,6 @@ export type CreateSprintResponse = {
     updatedAt?: string;
     creator?: {
       id: string;
-      username: string;
     };
     project?: {
       id: string;
@@ -250,7 +264,6 @@ export type SignupResponse = {
     user: {
       id: string;
       email: string;
-      username: string;
       firstName: string;
       lastName: string;
     };
@@ -269,7 +282,6 @@ export type LoginResponse = {
     user: {
       id: string;
       email: string;
-      username: string;
     };
     profile: {
       id: string;
@@ -326,7 +338,6 @@ export type RemoveAssigneeOfIssueResponse = {
     title: string;
     assignee?: {
       id: string;
-      username: string;
     };
   };
 };
@@ -351,7 +362,6 @@ export type AddTeamMemberResponse = {
   addTeamMember: {
     id: string;
     name?: string;
-    members?: { id: string; username: string; email: string }[];
   };
 };
 
@@ -367,7 +377,6 @@ export type RemoveTeamMemberResponse = {
   removeTeamMember: {
     id: string;
     name?: string;
-    members?: { id: string; username: string; email: string }[];
   };
 };
 
@@ -393,7 +402,6 @@ export type GetUserByIdResponse = {
   getUserById: {
     id: string;
     email: string;
-    username: string;
     role?: string;
     createdAt?: string;
     updatedAt?: string;
@@ -455,7 +463,6 @@ export type GetTeamByIdResponse = {
     id: string;
     name?: string;
     creatorId?: string;
-    members?: { id: string; email: string; username: string }[];
     projects?: { id: string; name?: string }[];
     createdAt?: string;
     updatedAt?: string;
@@ -482,13 +489,11 @@ export type GetIssueByIdResponse = {
       firstName?: string;
       lastName?: string;
       email?: string;
-      username: string;
     };
     assignee?: {
       id: string;
       firstName?: string;
       lastName?: string;
-      username?: string;
       email?: string;
       avatar?: string;
       createdAt?: string;
@@ -513,7 +518,6 @@ export type GetSprintByIdResponse = {
     updatedAt?: string;
     creator?: {
       id: string;
-      username: string;
     };
     project?: {
       id: string;
@@ -558,13 +562,11 @@ export type GetAllIssuesResponse = {
       firstName?: string;
       lastName?: string;
       email?: string;
-      username: string;
     };
     assignee?: {
       id: string;
       firstName?: string;
       lastName?: string;
-      username?: string;
       email?: string;
       avatar?: string;
       createdAt?: string;
@@ -589,7 +591,6 @@ export type GetAllSprintsResponse = {
     updatedAt?: string;
     creator?: {
       id: string;
-      username: string;
     };
     project?: {
       id: string;
@@ -608,7 +609,6 @@ export type GetAllUserTeamsResponse = {
     id: string;
     name?: string;
     creatorId?: string;
-    members?: { id: string; email: string; username: string }[];
     projects?: { id: string; name?: string }[];
     createdAt?: string;
     updatedAt?: string;

@@ -4,7 +4,7 @@ import { LOGIN_USER } from '../../graphql/Mutation/user';
 import { LoginInput, AuthResponce } from '../../types/types';
 import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
-import { authState } from '../../utils/logout';
+import authManager from '../../authManager';
 
 export function Login() {
   const [formData, setFormData] = useState<LoginInput>({
@@ -38,23 +38,13 @@ export function Login() {
         throw new Error('Token not Recieved');
       }
 
-      localStorage.setItem(
-        'name',
-        `${data.user.firstName} ${data.user.lastName}`
-      );
-      localStorage.setItem('id', data.user.id);
-      localStorage.setItem('email', data.user.email);
-      localStorage.setItem('IsLoggedIn', 'TRUE');
-      localStorage.setItem('avatar', data.profile.avatar);
-      localStorage.setItem('username', data.user.username);
-      localStorage.setItem('token', accessToken);
-      localStorage.setItem('refreshToken', refreshToken);
-
       if (!data.user.isVerified) {
         navigate('/auth/verify');
+      } else {
+        console.log(data);
+        localStorage.setItem("refreshToken", refreshToken)
+        authManager.setAuth(accessToken, data.user);
       }
-      authState.isAuthenticated = true;
-      authState.skipAuth = true;
 
       navigate('/dashboard/projects');
     } catch (err) {

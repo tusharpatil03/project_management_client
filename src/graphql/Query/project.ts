@@ -12,25 +12,6 @@ export const GET_RECENT_PROJECT = gql`
       updatedAt
       creatorId
       description
-      issues {
-        id
-        title
-        type
-        status
-        assignee {
-          id
-          email
-          username
-          firstName
-          lastName
-          profile {
-            avatar
-          }
-        }
-        parent {
-          id
-        }
-      }
     }
   }
 `;

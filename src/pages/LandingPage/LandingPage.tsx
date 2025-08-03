@@ -7,9 +7,11 @@ import Footer from './Footer';
 import Features from './Features';
 import Hero from './Hero';
 import { useNavigate } from 'react-router-dom';
+import { authState } from '../../authManager';
 
 const LandingPage = () => {
   const [tab, setTab] = useState<boolean>(false);
+  const isLoggedIn = authState.isAuthenticated;
 
   const handleClick: React.MouseEventHandler<HTMLElement> = () => {
     setTab((prev) => !prev);
@@ -20,17 +22,15 @@ const LandingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('IsLoggedIn');
-    if (isLoggedIn === 'TRUE') {
+    if (isLoggedIn) {
       navigate('/dashboard/projects', { replace: true });
     } else {
       const timer = setTimeout(() => {
         setLoaderComponent(false);
       }, 1000);
-
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [authState]);
 
   return loaderComponent ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

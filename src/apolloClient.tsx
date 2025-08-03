@@ -2,14 +2,14 @@
 import {
   ApolloClient,
   ApolloLink,
+  createHttpLink,
   InMemoryCache,
   NormalizedCacheObject,
-  createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/link-error';
-import { refreshToken } from './utils/refreshToken';
-import { triggerGlobalLogout } from './utils/logout';
+import { refresh } from './utils/refreshToken';
+import authManager from './authManager';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -18,7 +18,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('token');
+  const token = authManager.getAuth();
   return {
     headers: {
       ...headers,
@@ -32,22 +32,20 @@ const errorLink = onError(
     if (graphQLErrors) {
       graphQLErrors.map(({ message }) => {
         if (message == 'UnauthenticatedError') {
-          refreshToken().then((res) => {
-            if (res) {
+          refresh().then((token) => {
+            if (token) {
               const oldHeaders = operation.getContext().headers;
-              const accessToken = localStorage.getItem('token');
               operation.setContext({
                 headers: {
                   ...oldHeaders,
-                  authorization: 'Bearer ' + accessToken,
+                  authorization: 'Bearer ' + token,
                 },
               });
               window.location.replace('/dashboard/projects');
               return forward(operation);
             } else {
               localStorage.clear();
-              triggerGlobalLogout();
-              window.location.replace('/');
+              authManager.logout();
             }
           });
         }
