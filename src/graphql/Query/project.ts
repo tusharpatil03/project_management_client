@@ -1,24 +1,30 @@
 import { gql } from '@apollo/client';
 
 export const GET_RECENT_PROJECT = gql`
-  query GetRecentProject {
-    getRecentProject {
+  query GetrecentProject {
+  getRecentProject {
+    createdAt
+    creatorId
+    description
+    id
+    key
+    name
+    status
+    issues {
       id
-      key
-      name
-      description
-      status
-      createdAt
-      updatedAt
-      creatorId
-      description
+      parent {
+        id
+      }
     }
+    updatedAt
   }
+}
+
 `;
 
-export const GET_PROJECT_BY_ID = gql`
-  query GetProjectById($projectId: ID!) {
-    getProjectById(projectId: $projectId) {
+export const GET_PROJECT = gql`
+  query GetProject($projectId: String) {
+    getProject(projectId: $projectId) {
       id
       key
       name

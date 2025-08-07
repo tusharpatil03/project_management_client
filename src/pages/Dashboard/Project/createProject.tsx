@@ -44,7 +44,7 @@ const CreateProject: React.FC<CreateProjectProps> = () => {
       if (data?.createProject) {
         setForm(initialForm);
         setSuccess(true);
-        navigate('/dashboard/projects');
+        navigate('/projects');
       }
     } catch {
       setSuccess(false);

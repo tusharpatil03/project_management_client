@@ -1,8 +1,8 @@
-import IssueTable from '../../Issues/IssuesTable';
+import IssueTable from '../Issues/IssuesTable';
 import { InterfaceSprint } from '../../../types/types';
-import CreateIssue from '../../../pages/Dashboard/Project/CreateIssue';
+import CreateIssue from '../Issues/CreateIssue';
 import { useMemo, useState } from 'react';
-import Button from '../../Button/Button';
+import Button from '../../../components/Button/Button';
 
 interface ChildProps {
   sprint: InterfaceSprint;

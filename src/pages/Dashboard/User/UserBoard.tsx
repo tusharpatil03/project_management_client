@@ -26,7 +26,7 @@ const UserBoard = () => {
               <td className="py-2 px-4">{user.email}</td>
               <td className="py-2 px-4 text-center">
                 <button
-                  onClick={() => navigate(`/dashboard/users/${user.id}`)}
+                  onClick={() => navigate(`/users/${user.id}`)}
                   className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600"
                 >
                   View

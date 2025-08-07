@@ -25,7 +25,7 @@ const TeamBoard = () => {
               <td className="py-2 px-4">{team.name}</td>
               <td className="py-2 px-4 text-center">
                 <button
-                  onClick={() => navigate(`/dashboard/teams/${team.id}`)}
+                  onClick={() => navigate(`/people/${team.id}`)}
                   className="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-700"
                 >
                   View

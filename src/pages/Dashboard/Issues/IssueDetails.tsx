@@ -1,8 +1,8 @@
 import { useQuery } from '@apollo/client';
-import { GET_ISSUE_BY_ID } from '../../graphql/Query/issue';
-import Avatar from '../Profile/Avatar';
-import Loader from '../Loader';
-import { InterfaceIssue } from '../../types/types';
+import { GET_ISSUE_BY_ID } from '../../../graphql/Query/issue';
+import Avatar from '../../../components/Profile/Avatar';
+import Loader from '../../../components/Loader';
+import { InterfaceIssue } from '../../../types/types';
 
 interface ChildProps {
   issueId: string;
@@ -138,25 +138,5 @@ const IssueDetails: React.FC<ChildProps> = ({ issueId, setIssueTab }) => {
     </div>
   );
 };
-
-// const IssueDetails: React.FC<ChildProps> = (props) => {
-//   return (
-//     <ErrorBoundary
-//       fallback={
-//         <div className="p-4 bg-white rounded-lg shadow">
-//           <h3 className="text-red-600">Failed to load issue details</h3>
-//           <button
-//             onClick={() => props.setIssueTab(false)}
-//             className="mt-2 px-4 py-2 bg-gray-200 rounded"
-//           >
-//             Close
-//           </button>
-//         </div>
-//       }
-//     >
-//       <IssueDetailsContent {...props} />
-//     </ErrorBoundary>
-//   );
-// };
 
 export default IssueDetails;

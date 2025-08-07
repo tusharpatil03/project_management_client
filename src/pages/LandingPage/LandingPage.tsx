@@ -7,11 +7,17 @@ import Footer from './Footer';
 import Features from './Features';
 import Hero from './Hero';
 import { useNavigate } from 'react-router-dom';
-import { authState } from '../../authManager';
+import { authState } from '../../utils/authManager';
 
 const LandingPage = () => {
   const [tab, setTab] = useState<boolean>(false);
   const isLoggedIn = authState.isAuthenticated;
+
+  // const location = useLocation();
+  // console.log(location);
+  // if (location.pathname === '/login' && tab === false) {
+  //   setTab(true);
+  // }
 
   const handleClick: React.MouseEventHandler<HTMLElement> = () => {
     setTab((prev) => !prev);
@@ -23,7 +29,7 @@ const LandingPage = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/dashboard/projects', { replace: true });
+      navigate('/projects', { replace: true });
     } else {
       const timer = setTimeout(() => {
         setLoaderComponent(false);

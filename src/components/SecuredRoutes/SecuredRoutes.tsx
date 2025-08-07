@@ -1,8 +1,19 @@
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { authState } from '../../authManager';
+import { authState } from '../../utils/authManager';
 import { useEffect } from 'react';
 
 const SecuredRoutes: React.FC = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleLogout = () => {
+      authState.isAuthenticated = false;
+      navigate('/', { replace: true });
+    };
+
+    window.addEventListener('app:logout', handleLogout);
+    return () => window.removeEventListener('app:logout', handleLogout);
+  }, [navigate]);
   const isAuthenticated = authState.isAuthenticated;
   return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 };

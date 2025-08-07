@@ -4,7 +4,7 @@ import { LOGIN_USER } from '../../graphql/Mutation/user';
 import { LoginInput, AuthResponce } from '../../types/types';
 import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
-import authManager from '../../authManager';
+import authManager from '../../utils/authManager';
 
 export function Login() {
   const [formData, setFormData] = useState<LoginInput>({
@@ -41,12 +41,11 @@ export function Login() {
       if (!data.user.isVerified) {
         navigate('/auth/verify');
       } else {
-        console.log(data);
-        localStorage.setItem("refreshToken", refreshToken)
+        localStorage.setItem('refreshToken', refreshToken);
         authManager.setAuth(accessToken, data.user);
       }
 
-      navigate('/dashboard/projects');
+      navigate('/projects');
     } catch (err) {
       console.error(`Login error:`, err);
     }

@@ -10,10 +10,10 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-  { title: 'Dashboard', path: '/dashboard/projects/:projectId', icon: 'fa-gauge' },
+  { title: 'Dashboard', path: '/projects', icon: 'fa-gauge' },
   {
     title: 'Inbox',
-    path: '/dashboard/inbox',
+    path: '/people/:',
     icon: 'fa-inbox',
     badge: 3,
   },

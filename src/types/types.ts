@@ -145,6 +145,7 @@ export interface InterfaceProject {
   issues?: InterfaceIssue[];
   sprints?: InterfaceSprint[];
   teams: InterfaceProjectTeam[];
+  creator?: InterfaceUser;
 }
 
 export interface InterfaceSprint {

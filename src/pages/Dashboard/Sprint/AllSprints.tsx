@@ -3,7 +3,7 @@ import { InterfaceSprint } from '../../../types/types';
 import { GET_ALL_SPRINTS } from '../../../graphql/Query/sprint';
 import { useQuery } from '@apollo/client';
 import Loader from '../../../components/Loader';
-import Sprint from '../../../components/Project/Sprint/Sprint';
+import Sprint from './Sprint';
 import CreateSprint from './CreateSprint';
 import TabNavigation from '../../../components/TabNavigation/TabNavigation';
 
@@ -152,3 +152,30 @@ const SprintsView: React.FC<ChildProps> = ({ projectId }) => {
 };
 
 export default SprintsView;
+
+import { useOutletContext } from 'react-router-dom';
+import { InterfaceProject } from '../../../types/types';
+
+export interface ProjectContextType {
+  project: InterfaceProject;
+  refetch: () => void;
+  onCreateSuccess: () => void;
+}
+
+export const ProjectSprints: React.FC = () => {
+  const { project } = useOutletContext<ProjectContextType>();
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Sprints</h2>
+          <p className="text-gray-600 mt-1">
+            Manage project sprints and iterations
+          </p>
+        </div>
+      </div>
+      <SprintsView projectId={project.id} />
+    </div>
+  );
+};

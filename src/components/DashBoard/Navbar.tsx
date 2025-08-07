@@ -47,7 +47,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
               ></i>
             </button>
 
-            <Link to="/dashboard" className="flex items-center group">
+            <Link to="/projects" className="flex items-center group">
               <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
                 <i className="fa-solid fa-tasks text-white text-sm"></i>
               </div>

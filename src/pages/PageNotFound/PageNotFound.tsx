@@ -14,7 +14,7 @@ const PageNotFound = ({
         <h1 className="display-1 text-danger mb-4">404</h1>
         <p className="lead text-muted mb-4">{notFoundMsg}</p>
         <Link
-          to="/dashboard/projects"
+          to="/projects"
           className="btn btn-primary btn-lg px-4"
           aria-label="Go back to dashboard"
         >

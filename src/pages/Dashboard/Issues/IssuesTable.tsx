@@ -1,51 +1,15 @@
-// import { useState } from 'react';
 import { useState } from 'react';
-import { InterfaceIssue, InterfaceSprint } from '../../types/types';
+import { InterfaceIssue, InterfaceSprint } from '../../../types/types';
 import IssueDetails from './IssueDetails';
-import DeleteTab from '../Actions/DeleteTab';
+import DeleteTab from '../../../components/Actions/DeleteTab';
 import { useMutation, useQuery } from '@apollo/client';
-import { ASSIGN_ISSUE, DELETE_ISSUES } from '../../graphql/Mutation/issue';
-import { showError } from '../../utils/showError';
-
-// BaseTable.tsx - Minimal shared styles and structure
+import { ASSIGN_ISSUE, DELETE_ISSUES } from '../../../graphql/Mutation/issue';
+import { showError } from '../../../utils/showError';
 import React from 'react';
-import Loader from '../Loader';
-import { GET_ALL_MEMBERS } from '../../graphql/Query/team';
-import Members from '../Team/Members';
-
-interface BaseTableProps {
-  children: React.ReactNode;
-  className?: string;
-  loading?: boolean;
-}
-
-export const BaseTable: React.FC<BaseTableProps> = ({
-  children,
-  className = '',
-  loading = false,
-}) => {
-  if (loading) {
-    return (
-      <div
-        className={`relative overflow-x-auto shadow-md sm:rounded-lg ${className}`}
-      >
-        <div className="flex justify-center items-center h-32">
-          <Loader size="lg" />
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div
-      className={`relative overflow-x-auto shadow-md sm:rounded-lg ${className}`}
-    >
-      <table className="w-full text-sm text-left text-gray-500">
-        {children}
-      </table>
-    </div>
-  );
-};
+import Loader from '../../../components/Loader';
+import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
+import Members from '../../../components/Team/Members';
+import BaseTable from '../../../components/Table/BaseTable';
 
 interface IssueTableProps {
   issues: InterfaceIssue[];
@@ -144,22 +108,22 @@ const IssueTable: React.FC<IssueTableProps> = ({
     </span>
   );
 
-  const renderDescription = (description: string) => {
-    if (!description) {
-      return <span className="text-gray-400"></span>;
-    }
+  // const renderDescription = (description: string) => {
+  //   if (!description) {
+  //     return <span className="text-gray-400"></span>;
+  //   }
 
-    return (
-      <div className="flex items-center gap-2">
-        {description && (
-          <p className="text-sm text-gray-500 mt-1 truncate max-w-xs">
-            {description}
-          </p>
-        )}
-        <p>Not Provided</p>
-      </div>
-    );
-  };
+  //   return (
+  //     <div className="flex items-center gap-2">
+  //       {description && (
+  //         <p className="text-sm text-gray-500 mt-1 truncate max-w-xs">
+  //           {description}
+  //         </p>
+  //       )}
+  //       <p>Not Provided</p>
+  //     </div>
+  //   );
+  // };
 
   const renderSprintInfo = (sprint: InterfaceSprint) => {
     if (!sprint) {
@@ -370,7 +334,6 @@ const IssueTable: React.FC<IssueTableProps> = ({
               />
             </th>
             <th className="px-6 py-3 text-left">Title</th>
-            <th className="px-6 py-3 text-left">Description</th>
             <th className="px-6 py-3 text-left">Type</th>
             <th className="px-6 py-3 text-left">Sprint</th>
             <th className="px-6 py-3 text-left">Assignee</th>
@@ -433,9 +396,6 @@ const IssueTable: React.FC<IssueTableProps> = ({
                   >
                     {issue.title}
                   </button>
-                </td>
-                <td className="px-6 py-4">
-                  {renderDescription(issue.description || '')}
                 </td>
                 <td className="px-6 py-4">{renderIssueType(issue.type)}</td>
                 <td className="px-6 py-4">{renderSprintInfo(issue.sprint)}</td>

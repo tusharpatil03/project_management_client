@@ -1,213 +1,92 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Outlet, useSearchParams } from 'react-router-dom';
-import { GET_RECENT_PROJECT } from '../../../graphql/Query/project';
-import { InterfaceProject, ProjectStatus } from '../../../types/types';
-import CreateIssue from './CreateIssue';
-import SprintsView from './sprint';
-import IssueBoard from './issues';
-import Loader from '../../../components/Loader';
+import { Outlet, useParams, useLocation, useNavigate } from 'react-router-dom';
+import { GET_PROJECT } from '../../../graphql/Query/project';
+import CreateIssue from '../Issues/CreateIssue';
+import ErrorState from '../../../components/ErrorState';
+import ProjectHeader from './ProjectHeader';
+import LoadingState from '../../../components/LoadingState';
 
-type TabType = 'issues' | 'sprints' | 'timeline' | 'progress';
+type TabType = 'issues' | 'sprints' | 'progress' | 'timeline';
 
 interface TabConfig {
   id: TabType;
   label: string;
-  component: React.ReactNode;
+  path: string;
   allowCreate: boolean;
   description?: string;
-}
-
-interface ProjectHeaderProps {
-  project: InterfaceProject;
-  onCreateClick: () => void;
-  showCreateButton: boolean;
-}
-
-interface ErrorStateProps {
-  title: string;
-  message: string;
-  action?: React.ReactNode;
 }
 
 const TABS: TabConfig[] = [
   {
     id: 'sprints',
     label: 'Sprints',
-    component: null, // Will be set dynamically
+    path: '/sprints',
     allowCreate: true,
     description: 'Manage project sprints and iterations',
   },
   {
     id: 'issues',
     label: 'Issues',
-    component: null, // Will be set dynamically
+    path: '/issues',
     allowCreate: true,
     description: 'Track and manage project issues',
   },
   {
-    id: 'timeline',
-    label: 'Timeline',
-    component: null, // Will be set dynamically
-    allowCreate: false,
-    description: 'View project timeline and milestones',
-  },
-  {
     id: 'progress',
     label: 'Progress',
-    component: null, // Will be set dynamically
+    path: '/progress',
     allowCreate: false,
     description: 'Analyze project progress and metrics',
   },
+  {
+    id: 'timeline',
+    label: 'Timeline',
+    path: '/timeline',
+    allowCreate: false,
+    description: 'View project timeline and milestones',
+  },
 ];
 
-const ProjectHeader: React.FC<ProjectHeaderProps> = ({
-  project,
-  onCreateClick,
-  showCreateButton,
-}) => (
-  <header className="bg-white shadow-sm border-b border-gray-200">
-    <div className="mx-auto px-6 py-6">
-      <div className="flex justify-between items-start">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <h1 className="text-3xl font-bold text-gray-900">{project.name}</h1>
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-              {project.key}
-            </span>
-            <span
-              className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                project.status === ProjectStatus.ACTIVE
-                  ? 'bg-green-100 text-green-800'
-                  : 'bg-gray-100 text-gray-800'
-              }`}
-            >
-              {project.status || 'Unknown'}
-            </span>
-          </div>
-          <p className="text-gray-600 max-w-2xl leading-relaxed">
-            {project.description || 'No description provided'}
-          </p>
-          <div className="flex items-center gap-4 mt-3 text-sm text-gray-500">
-            <span>
-              Created: {new Date(project.createdAt).toLocaleDateString()}
-            </span>
-            <span>•</span>
-            <span>
-              Last updated: {new Date(project.updatedAt).toLocaleDateString()}
-            </span>
-          </div>
-        </div>
-
-        {showCreateButton && (
-          <button
-            onClick={onCreateClick}
-            className="ml-6 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 flex items-center gap-2 shadow-sm"
-          >
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 4v16m8-8H4"
-              />
-            </svg>
-            Create
-          </button>
-        )}
-      </div>
-    </div>
-  </header>
-);
-
-const ErrorState: React.FC<ErrorStateProps> = ({ title, message, action }) => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <div className="text-center max-w-md mx-auto">
-      <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
-        <svg
-          className="w-8 h-8 text-red-600"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-          />
-        </svg>
-      </div>
-      <h2 className="text-xl font-semibold text-gray-900 mb-2">{title}</h2>
-      <p className="text-gray-600 mb-6">{message}</p>
-      {action}
-    </div>
-  </div>
-);
-
-const LoadingState = () => (
-  <div className="min-h-screen flex items-center justify-center bg-gray-50">
-    <div className="text-center">
-      <Loader size="lg" />
-      <p className="mt-4 text-gray-600">Loading project...</p>
-    </div>
-  </div>
-);
-
-const ComingSoonState: React.FC<{ title: string; description: string }> = ({
-  title,
-  description,
-}) => (
-  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
-    <div className="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-      <svg
-        className="w-8 h-8 text-blue-600"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-        />
-      </svg>
-    </div>
-    <h3 className="text-lg font-semibold text-gray-900 mb-2">{title}</h3>
-    <p className="text-gray-600 max-w-md mx-auto">{description}</p>
-  </div>
-);
-
 const ProjectBoard = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [project, setProject] = useState<InterfaceProject | null>(null);
   const [createTab, setCreateTab] = useState<boolean>(false);
 
-  // Get active tab from URL params, default to 'sprints'
-  const activeTab = (searchParams.get('tab') as TabType) || 'sprints';
+  const { projectId } = useParams();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const { data, loading, error, refetch } = useQuery(GET_RECENT_PROJECT, {
+  console.log('ProjectBoard render - projectId:', projectId);
+
+  const getActiveTabFromPath = (): TabType => {
+    const path = location.pathname;
+    if (path.includes('/issues')) return 'issues';
+    if (path.includes('/sprints')) return 'sprints';
+    if (path.includes('/progress')) return 'progress';
+    if (path.includes('/timeline')) return 'timeline';
+    return 'sprints'; // default
+  };
+
+  const activeTab = getActiveTabFromPath();
+
+  const { data, loading, error, refetch } = useQuery(GET_PROJECT, {
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
+    variables: {
+      projectId: projectId as string,
+    },
+    skip: !projectId,
   });
 
-  useEffect(() => {
-    if (data?.getRecentProject) {
-      setProject(data.getRecentProject);
-    }
-  }, [data]);
+  // Get project directly from data - NO useState needed
+  const project = data?.getProject || null;
 
+  // Stable callback - doesn't change on every render
   const handleTabChange = useCallback(
     (tab: TabType) => {
-      setSearchParams({ tab });
+      const targetPath = `/projects/${projectId}${TABS.find((t) => t.id === tab)?.path}`;
+      navigate(targetPath);
     },
-    [setSearchParams]
+    [projectId, navigate]
   );
 
   const handleCreateClick = useCallback(() => {
@@ -216,55 +95,10 @@ const ProjectBoard = () => {
 
   const handleCreateSuccess = useCallback(() => {
     setCreateTab(false);
-    // refetch data or trigger updates
   }, []);
 
-  const currentTabConfig = useMemo(
-    () => TABS.find((tab) => tab.id === activeTab) || TABS[0],
-    [activeTab]
-  );
-
-  const renderTabContent = useMemo(() => {
-    if (!project) return null;
-
-    switch (activeTab) {
-      case 'issues':
-        return <IssueBoard project={project} />;
-      case 'sprints':
-        return <SprintsView projectId={project.id} />;
-      case 'timeline':
-        return (
-          <ComingSoonState
-            title="Timeline Coming Soon"
-            description="Project timeline and milestone tracking features are currently in development."
-          />
-        );
-      case 'progress':
-        return (
-          <ComingSoonState
-            title="Progress Analytics Coming Soon"
-            description="Advanced project analytics and progress tracking will be available soon."
-          />
-        );
-      default:
-        return null;
-    }
-  }, [activeTab, project]);
-  // const handleCreateTabs = () => {
-  //   if (createTab) {
-  //     return (
-  //       <CreateIssue
-  //         projectId={project.id}
-  //         sprintId=""
-  //         setCreateTaskTab={setCreateTab}
-  //         onSuccess={() => {}}
-  //       />
-  //     );
-  //   }
-  // };
-
   if (loading) {
-    return <LoadingState />;
+    return <LoadingState size="lg" />;
   }
 
   // Error state
@@ -293,7 +127,7 @@ const ProjectBoard = () => {
     return (
       <ErrorState
         title="No Project Found"
-        message="We couldn't find any recent project. Please create a new project or select an existing one."
+        message="We couldn't find the requested project. Please check the project ID or try refreshing."
         action={
           <button
             onClick={() => refetch()}
@@ -323,14 +157,9 @@ const ProjectBoard = () => {
       )}
 
       <div className="min-h-screen bg-gray-50">
-        <ProjectHeader
-          project={project}
-          onCreateClick={handleCreateClick}
-          showCreateButton={currentTabConfig.allowCreate}
-        />
+        <ProjectHeader project={project} onCreateClick={handleCreateClick} />
 
-        {/* Navigation Tabs */}
-        <nav className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <nav className="bg-white border-b border-gray-200 sticky top-0">
           <div className="mx-auto px-6">
             <div className="flex space-x-8">
               {TABS.map((tab) => (
@@ -354,13 +183,16 @@ const ProjectBoard = () => {
           </div>
         </nav>
 
-        {/* Main Content */}
         <main className="mx-auto px-6 py-8">
-          <div className="transition-all duration-200">{renderTabContent}</div>
+          <div className="transition-all duration-200">
+            <Outlet
+              context={{
+                project,
+              }}
+            />
+          </div>
         </main>
       </div>
-
-      <Outlet />
     </>
   );
 };

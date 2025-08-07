@@ -3,7 +3,7 @@ import { InterfaceIssue, InterfaceProject } from '../../../types/types';
 import { GET_ALL_ISSUES } from '../../../graphql/Query/issue';
 import { useQuery } from '@apollo/client';
 import Loader from '../../../components/Loader';
-import IssueTable from '../../../components/Issues/IssuesTable';
+import IssueTable from './IssuesTable';
 
 interface ChildProps {
   project: InterfaceProject;
@@ -56,8 +56,34 @@ const IssueBoard: React.FC<ChildProps> = ({ project }) => {
 
   return (
     <div>
-      <IssueTable issues={issues} projectId={projectId}/>
+      <IssueTable issues={issues} projectId={projectId} />
     </div>
   );
 };
 export default IssueBoard;
+
+import { useOutletContext } from 'react-router-dom';
+
+interface ProjectContextType {
+  project: InterfaceProject;
+  refetch: () => void;
+  onCreateSuccess: () => void;
+}
+
+export const ProjectIssues: React.FC = () => {
+  const { project } = useOutletContext<ProjectContextType>();
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-gray-900">Issues</h2>
+          <p className="text-gray-600 mt-1">Track and manage project issues</p>
+        </div>
+      </div>
+
+      {/* Your existing IssueBoard component */}
+      <IssueBoard project={project} />
+    </div>
+  );
+};
