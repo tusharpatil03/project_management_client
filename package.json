@@ -21,7 +21,8 @@
     "lucide-react": "^0.488.0",
     "react": "^19.0.0",
     "react-cookie": "^8.0.1",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "recharts": "^3.1.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

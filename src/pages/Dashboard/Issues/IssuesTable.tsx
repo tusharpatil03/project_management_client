@@ -434,7 +434,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
     },
   });
 
-  const [removeAssignee, { loading:removeAssigneeLoading, error:removeAssigneeError }] = useMutation(REMOVE_ASSIGNEE, {
+  const [removeAssignee, { loading:removeAssigneeLoading }] = useMutation(REMOVE_ASSIGNEE, {
     errorPolicy: 'all',
     onCompleted: (data) => {
       if (data?.removeAssineeOfIssue?.success) {
