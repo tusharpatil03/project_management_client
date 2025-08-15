@@ -35,7 +35,7 @@ const EmailVerification: React.FC = () => {
         if (result.user.isVerified) {
           const { accessToken, refreshToken } = result;
           localStorage.setItem('refreshToken', refreshToken);
-          authManager.setAuth(accessToken, result.user);
+          authManager.setAuth(accessToken);
           navigate('/projects');
         }
       } catch (err: any) {

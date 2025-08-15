@@ -95,7 +95,8 @@ const ProjectBoard = () => {
 
   const handleCreateSuccess = useCallback(() => {
     setCreateTab(false);
-  }, []);
+    navigate(`/projects/${projectId}/issues`);
+  }, [projectId, navigate, createTab, refetch]);
 
   if (loading) {
     return <LoadingState size="lg" />;

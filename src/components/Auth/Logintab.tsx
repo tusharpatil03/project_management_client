@@ -23,6 +23,7 @@ export function Login() {
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -39,10 +40,10 @@ export function Login() {
       }
 
       if (!data.user.isVerified) {
-        navigate('/auth/verify');
+        navigate('/signup/verify');
       } else {
         localStorage.setItem('refreshToken', refreshToken);
-        authManager.setAuth(accessToken, data.user);
+        authManager.setAuth(accessToken);
       }
 
       navigate('/projects');

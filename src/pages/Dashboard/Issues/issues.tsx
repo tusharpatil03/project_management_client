@@ -56,7 +56,7 @@ const IssueBoard: React.FC<ChildProps> = ({ project }) => {
 
   return (
     <div>
-      <IssueTable issues={issues} projectId={projectId} />
+      <IssueTable issues={issues} projectId={projectId} onIssueUpdate={refetch}/>
     </div>
   );
 };

@@ -3,7 +3,7 @@ import Navbar from "../../components/DashBoard/Navbar";
 import { Sidebar } from "../../components/DashBoard/Sidebar";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);

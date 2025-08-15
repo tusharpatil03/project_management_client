@@ -1,5 +1,3 @@
-import { InterfaceUser } from "../types/types";
-
 
 export const authState = {
     isAuthenticated: !!localStorage.getItem('token'),
@@ -13,16 +11,16 @@ export const authManager = {
         return token
     },
 
-    setAuth: (token: string, user: InterfaceUser | undefined) => {
+    setAuth: (token: string) => {
         authState.isAuthenticated = true;
         authState.skipAuth = false;
         localStorage.setItem("token", token);
-        if (user) {
-            localStorage.setItem("firstName", user.firstName);
-            localStorage.setItem("lastName", user.lastName);
-            localStorage.setItem("email", user.email);
-            localStorage.setItem("avatar", user.profile.avatar);
-        }
+        // if (user) {
+        //     localStorage.setItem("firstName", user.firstName);
+        //     localStorage.setItem("lastName", user.lastName);
+        //     localStorage.setItem("email", user.email);
+        //     localStorage.setItem("avatar", user.profile.avatar);
+        // }
     },
 
     isAuth: () => {
@@ -86,7 +84,7 @@ export const authManager = {
             }
 
             // Update auth state
-            authManager.setAuth(accessToken, undefined)
+            authManager.setAuth(accessToken)
             localStorage.setItem("refreshToken", newRefreshToken);
             console.log('Token refreshed successfully');
             return accessToken;

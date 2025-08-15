@@ -38,6 +38,7 @@ function App() {
               <Route path="progress" element={<ProjectProgress />} />
               <Route path="timeline" element={<ProjectTimeline />} />
             </Route>
+            <Route path="/projects/:projectId/details" element={<ProjectBoard />}></Route>
             <Route path="/people/:userId" element={<UserBoard />}></Route>
             <Route path="/people/search" element={<UserBoard />}></Route>
             <Route path="/people/teams" element={<TeamBoard />}></Route>

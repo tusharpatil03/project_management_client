@@ -46,22 +46,30 @@ export const REMOVE_ISSUE = gql`
     }
   }
 `;
-export const REMOVE_ASSIGNEE_OF_ISSUE = gql`
-  mutation RemoveAssineeOfIssue($issueId: ID!) {
-    removeAssineeOfIssue(issueId: $issueId) {
-      id
-      title
-      assignee {
-        id
-      }
-    }
-  }
-`;
 
 
 export const DELETE_ISSUES = gql`
 mutation RemoveIssue($input: removeIssueInput!){
   removeIssue(input: $input) {
+    message
+    status
+    success
+  }
+}
+`
+
+export const REMOVE_ASSIGNEE = gql`
+mutation RemoveAssignee($issueId: ID!){
+  removeAssineeOfIssue(issueId: $issueId){
+    message
+    success
+  }
+}
+`
+
+export const ADD_ISSUE_IN_SPRINT = gql`
+mutation AddIssueInSprint($input: addIssueInput!) {
+  addIssueInSprint(input: $input) {
     message
     status
     success

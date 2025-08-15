@@ -138,6 +138,7 @@ export interface InterfaceProject {
   key: string;
   name: string;
   description?: string;
+  starred?: boolean;
   createdAt: string;
   updatedAt: string;
   status: ProjectStatus;
@@ -619,3 +620,8 @@ export type GetAllUserTeamsResponse = {
 export type GetAllUserTeamsVariables = {
   userId: string;
 };
+
+
+export type GetAllProjectsResponce = {
+  getAllProjects: InterfaceProject[];
+}

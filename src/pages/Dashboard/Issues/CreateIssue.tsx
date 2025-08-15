@@ -38,6 +38,7 @@ const CreateIssue: React.FC<CreateIssueProps> = ({
   projectId,
   sprintId,
   setCreateTaskTab,
+  onSuccess,
 }) => {
   const [formData, setFormData] = useState<CreateIssueInput>({
     ...initialForm,
@@ -112,6 +113,7 @@ const CreateIssue: React.FC<CreateIssueProps> = ({
         return;
       }
       setSuccess(true);
+      onSuccess();
       setFormData({ ...initialForm, projectId });
       setCreateTaskTab(false);
     } catch (err: any) {

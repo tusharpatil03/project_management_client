@@ -43,15 +43,24 @@ export const GET_PROJECT = gql`
 
 export const GET_ALL_PROJECTS = gql`
   query GetAllProjects {
-    getAllProjects {
+  getAllProjects {
+    id
+    key
+    name
+    status
+    creatorId
+    description
+    createdAt
+    updatedAt
+    creator {
       id
-      key
-      name
-      description
-      createdAt
-      updatedAt
-      status
-      creatorId
+      email
+      firstName
+      lastName
+      profile {
+        avatar
+      }
     }
   }
+}
 `;

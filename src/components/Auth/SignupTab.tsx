@@ -87,7 +87,7 @@ export function SignUp() {
       }
 
       localStorage.setItem('email', formData.email);
-      navigate('/auth/verify');
+      navigate('/signup/verify');
     } catch (err) {
       console.error('SignUp error:', err);
       throw new Error('Internal Server Error');

@@ -1,4 +1,5 @@
-import { Loader } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import LoadingState from '../LoadingState';
 
 interface BaseTableProps {
   children: React.ReactNode;
@@ -11,13 +12,19 @@ const BaseTable: React.FC<BaseTableProps> = ({
   className = '',
   loading = false,
 }) => {
-  if (loading) {
+  const [isLoading, setIsLoading] = useState(loading);
+
+  useEffect(() => {
+    setIsLoading(loading);
+  }, [loading]);
+
+  if (isLoading) {
     return (
       <div
         className={`relative overflow-x-auto shadow-md sm:rounded-lg ${className}`}
       >
         <div className="flex justify-center items-center h-32">
-          <Loader size="lg" />
+          <LoadingState size="lg" />
         </div>
       </div>
     );
@@ -33,6 +40,5 @@ const BaseTable: React.FC<BaseTableProps> = ({
     </div>
   );
 };
-
 
 export default BaseTable;
