@@ -72,6 +72,12 @@ export const GET_PROJECT_STAT = gql`
       closedIssues
       inProgressIssues
       totalSprints
+      activeSprintStat {
+        totalIssues
+        openIssues
+        closedIssues
+        inProgressIssues
+      }
     }
   }
 `;
@@ -82,5 +88,10 @@ export interface ProjectStat {
   closedIssues: number;
   inProgressIssues: number;
   totalSprints: number;
-  activeSprint: number;
+  activeSprintStat: {
+    totalIssues: number;
+    openIssues: number;
+    closedIssues: number;
+    inProgressIssues: number;
+  }
 }
