@@ -38,7 +38,7 @@ interface SidebarProps {
 export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
   const location = useLocation();
   const { recentProjects, starredProjects, user, loading } = useDashboard();
-  console.log(recentProjects);
+
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
   const sidebarRef = useRef<HTMLDivElement>(null);
 

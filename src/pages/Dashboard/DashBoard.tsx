@@ -185,6 +185,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
         )
         .slice(0, 4);
 
+
       const starredProjects = projects.filter((project) => project.starred);
       const currentProject = recentProjects[0] || projects[0] || null;
 
@@ -234,6 +235,7 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <DashboardContext.Provider value={contextValue}>
+      {true?  <>{console.log(contextValue)}</> : <></>}
       {children}
     </DashboardContext.Provider>
   );

@@ -33,3 +33,27 @@ export const GET_TEAM_BY_ID = gql`
     }
   }
 `;
+
+export const GET_ALL_TEAMS = gql`
+  query GetAllTeams {
+    getAllTeams {
+      id
+      name
+      creatorId
+      users {
+        id
+        role
+        user {
+          id
+          firstName
+          lastName
+          email
+          profile{
+            id
+            avatar
+          }
+        }
+      }
+    }
+  }
+`;

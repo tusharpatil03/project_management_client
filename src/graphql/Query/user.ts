@@ -37,6 +37,8 @@ query GetUserInfo {
       name
       description
       status
+      updatedAt
+      createdAt
       creatorId
       creator {
         id

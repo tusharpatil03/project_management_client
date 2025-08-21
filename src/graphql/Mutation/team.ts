@@ -4,18 +4,7 @@ export const CREATE_TEAM = gql`
   mutation CreateTeam($input: CreateTeamInput!) {
     createTeam(input: $input) {
       id
-      name
       creatorId
-      members {
-        id
-        email
-      }
-      projects {
-        id
-        name
-      }
-      createdAt
-      updatedAt
     }
   }
 `;

@@ -8,7 +8,7 @@ const ProjectRedirect = () => {
   if (error) return <Navigate to="/projects/list" replace />;
 
   if (currentProject?.id) {
-    // console.log("user:", user);
+    //console.log("user:", user);
     return <Navigate to={`/projects/${currentProject.id}`} replace />;
   }
   return <Navigate to="/projects/list" replace />;
