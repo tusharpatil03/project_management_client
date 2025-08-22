@@ -16,6 +16,7 @@ import ProjectProgress from './pages/Dashboard/Progress/Progress';
 import { ProjectSprints } from './pages/Dashboard/Sprint/AllSprints';
 import ProjectTimeline from './pages/Dashboard/Timeline/TimeLine';
 import ProjectRedirect from './pages/Dashboard/Redirect';
+import TeamDetails from './pages/Dashboard/Team/TeamDetails';
 
 function App() {
   return (
@@ -42,7 +43,7 @@ function App() {
             <Route path="/people/:userId" element={<UserBoard />}></Route>
             <Route path="/people/search" element={<UserBoard />}></Route>
             <Route path="/people/teams" element={<TeamBoard />}></Route>
-            <Route path="/people/team/:teamId" element={<TeamBoard />}></Route>
+            <Route path="/people/teams/:teamId" element={<TeamDetails />}></Route>
           </Route>
         </Route>
         <Route path="*" element={<PageNotFound />}></Route>

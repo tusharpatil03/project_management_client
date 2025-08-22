@@ -15,21 +15,24 @@ export const GET_ALL_MEMBERS = gql`
 `;
 
 export const GET_TEAM_BY_ID = gql`
-  query GetTeamById($teamId: ID!) {
+  query GetTeam($teamId: ID!) {
     getTeamById(teamId: $teamId) {
       id
       name
       creatorId
-      members {
+      users {
         id
-        email
+        role
+        user {
+          email
+          firstName
+          lastName
+          profile {
+            id
+            avatar
+          }
+        }
       }
-      projects {
-        id
-        name
-      }
-      createdAt
-      updatedAt
     }
   }
 `;
@@ -48,7 +51,7 @@ export const GET_ALL_TEAMS = gql`
           firstName
           lastName
           email
-          profile{
+          profile {
             id
             avatar
           }

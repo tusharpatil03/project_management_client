@@ -113,3 +113,18 @@ export const GET_USER_BY_ID = gql`
     }
   }
 `;
+
+export const GET_USERS_BY_SEARCH = gql`
+  query GetUserBySearch($search: String!) {
+    getUsersBySearch(search: $search) {
+      id
+      email
+      firstName
+      lastName
+      profile {
+        id
+        avatar
+      }
+    }
+  }
+`;

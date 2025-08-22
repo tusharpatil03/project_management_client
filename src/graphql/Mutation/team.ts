@@ -20,16 +20,21 @@ export const REMOVE_TEAM = gql`
 `;
 
 export const ADD_TEAM_MEMBER = gql`
-  mutation AddTeamMember($memberId: ID!, $teamId: ID!, $role: String!) {
-    addTeamMember(memberId: $memberId, teamId: $teamId, role: $role) {
+  mutation AddmemberInTeam( $memberId: memberId!){
+  addTeamMember(input: $memberId) {
+    name
+    id
+    creatorId
+    users {
       id
-      name
-      members {
-        id
-        email
+      role
+      user {
+        firstName
+        lastName
       }
     }
   }
+}
 `;
 
 export const REMOVE_TEAM_MEMBER = gql`

@@ -154,11 +154,12 @@ const TeamBoard = () => {
                   <div className="mb-4">
                     <div className="flex items-center">
                       <div className="flex -space-x-2">
-                        {displayUsers.map((teamUser, index) => (
+                        {displayUsers.map((teamUser) => (
                           <div
                             key={teamUser.id}
                             className="relative inline-block"
                             title={`${teamUser.user?.firstName} ${teamUser.user?.lastName} (${teamUser.role})`}
+                            
                           >
                             {teamUser.user?.profile?.avatar ? (
                               <img
@@ -187,7 +188,7 @@ const TeamBoard = () => {
                   {/* Action Button */}
                   <div className="flex space-x-2">
                     <button
-                      onClick={() => navigate(`/people/${team.id}`)}
+                      onClick={() => navigate(`/people/teams/${team.id}`)}
                       className="flex-1 bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors font-medium text-sm"
                     >
                       View Team
