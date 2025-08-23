@@ -19,22 +19,32 @@ export const REMOVE_TEAM = gql`
   }
 `;
 
+// const inputs = gql`
+//   input addTeamMemberInput {
+//     memberId: ID!
+//     teamId: ID!
+//     role: String!
+//   }
+// `;
+
 export const ADD_TEAM_MEMBER = gql`
-  mutation AddmemberInTeam( $memberId: memberId!){
-  addTeamMember(input: $memberId) {
-    name
-    id
-    creatorId
-    users {
+  mutation AddmemberInTeam($input: addTeamMemberInput!) {
+    addTeamMember(input: $input) {
       id
-      role
+      userId
+      teamId
       user {
+        id
+        email
         firstName
         lastName
+        profile {
+          id
+          avatar
+        }
       }
     }
   }
-}
 `;
 
 export const REMOVE_TEAM_MEMBER = gql`
