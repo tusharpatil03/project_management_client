@@ -1,12 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-
-const users = [
-  { id: '1', username: 'tushar', email: 'tushar@example.com' },
-  { id: '2', username: 'john', email: 'john@example.com' },
-];
 
 const UserBoard = () => {
-  const navigate = useNavigate();
 
   return (
     <div className="p-6">
@@ -20,7 +13,7 @@ const UserBoard = () => {
           </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+          {/* {users.map((user) => (
             <tr key={user.id} className="border-t">
               <td className="py-2 px-4">{user.username}</td>
               <td className="py-2 px-4">{user.email}</td>
@@ -33,7 +26,7 @@ const UserBoard = () => {
                 </button>
               </td>
             </tr>
-          ))}
+          ))} */}
         </tbody>
       </table>
     </div>
