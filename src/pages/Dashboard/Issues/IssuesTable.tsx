@@ -103,14 +103,14 @@ const IssueTable: React.FC<IssueTableProps> = ({
   // Render helpers
   const renderIssueType = (type: string) => (
     <span
-      className={`px-2 py-1 rounded text-xs font-medium ${
+      className={`px-1.5 py-0.5 rounded text-xs font-medium ${
         type === 'bug'
-          ? 'bg-red-100 text-red-800'
+          ? 'bg-red-100 text-red-700'
           : type === 'feature'
-            ? 'bg-green-100 text-green-800'
+            ? 'bg-green-100 text-green-700'
             : type === 'task'
-              ? 'bg-blue-100 text-blue-800'
-              : 'bg-gray-100 text-gray-800'
+              ? 'bg-blue-100 text-blue-700'
+              : 'bg-gray-100 text-gray-700'
       }`}
     >
       {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -119,12 +119,12 @@ const IssueTable: React.FC<IssueTableProps> = ({
 
   const renderSprintInfo = (sprint: InterfaceSprint) => {
     if (!sprint) {
-      return <span className="text-gray-400"></span>;
+      return <span className="text-gray-400 text-xs">-</span>;
     }
 
     return (
-      <div className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+      <div className="flex items-center gap-1.5">
+        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
           {sprint.key}
         </div>
       </div>
@@ -133,16 +133,16 @@ const IssueTable: React.FC<IssueTableProps> = ({
 
   const renderAssignee = (assignee: any, issueId: string) => {
     if (!assignee) {
-      return <span className="text-gray-400">Unassigned</span>;
+      return <span className="text-gray-400 text-xs">Unassigned</span>;
     }
 
     return (
       <div className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-sm font-medium">
+        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-medium">
           {assignee.firstName[0]}
           {assignee.lastName[0]}
         </div>
-        <span>
+        <span className="text-xs">
           {assignee.firstName} {assignee.lastName}
         </span>
         <button
@@ -151,6 +151,7 @@ const IssueTable: React.FC<IssueTableProps> = ({
             setCurrentAssignee(assignee.id);
             setIssueId(issueId);
           }}
+          className="text-gray-500 hover:text-gray-700 text-xs"
         >
           ^
         </button>
@@ -160,7 +161,7 @@ const IssueTable: React.FC<IssueTableProps> = ({
 
   const renderDueDate = (dueDate: string | null) => {
     if (!dueDate) {
-      return <span className="text-gray-400">No due date</span>;
+      return <span className="text-gray-400 text-xs">No due date</span>;
     }
 
     const date = new Date(dueDate);
@@ -169,7 +170,7 @@ const IssueTable: React.FC<IssueTableProps> = ({
 
     return (
       <span
-        className={`${
+        className={`text-xs ${
           isOverdue
             ? 'text-red-600 font-medium'
             : isToday
@@ -213,12 +214,12 @@ const IssueTable: React.FC<IssueTableProps> = ({
   );
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Bulk Actions Bar */}
       {selectedIssues.size > 0 && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 flex items-center justify-between">
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <span className="text-blue-700 font-medium">
+            <span className="text-blue-700 font-medium text-sm">
               {selectedIssues.size} issue{selectedIssues.size > 1 ? 's' : ''}{' '}
               selected
             </span>
@@ -228,7 +229,7 @@ const IssueTable: React.FC<IssueTableProps> = ({
                 setSelectedIssues(new Set());
                 setShowDeleteTab(false);
               }}
-              className="text-blue-600 hover:text-blue-800 text-sm"
+              className="text-blue-600 hover:text-blue-800 text-xs"
             >
               Clear selection
             </button>
@@ -240,7 +241,7 @@ const IssueTable: React.FC<IssueTableProps> = ({
       <BaseTable loading={deleteLoading}>
         <thead className="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
-            <th className="px-6 py-3">
+            <th className="px-4 py-2">
               <input
                 type="checkbox"
                 checked={isAllSelected}
@@ -248,22 +249,22 @@ const IssueTable: React.FC<IssueTableProps> = ({
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
               />
             </th>
-            <th className="px-6 py-3 text-left">Title</th>
-            <th className="px-6 py-3 text-left">Type</th>
-            <th className="px-6 py-3 text-left">Sprint</th>
-            <th className="px-6 py-3 text-left">Assignee</th>
-            <th className="px-6 py-3 text-left">Due Date</th>
+            <th className="px-4 py-2 text-left">Title</th>
+            <th className="px-4 py-2 text-left">Type</th>
+            <th className="px-4 py-2 text-left">Sprint</th>
+            <th className="px-4 py-2 text-left">Assignee</th>
+            <th className="px-4 py-2 text-left">Due Date</th>
             <th className="px-6 py-3 text-left">Status</th>
-            <th className="px-6 py-3 text-center">Actions</th>
+            <th className="px-4 py-2 text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
           {issues.length === 0 ? (
             <tr>
-              <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
-                <div className="flex flex-col items-center gap-3">
+              <td colSpan={8} className="px-4 py-8 text-center text-gray-500">
+                <div className="flex flex-col items-center gap-2">
                   <svg
-                    className="w-12 h-12 text-gray-300"
+                    className="w-10 h-10 text-gray-300"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -276,10 +277,10 @@ const IssueTable: React.FC<IssueTableProps> = ({
                     />
                   </svg>
                   <div>
-                    <p className="text-lg font-medium text-gray-900">
+                    <p className="text-base font-medium text-gray-900">
                       No issues found
                     </p>
-                    <p className="text-sm text-gray-500">
+                    <p className="text-xs text-gray-500">
                       Create your first issue to get started.
                     </p>
                   </div>
@@ -294,7 +295,7 @@ const IssueTable: React.FC<IssueTableProps> = ({
                   selectedIssues.has(issue.id) ? 'bg-blue-50' : 'bg-white'
                 }`}
               >
-                <td className="px-6 py-4">
+                <td className="px-4 py-3">
                   <input
                     type="checkbox"
                     checked={selectedIssues.has(issue.id)}
@@ -304,38 +305,38 @@ const IssueTable: React.FC<IssueTableProps> = ({
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
                   />
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-3">
                   <button
                     onClick={() => handleIssueClick(issue.id)}
-                    className="text-blue-600 hover:text-blue-800 hover:underline text-left font-medium"
+                    className="text-blue-600 hover:text-blue-800 hover:underline text-left font-medium text-sm"
                   >
                     {issue.title}
                   </button>
                 </td>
-                <td className="px-6 py-4">{renderIssueType(issue.type)}</td>
-                <td className="px-6 py-4">{renderSprintInfo(issue.sprint)}</td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-3">{renderIssueType(issue.type)}</td>
+                <td className="px-4 py-3">{renderSprintInfo(issue.sprint)}</td>
+                <td className="px-4 py-3">
                   {renderAssignee(issue.assignee, issue.id)}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-3">
                   {renderDueDate(String(issue.dueDate))}
                 </td>
-                <td className="px-6 py-4">
+                <td className="px-4 py-3">
                   <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
+                    className={`px-1.5 py-0.5 rounded text-xs font-medium ${
                       issue.status === 'open'
-                        ? 'bg-green-100 text-green-800'
+                        ? 'bg-green-100 text-green-700'
                         : issue.status === 'in_progress'
-                          ? 'bg-yellow-100 text-yellow-800'
+                          ? 'bg-yellow-100 text-yellow-700'
                           : issue.status === 'closed'
-                            ? 'bg-gray-100 text-gray-800'
-                            : 'bg-blue-100 text-blue-800'
+                            ? 'bg-gray-100 text-gray-700'
+                            : 'bg-blue-100 text-blue-700'
                     }`}
                   >
                     {issue.status?.replace('_', ' ').toUpperCase() || 'OPEN'}
                   </span>
                 </td>
-                <td className="px-6 py-4">{renderActions(issue)}</td>
+                <td className="px-4 py-3">{renderActions(issue)}</td>
               </tr>
             ))
           )}
@@ -544,7 +545,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
   if (loading  || removeAssigneeLoading) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-        <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+        <div className="bg-white rounded-xl p-6 max-w-sm w-full mx-4">
           <LoadingState size="lg" />
         </div>
       </div>
@@ -553,18 +554,18 @@ const GetMembers: React.FC<GetMembersProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="relative w-full max-w-2xl max-h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden">
+      <div className="relative w-full max-w-xl max-h-[85vh] bg-white rounded-xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200 bg-gray-50">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-              <Users className="w-5 h-5 text-blue-600" />
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gray-50">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+              <Users className="w-4 h-4 text-blue-600" />
             </div>
             <div>
-              <h3 className="text-xl font-semibold text-gray-900">
+              <h3 className="text-lg font-semibold text-gray-900">
                 Assign Team Member
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-xs text-gray-500">
                 Choose a team member to assign this issue to
               </p>
             </div>
@@ -572,27 +573,27 @@ const GetMembers: React.FC<GetMembersProps> = ({
 
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-600 p-2 rounded-full hover:bg-gray-100 transition-colors"
+            className="text-gray-400 hover:text-gray-600 p-1.5 rounded-full hover:bg-gray-100 transition-colors"
           >
-            <X size={20} />
+            <X size={18} />
           </button>
         </div>
 
         {/* Search Bar */}
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-4 border-b border-gray-200">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
             <input
               type="text"
               placeholder="Search members by name or email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm transition-all"
             />
           </div>
 
           {searchTerm && (
-            <div className="mt-2 text-sm text-gray-500">
+            <div className="mt-2 text-xs text-gray-500">
               {filteredMembers.length} member
               {filteredMembers.length !== 1 ? 's' : ''} found
             </div>
@@ -601,12 +602,12 @@ const GetMembers: React.FC<GetMembersProps> = ({
 
         {/* Current Assignee Info */}
         {currentAssigneeId && (
-          <div className="px-6 py-4 bg-blue-50 border-b border-blue-200">
+          <div className="px-4 py-3 bg-blue-50 border-b border-blue-200">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <CheckCircle className="w-5 h-5 text-blue-600" />
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-4 h-4 text-blue-600" />
                 <div>
-                  <span className="text-sm font-medium text-blue-900">
+                  <span className="text-xs font-medium text-blue-900">
                     Currently Assigned
                   </span>
                   {(() => {
@@ -620,7 +621,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
                             name={currentAssignee.firstName}
                             src={currentAssignee.avatar}
                           />
-                          <span className="text-sm text-blue-800">
+                          <span className="text-xs text-blue-800">
                             {currentAssignee.firstName}{' '}
                             {currentAssignee.lastName}
                           </span>
@@ -634,7 +635,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
               <button
                 onClick={handleUnassign}
                 disabled={isAssigning}
-                className="text-sm text-red-600 hover:text-red-700 font-medium disabled:opacity-50"
+                className="text-xs text-red-600 hover:text-red-700 font-medium disabled:opacity-50"
               >
                 Unassign
               </button>
@@ -643,38 +644,38 @@ const GetMembers: React.FC<GetMembersProps> = ({
         )}
 
         {/* Members List */}
-        <div className="flex-1 overflow-y-auto max-h-96">
+        <div className="flex-1 overflow-y-auto max-h-80">
           {error ? (
-            <div className="p-8 text-center">
-              <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-              <h4 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="p-6 text-center">
+              <AlertCircle className="w-10 h-10 text-red-400 mx-auto mb-3" />
+              <h4 className="text-base font-medium text-gray-900 mb-2">
                 Failed to load team members
               </h4>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-xs text-gray-500 mb-3">
                 {error.message ||
                   'An error occurred while fetching team members'}
               </p>
               <button
                 onClick={() => refetch()}
-                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                className="px-3 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
               >
                 Try Again
               </button>
             </div>
           ) : filteredMembers.length === 0 ? (
-            <div className="p-8 text-center">
-              <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h4 className="text-lg font-medium text-gray-900 mb-2">
+            <div className="p-6 text-center">
+              <Users className="w-10 h-10 text-gray-400 mx-auto mb-3" />
+              <h4 className="text-base font-medium text-gray-900 mb-2">
                 {searchTerm ? 'No members found' : 'No team members'}
               </h4>
-              <p className="text-sm text-gray-500">
+              <p className="text-xs text-gray-500">
                 {searchTerm
                   ? `No members match "${searchTerm}". Try a different search term.`
                   : "This project doesn't have any team members yet."}
               </p>
             </div>
           ) : (
-            <div className="p-4">
+            <div className="p-3">
               <Members
                 members={filteredMembers}
                 handleClick={handleMemberClick}
@@ -689,9 +690,9 @@ const GetMembers: React.FC<GetMembersProps> = ({
 
         {/* Action Buttons */}
         {selectedMemberId && (
-          <div className="p-6 border-t border-gray-200 bg-gray-50">
+          <div className="p-4 border-t border-gray-200 bg-gray-50">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 {(() => {
                   const selectedMember = members.find(
                     (m: any) => m.id === selectedMemberId
@@ -704,10 +705,10 @@ const GetMembers: React.FC<GetMembersProps> = ({
                           src={selectedMember.avatar}
                         />
                         <div>
-                          <div className="font-medium text-gray-900">
+                          <div className="font-medium text-gray-900 text-sm">
                             {selectedMember.firstName} {selectedMember.lastName}
                           </div>
-                          <div className="text-sm text-gray-500">
+                          <div className="text-xs text-gray-500">
                             {selectedMember.email}
                           </div>
                         </div>
@@ -716,10 +717,10 @@ const GetMembers: React.FC<GetMembersProps> = ({
                   );
                 })()}
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2">
                   <button
                     onClick={() => setSelectedMemberId(null)}
-                    className="px-4 py-2 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+                    className="px-3 py-1.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
                     disabled={isAssigning}
                   >
                     Cancel
@@ -727,16 +728,16 @@ const GetMembers: React.FC<GetMembersProps> = ({
                   <button
                     onClick={handleAssignConfirm}
                     disabled={isAssigning}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
+                    className="px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2 text-sm"
                   >
                     {isAssigning ? (
                       <>
-                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        <div className="w-3 h-3 border-2 border-white border-t-transparent rounded-full animate-spin" />
                         Assigning...
                       </>
                     ) : (
                       <>
-                        <CheckCircle className="w-4 h-4" />
+                        <CheckCircle className="w-3 h-3" />
                         Assign Issue
                       </>
                     )}
