@@ -3,12 +3,11 @@ import Navbar from "../../components/DashBoard/Navbar";
 import { Sidebar } from "../../components/DashBoard/Sidebar";
 
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
-
 
   return (
     <div className="h-screen flex flex-col bg-gray-50 overflow-hidden">

@@ -4,7 +4,8 @@ import { LOGIN_USER } from '../../graphql/Mutation/user';
 import { LoginInput, AuthResponce } from '../../types/types';
 import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
-import authManager from '../../utils/authManager';
+import { useAuth } from '../../contexts/AuthContext';
+import { setRefreshToken } from '../../utils/storage';
 
 export function Login() {
   const [formData, setFormData] = useState<LoginInput>({
@@ -24,6 +25,8 @@ export function Login() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
 
+  const auth = useAuth();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
@@ -42,8 +45,9 @@ export function Login() {
       if (!data.user.isVerified) {
         navigate('/signup/verify');
       } else {
-        localStorage.setItem('refreshToken', refreshToken);
-        authManager.setAuth(accessToken);
+  setRefreshToken(refreshToken);
+  // set token centrally via provider
+  auth.setAccessToken(accessToken);
       }
 
       navigate('/projects');

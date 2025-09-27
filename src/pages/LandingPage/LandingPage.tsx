@@ -7,11 +7,12 @@ import Footer from './Footer';
 import Features from './Features';
 import Hero from './Hero';
 import { useNavigate } from 'react-router-dom';
-import { authState } from '../../utils/authManager';
+import { useAuth } from '../../contexts/AuthContext';
 
 const LandingPage = () => {
   const [tab, setTab] = useState<boolean>(false);
-  const isLoggedIn = authState.isAuthenticated;
+  const auth = useAuth();
+  const isLoggedIn = auth.isAuthenticated;
 
   // const location = useLocation();
   // console.log(location);
@@ -36,7 +37,7 @@ const LandingPage = () => {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [authState]);
+  }, [isLoggedIn, navigate]);
 
   return loaderComponent ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
