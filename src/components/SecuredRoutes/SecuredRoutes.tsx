@@ -1,20 +1,24 @@
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
-import { authState } from '../../utils/authManager';
 import { useEffect } from 'react';
+import { useAuth } from '../../contexts/AuthContext';
 
 const SecuredRoutes: React.FC = () => {
   const navigate = useNavigate();
 
+  const auth = useAuth();
+
   useEffect(() => {
     const handleLogout = () => {
-      authState.isAuthenticated = false;
+      // ensure provider state is cleared
+      auth.signOut();
       navigate('/', { replace: true });
     };
 
     window.addEventListener('app:logout', handleLogout);
     return () => window.removeEventListener('app:logout', handleLogout);
-  }, [navigate]);
-  const isAuthenticated = authState.isAuthenticated;
+  }, [navigate, auth]);
+
+  const isAuthenticated = auth.isAuthenticated;
   return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 };
 
@@ -35,8 +39,8 @@ setInterval(() => {
 
   if (timeSinceLastActive > timeoutMilliseconds) {
     console.warn('Kindly relogin as sessison has expired');
-
-    window.location.href = '/';
+    // Use a logout event so all parts of the app respond consistently
+    window.dispatchEvent(new Event('app:logout'));
   }
 }, inactiveIntervalMilsec);
 

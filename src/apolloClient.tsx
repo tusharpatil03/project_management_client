@@ -9,7 +9,8 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/link-error';
-import authManager from './utils/authManager';
+import { callRefresh, callSignOut } from './utils/authBridge';
+import tokenStore from './utils/tokenStore';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -43,7 +44,7 @@ const httpLink = createHttpLink({
 });
 
 const authLink = setContext((_, { headers }) => {
-  const token = authManager.getAuth();
+  const token = tokenStore.getToken();
   return {
     headers: {
       ...headers,
@@ -84,10 +85,11 @@ const errorLink = onError(
             } else {
               isRefreshing = true;
 
-              authManager
-                .refresh()
+              callRefresh()
                 .then((token) => {
                   if (token) {
+                    // sync token into tokenStore used by authLink
+                    tokenStore.setToken(token);
                     isRefreshing = false;
                     processQueue(null, token);
 
@@ -111,7 +113,7 @@ const errorLink = onError(
                     isRefreshing = false;
                     const refreshError = new Error('Token refresh failed');
                     processQueue(refreshError);
-                    authManager.logout();
+                    callSignOut();
                     observer.error(refreshError);
                   }
                 })
@@ -119,7 +121,7 @@ const errorLink = onError(
                   // Refresh threw an error
                   isRefreshing = false;
                   processQueue(error);
-                  authManager.logout();
+                  callSignOut();
                   observer.error(error);
                 });
             }

@@ -6,7 +6,8 @@ import { VERIFY_USER } from '../../graphql/Mutation/user';
 import { showError } from '../../utils/showError';
 import Loader from '../../components/Loader';
 import { InterfaceAuth } from '../../types/types';
-import authManager from '../../utils/authManager';
+import { useAuth } from '../../contexts/AuthContext';
+import { setRefreshToken } from '../../utils/storage';
 
 const EmailVerification: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -17,6 +18,8 @@ const EmailVerification: React.FC = () => {
   const [verifyUser, { loading, error }] = useMutation<{
     verifyUser: InterfaceAuth;
   }>(VERIFY_USER);
+
+  const auth = useAuth();
 
   useEffect(() => {
     const verifyEmail = async () => {
@@ -34,8 +37,9 @@ const EmailVerification: React.FC = () => {
 
         if (result.user.isVerified) {
           const { accessToken, refreshToken } = result;
-          localStorage.setItem('refreshToken', refreshToken);
-          authManager.setAuth(accessToken);
+          setRefreshToken(refreshToken);
+          // set token via provider
+          auth.setAccessToken(accessToken);
           navigate('/projects');
         }
       } catch (err: any) {

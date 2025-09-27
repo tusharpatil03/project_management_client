@@ -56,8 +56,8 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       },
       {
         type: 'static',
-        title: 'Peoples',
-        path: '/peoples',
+        title: 'People',
+        path: '/people',
         icon: 'fa-users',
       },
       {
@@ -69,7 +69,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       {
         type: 'static',
         title: 'Profile',
-        path: `/people/${userId}/profile`,
+        path: `/people/${userId}`,
         icon: 'fa-user-circle',
       },
       {

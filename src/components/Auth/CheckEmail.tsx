@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { MailCheck } from 'lucide-react';
 import { SEND_VERIFICATION_LINK } from '../../graphql/Mutation/user';
 import { useMutation } from '@apollo/client';
+import { getEmail } from '../../utils/storage';
 
 const CheckEmail: React.FC = () => {
   const [message, setMessage] = useState<string | null>(null);
@@ -9,7 +10,7 @@ const CheckEmail: React.FC = () => {
 
   const handleSend = async () => {
     try {
-      const email = localStorage.getItem('email');
+  const email = getEmail();
 
       const res = await sendLink({ variables: { email: email } });
       if (res.data?.sendVerificationLink?.success) {
