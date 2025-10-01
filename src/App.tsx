@@ -10,7 +10,6 @@ import UserBoard from './pages/Dashboard/User/UserBoard';
 import TeamBoard from './pages/Dashboard/Team/TeamBoard';
 import EmailVerification from './pages/Auth/EmailVerification';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
-import { ErrorAlert } from './components/ErrorAlert';
 import { ProjectIssues } from './pages/Dashboard/Issues/issues';
 import ProjectProgress from './pages/Dashboard/Progress/Progress';
 import { ProjectSprints } from './pages/Dashboard/Sprint/AllSprints';
@@ -43,7 +42,6 @@ function App() {
               path="/projects/:projectId/details"
               element={<ProjectBoard />}
             ></Route>
-            <Route path="/people" element={<UserBoard />}></Route>
             <Route path="/people/:userId" element={<UserBoard />}></Route>
             <Route path="/people/:userId/inbox" element={<UserBoard />}></Route>
             <Route path="/people/search" element={<UserBoard />}></Route>
@@ -56,7 +54,6 @@ function App() {
         </Route>
         <Route path="*" element={<PageNotFound />}></Route>
       </Routes>
-      <ErrorAlert />
     </>
   );
 }

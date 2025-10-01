@@ -54,12 +54,12 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
         path: '/projects',
         icon: 'fa-gauge',
       },
-      {
-        type: 'static',
-        title: 'People',
-        path: '/people',
-        icon: 'fa-users',
-      },
+      // {
+      //   type: 'static',
+      //   title: 'People',
+      //   path: '/people',
+      //   icon: 'fa-users',
+      // },
       {
         type: 'static',
         title: 'Teams',

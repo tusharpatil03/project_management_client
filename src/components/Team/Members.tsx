@@ -79,7 +79,7 @@ const Members: React.FC<ChildProps> = ({
           onClick={() => handleClick(user.id)}
           className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 bg-white hover:bg-blue-50 hover:border-blue-200 cursor-pointer transition-all group"
         >
-          <Avatar name={user.firstName} src={user.avatar} />
+          <Avatar name={user.firstName} src={user.profile?.avatar || ''} />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 group-hover:text-blue-700">
               {user.firstName} {user.lastName}

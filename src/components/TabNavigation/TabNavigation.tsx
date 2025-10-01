@@ -12,8 +12,6 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
   tabs, 
   activeTab, 
   onTabChange, 
-  showCreateTab, 
-  setCreateTab 
 }) => {
   return (
     <div className="border-b border-gray-200 mx-auto px-6 mt-4">
@@ -34,7 +32,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
           ))}
         </nav>
         
-        {showCreateTab && (
+        {/* {showCreateTab && (
           <button
             onClick={() => setCreateTab(true)}
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
@@ -44,7 +42,7 @@ const TabNavigation: React.FC<TabNavigationProps> = ({
             </svg>
             Create Sprint
           </button>
-        )}
+        )} */}
       </div>
     </div>
   );

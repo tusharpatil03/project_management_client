@@ -16,7 +16,7 @@ import Members from '../../../components/Team/Members';
 import BaseTable from '../../../components/Table/BaseTable';
 import { AlertCircle, CheckCircle, Search, Users, X } from 'lucide-react';
 import Avatar from '../../../components/Profile/Avatar';
-import { showSuccess } from '../../../utils/showSuccess';
+import { useMessage } from '../../../components/ShowMessage';
 
 interface IssueTableProps {
   issues: InterfaceIssue[];
@@ -403,6 +403,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [isAssigning, setIsAssigning] = useState(false);
+  const {showSuccess, showError} = useMessage();
 
   const { data, loading, error, refetch } = useQuery(GET_ALL_MEMBERS, {
     variables: { projectId },

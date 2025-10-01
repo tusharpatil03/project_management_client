@@ -97,7 +97,7 @@ export const MemberCard = ({
           {false ? (
             <img
               className={`w-12 h-12 rounded-full object-cover ${isCreator ? 'ring-4 ring-purple-200' : 'ring-2 ring-gray-200'}`}
-              src={teamUser.user?.profile.avatar}
+              src={teamUser.user?.profile?.avatar || ''}
               alt={`${teamUser.user?.firstName} ${teamUser.user?.lastName}`}
             />
           ) : (

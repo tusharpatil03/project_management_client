@@ -235,7 +235,7 @@ const CreateIssue: React.FC<CreateIssueProps> = ({
                   <div className="flex items-center gap-3">
                     <Avatar
                       name={selectedMember.firstName}
-                      src={selectedMember.avatar}
+                      src={selectedMember.profile?.avatar || ''}
                     />
                     <span className="text-sm font-medium text-gray-900">
                       {selectedMember.firstName} {selectedMember.lastName}

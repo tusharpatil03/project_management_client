@@ -6,17 +6,20 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient.tsx';
 import { AuthProvider } from './contexts/AuthContext';
+import { MessageProvider } from './components/ShowMessage.tsx';
 
 const fallbackLoader = <div className="loader"></div>;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Suspense fallback={fallbackLoader}>
-    <ApolloProvider client={client}>
-      <AuthProvider>
-        <BrowserRouter>
-          <App />
-        </BrowserRouter>
-      </AuthProvider>
-    </ApolloProvider>
-  </Suspense>
+  <MessageProvider>
+    <Suspense fallback={fallbackLoader}>
+      <ApolloProvider client={client}>
+        <AuthProvider>
+          <BrowserRouter>
+            <App />
+          </BrowserRouter>
+        </AuthProvider>
+      </ApolloProvider>
+    </Suspense>
+  </MessageProvider>
 );

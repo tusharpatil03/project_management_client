@@ -3,15 +3,18 @@ import { GET_ISSUE_BY_ID } from '../../../graphql/Query/issue';
 import Avatar from '../../../components/Profile/Avatar';
 import Loader from '../../../components/Loader';
 import { InterfaceIssue } from '../../../types/types';
+import { useDashboard } from '../DashBoard';
 
 interface ChildProps {
   issueId: string;
   setIssueTab: (value: boolean) => void;
-  onIssueUpdates?: ()=> void
+  onIssueUpdates?: () => void;
 }
 const IssueDetails: React.FC<ChildProps> = ({ issueId, setIssueTab }) => {
+  const { currentProject } = useDashboard();
+
   const { loading, error, data } = useQuery(GET_ISSUE_BY_ID, {
-    variables: { issueId },
+    variables: { issueId, projectId: currentProject?.id },
   });
 
   // Loading State
@@ -39,7 +42,7 @@ const IssueDetails: React.FC<ChildProps> = ({ issueId, setIssueTab }) => {
     );
   }
 
-  const issue:InterfaceIssue = data?.getIssueById;
+  const issue: InterfaceIssue = data?.getIssueById;
   if (!issue) {
     return (
       <div className="max-w-lg mx-auto p-6 bg-gray-100 text-gray-700 rounded-lg shadow">
@@ -104,7 +107,7 @@ const IssueDetails: React.FC<ChildProps> = ({ issueId, setIssueTab }) => {
                 <div>
                   <Avatar
                     name={`${issue.assignee.firstName} ${issue.assignee.lastName}`}
-                    src={issue.assignee.profile.avatar}
+                    src={issue.assignee.profile?.avatar || ''}
                     size={36}
                   />
                   <span className="text-gray-800">
@@ -125,7 +128,7 @@ const IssueDetails: React.FC<ChildProps> = ({ issueId, setIssueTab }) => {
             <div className="flex items-center gap-2 mt-1">
               <Avatar
                 name={`${issue.creator.firstName} ${issue.creator.lastName}`}
-                src={issue.creator.profile.avatar}
+                src={issue.creator.profile?.avatar || ''}
                 size={36}
               />
               <span className="text-gray-800">

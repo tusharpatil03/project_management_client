@@ -72,3 +72,12 @@ export const REFRESH_TOKEN = gql`
     }
   }
 `;
+
+export const UPDATE_USER_PROFILE = gql`
+mutation UpdateProfile($input: UpdateProfileInput!){
+  updateUserProfile(input: $input) {
+    message
+    success
+    status
+  }
+}`;

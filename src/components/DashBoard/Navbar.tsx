@@ -8,7 +8,7 @@ interface NavbarProps {
 
 const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
-  const [notifications] = useState(3);
+  const [notifications] = useState(29);
   const userMenuRef = useRef<HTMLDivElement>(null);
 
   const toggleUserMenu = () => setUserMenuOpen((prev) => !prev);
@@ -99,11 +99,11 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
               >
                 <img
                   className="w-8 h-8 rounded-lg object-cover"
-                  src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                  src="./src/assets/profile1.png"
                   alt="User profile"
                 />
                 <span className="hidden lg:block text-gray-700 dark:text-gray-300 font-medium">
-                  Neil Sims
+                  Tushar Patil
                 </span>
                 <i
                   className={`hidden lg:block fa-solid fa-chevron-down text-xs text-gray-500 transition-transform duration-200 ${

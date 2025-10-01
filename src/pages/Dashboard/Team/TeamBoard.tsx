@@ -198,7 +198,7 @@ const TeamBoard = () => {
                             {false ? (
                               <img
                                 className="w-8 h-8 rounded-full border-2 border-white shadow-sm"
-                                src={teamUser.user?.profile.avatar}
+                                src={teamUser?.user?.profile?.avatar || ''}
                                 alt={`${teamUser.user?.firstName} ${teamUser.user?.lastName}`}
                               />
                             ) : (

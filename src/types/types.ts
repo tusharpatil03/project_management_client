@@ -58,24 +58,40 @@ export interface InterfaceUser {
   assignedIssues: InterfaceIssue[];
   firstName: string;
   lastName: string;
-  phone: string;
-  gender: string;
-  avatar: string;
-  social: Social;
-  profile: InterfaceUserProfile;
+  profile: InterfaceUserProfile | null;
+  activities: Activity[];
 }
 
-interface Social {
+interface ProjectRef {
+  key: string;
+  name: string | null;
+}
+
+interface IssueRef {
+  key: string;
+  title: string | null;
+}
+
+export interface Activity {
   id: string;
-  github: string;
-  facebook: string;
-  twitter: string;
-  linkedin: string;
-  createdAt: Date;
-  updatedAt: Date;
+  action: string | null;
+  createdAt: string; // ISO DateTime string
+  project: ProjectRef | null;
+  issue: IssueRef | null;
 }
 
-interface InterfaceTeam {
+
+export interface Social {
+  id?: string | null;
+  github?: string | null;
+  facebook?: string | null;
+  twitter?: string | null;
+  linkedin?: string | null;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+}
+
+export interface InterfaceTeam {
   id: string;
   name: string;
   creatorId: string;
@@ -85,15 +101,16 @@ interface InterfaceTeam {
   updatedAt: Date;
 }
 
-interface InterfaceUserProfile {
-  id: string;
-  avatar: string;
-  phone: string;
-  gender: string;
-  social: Social;
-  createdAt: Date;
-  updatedAt: Date;
-  user: InterfaceUser;
+export interface InterfaceUserProfile {
+  id?: string;
+  avatar?: string | null;
+  phone?: string | null;
+  bio?: string | null;
+  gender?: Gender;
+  social?: Social | null;
+  createdAt?: Date | null;
+  updatedAt?: Date | null;
+  user?: InterfaceUser | null;
 }
 
 export interface InterfaceIssue {
@@ -186,6 +203,12 @@ export enum IssueType {
   BUG = 'BUG',
   EPIC = 'EPIC',
   STORY = 'STORY',
+}
+
+
+export enum Gender {
+  MALE = "MALE",
+  FEMALE = "FEMALE"
 }
 
 export type CreateIssueInput = {
