@@ -28,8 +28,8 @@ import {
   PlayCircle,
   PauseCircle,
 } from 'lucide-react';
-import { GET_PROJECT_STAT } from '../../../graphql/Query/project';
-import LoadingState from '../../../components/LoadingState';
+import { GET_PROJECT_STAT } from '../../graphql/Query/project';
+import LoadingState from '../../components/LoadingState';
 
 interface ActiveSprintStat {
   totalIssues: number;
@@ -90,7 +90,7 @@ const ProjectProgress: React.FC = () => {
     }
   );
 
-  useEffect(()=> {
+  useEffect(() => {
     refetch();
   }, [projectId, refetch]);
 
@@ -112,45 +112,70 @@ const ProjectProgress: React.FC = () => {
         openIssues: Number(stats.activeSprintStat?.openIssues) || 0,
         closedIssues: Number(stats.activeSprintStat?.closedIssues) || 0,
         inProgressIssues: Number(stats.activeSprintStat?.inProgressIssues) || 0,
-      }
+      },
     };
 
     // Overall project metrics
-    const overallCompletionRate = safeStats.totalIssues > 0 
-      ? Math.round((safeStats.closedIssues / safeStats.totalIssues) * 100)
-      : 0;
+    const overallCompletionRate =
+      safeStats.totalIssues > 0
+        ? Math.round((safeStats.closedIssues / safeStats.totalIssues) * 100)
+        : 0;
 
-    const overallProgressRate = safeStats.totalIssues > 0
-      ? Math.round((safeStats.inProgressIssues / safeStats.totalIssues) * 100)
-      : 0;
+    const overallProgressRate =
+      safeStats.totalIssues > 0
+        ? Math.round((safeStats.inProgressIssues / safeStats.totalIssues) * 100)
+        : 0;
 
-    const overallOpenRate = safeStats.totalIssues > 0
-      ? Math.round((safeStats.openIssues / safeStats.totalIssues) * 100)
-      : 0;
+    const overallOpenRate =
+      safeStats.totalIssues > 0
+        ? Math.round((safeStats.openIssues / safeStats.totalIssues) * 100)
+        : 0;
 
     // Active sprint metrics
-    const sprintCompletionRate = safeStats.activeSprintStat.totalIssues > 0
-      ? Math.round((safeStats.activeSprintStat.closedIssues / safeStats.activeSprintStat.totalIssues) * 100)
-      : 0;
+    const sprintCompletionRate =
+      safeStats.activeSprintStat.totalIssues > 0
+        ? Math.round(
+            (safeStats.activeSprintStat.closedIssues /
+              safeStats.activeSprintStat.totalIssues) *
+              100
+          )
+        : 0;
 
-    const sprintProgressRate = safeStats.activeSprintStat.totalIssues > 0
-      ? Math.round((safeStats.activeSprintStat.inProgressIssues / safeStats.activeSprintStat.totalIssues) * 100)
-      : 0;
+    const sprintProgressRate =
+      safeStats.activeSprintStat.totalIssues > 0
+        ? Math.round(
+            (safeStats.activeSprintStat.inProgressIssues /
+              safeStats.activeSprintStat.totalIssues) *
+              100
+          )
+        : 0;
 
-    const sprintOpenRate = safeStats.activeSprintStat.totalIssues > 0
-      ? Math.round((safeStats.activeSprintStat.openIssues / safeStats.activeSprintStat.totalIssues) * 100)
-      : 0;
+    const sprintOpenRate =
+      safeStats.activeSprintStat.totalIssues > 0
+        ? Math.round(
+            (safeStats.activeSprintStat.openIssues /
+              safeStats.activeSprintStat.totalIssues) *
+              100
+          )
+        : 0;
 
     // Determine productivity level
-    const productivity: 'High' | 'Medium' | 'Low' = 
-      overallCompletionRate > 70 ? 'High' : 
-      overallCompletionRate > 40 ? 'Medium' : 'Low';
+    const productivity: 'High' | 'Medium' | 'Low' =
+      overallCompletionRate > 70
+        ? 'High'
+        : overallCompletionRate > 40
+          ? 'Medium'
+          : 'Low';
 
     // Determine project health
-    const health: 'Excellent' | 'Good' | 'Fair' | 'Needs Attention' = 
-      overallCompletionRate > 60 && safeStats.inProgressIssues > 0 ? 'Excellent' : 
-      overallCompletionRate > 40 ? 'Good' : 
-      overallCompletionRate > 20 ? 'Fair' : 'Needs Attention';
+    const health: 'Excellent' | 'Good' | 'Fair' | 'Needs Attention' =
+      overallCompletionRate > 60 && safeStats.inProgressIssues > 0
+        ? 'Excellent'
+        : overallCompletionRate > 40
+          ? 'Good'
+          : overallCompletionRate > 20
+            ? 'Fair'
+            : 'Needs Attention';
 
     return {
       overall: {
@@ -165,24 +190,28 @@ const ProjectProgress: React.FC = () => {
         progressRate: sprintProgressRate,
         openRate: sprintOpenRate,
         isActive: safeStats.activeSprintStat.totalIssues > 0,
-      }
+      },
     };
   }, [stats]);
 
   // Chart data with null safety
   const issueDistributionData = useMemo(() => {
     if (!stats) return [];
-    
+
     return [
       { name: 'Completed', value: stats.closedIssues || 0, color: '#10B981' },
-      { name: 'In Progress', value: stats.inProgressIssues || 0, color: '#3B82F6' },
+      {
+        name: 'In Progress',
+        value: stats.inProgressIssues || 0,
+        color: '#3B82F6',
+      },
       { name: 'Open', value: stats.openIssues || 0, color: '#F59E0B' },
-    ].filter(item => item.value > 0);
+    ].filter((item) => item.value > 0);
   }, [stats]);
 
   const comparisonData = useMemo(() => {
     if (!stats || !stats.activeSprintStat) return [];
-    
+
     return [
       {
         category: 'Open',
@@ -215,7 +244,9 @@ const ProjectProgress: React.FC = () => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <div className="text-red-500 font-medium mb-2">Failed to load project statistics</div>
+          <div className="text-red-500 font-medium mb-2">
+            Failed to load project statistics
+          </div>
           <div className="text-red-400 text-sm">{error.message}</div>
         </div>
       </div>
@@ -227,7 +258,9 @@ const ProjectProgress: React.FC = () => {
       <div className="flex items-center justify-center h-64">
         <div className="text-center">
           <BarChart3 className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <div className="text-gray-500 font-medium">No statistics available</div>
+          <div className="text-gray-500 font-medium">
+            No statistics available
+          </div>
         </div>
       </div>
     );
@@ -235,18 +268,25 @@ const ProjectProgress: React.FC = () => {
 
   const getHealthColor = (health: string): string => {
     switch (health) {
-      case 'Excellent': return 'text-green-600 bg-green-100';
-      case 'Good': return 'text-blue-600 bg-blue-100';
-      case 'Fair': return 'text-yellow-600 bg-yellow-100';
-      default: return 'text-red-600 bg-red-100';
+      case 'Excellent':
+        return 'text-green-600 bg-green-100';
+      case 'Good':
+        return 'text-blue-600 bg-blue-100';
+      case 'Fair':
+        return 'text-yellow-600 bg-yellow-100';
+      default:
+        return 'text-red-600 bg-red-100';
     }
   };
 
   const getProductivityColor = (productivity: string): string => {
     switch (productivity) {
-      case 'High': return 'text-green-600 bg-green-100';
-      case 'Medium': return 'text-yellow-600 bg-yellow-100';
-      default: return 'text-red-600 bg-red-100';
+      case 'High':
+        return 'text-green-600 bg-green-100';
+      case 'Medium':
+        return 'text-yellow-600 bg-yellow-100';
+      default:
+        return 'text-red-600 bg-red-100';
     }
   };
 
@@ -288,7 +328,8 @@ const ProjectProgress: React.FC = () => {
           </div>
           <div className="mt-4">
             <div className="text-sm text-gray-500">
-              {stats.totalSprints} sprint{stats.totalSprints !== 1 ? 's' : ''} total
+              {stats.totalSprints} sprint{stats.totalSprints !== 1 ? 's' : ''}{' '}
+              total
             </div>
           </div>
         </div>
@@ -297,7 +338,9 @@ const ProjectProgress: React.FC = () => {
         <div className="bg-white rounded-lg shadow-sm border p-6 hover:shadow-md transition-shadow">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-gray-600">Completion Rate</p>
+              <p className="text-sm font-medium text-gray-600">
+                Completion Rate
+              </p>
               <p className="text-3xl font-bold text-green-600 mt-1">
                 {metrics.overall.completionRate}%
               </p>
@@ -352,10 +395,9 @@ const ProjectProgress: React.FC = () => {
           </div>
           <div className="mt-4">
             <div className="text-sm text-gray-500">
-              {metrics.activeSprint.isActive 
-                ? `${metrics.activeSprint.completionRate}% completed` 
-                : 'No active sprint'
-              }
+              {metrics.activeSprint.isActive
+                ? `${metrics.activeSprint.completionRate}% completed`
+                : 'No active sprint'}
             </div>
           </div>
         </div>
@@ -384,7 +426,7 @@ const ProjectProgress: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           {issueDistributionData.length > 0 ? (
             <ResponsiveContainer width="100%" height={300}>
               <PieChart>
@@ -393,7 +435,9 @@ const ProjectProgress: React.FC = () => {
                   cx="50%"
                   cy="50%"
                   labelLine={false}
-                  label={({ name, percent }) => `${name} ${(percent || 0 * 100).toFixed(0)}%`}
+                  label={({ name, percent }) =>
+                    `${name} ${(percent || 0 * 100).toFixed(0)}%`
+                  }
                   outerRadius={100}
                   fill="#8884d8"
                   dataKey="value"
@@ -429,7 +473,7 @@ const ProjectProgress: React.FC = () => {
               </div>
             </div>
           </div>
-          
+
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={comparisonData}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -450,7 +494,7 @@ const ProjectProgress: React.FC = () => {
             <Calendar className="w-5 h-5 text-purple-600" />
             Active Sprint Performance
           </h3>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="text-center">
               <div className="text-3xl font-bold text-purple-600 mb-2">
@@ -464,7 +508,7 @@ const ProjectProgress: React.FC = () => {
                 ></div>
               </div>
             </div>
-            
+
             <div className="text-center">
               <div className="text-3xl font-bold text-blue-600 mb-2">
                 {stats.activeSprintStat.inProgressIssues}
@@ -474,7 +518,7 @@ const ProjectProgress: React.FC = () => {
                 {metrics.activeSprint.progressRate}% of sprint
               </div>
             </div>
-            
+
             <div className="text-center">
               <div className="text-3xl font-bold text-yellow-600 mb-2">
                 {stats.activeSprintStat.openIssues}
@@ -497,16 +541,22 @@ const ProjectProgress: React.FC = () => {
               <TrendingUp className="w-5 h-5 text-blue-600" />
               Project Health
             </h3>
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getHealthColor(metrics.overall.health)}`}>
+            <span
+              className={`px-3 py-1 rounded-full text-sm font-medium ${getHealthColor(metrics.overall.health)}`}
+            >
               {metrics.overall.health}
             </span>
           </div>
-          
+
           <div className="space-y-4">
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm text-gray-600">Overall Completion</span>
-                <span className="text-sm font-medium">{metrics.overall.completionRate}%</span>
+                <span className="text-sm text-gray-600">
+                  Overall Completion
+                </span>
+                <span className="text-sm font-medium">
+                  {metrics.overall.completionRate}%
+                </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
@@ -515,11 +565,13 @@ const ProjectProgress: React.FC = () => {
                 ></div>
               </div>
             </div>
-            
+
             <div>
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-gray-600">Work in Progress</span>
-                <span className="text-sm font-medium">{metrics.overall.progressRate}%</span>
+                <span className="text-sm font-medium">
+                  {metrics.overall.progressRate}%
+                </span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-2">
                 <div
@@ -538,11 +590,13 @@ const ProjectProgress: React.FC = () => {
               <Zap className="w-5 h-5 text-yellow-600" />
               Productivity Insights
             </h3>
-            <span className={`px-3 py-1 rounded-full text-sm font-medium ${getProductivityColor(metrics.overall.productivity)}`}>
+            <span
+              className={`px-3 py-1 rounded-full text-sm font-medium ${getProductivityColor(metrics.overall.productivity)}`}
+            >
               {metrics.overall.productivity}
             </span>
           </div>
-          
+
           <div className="space-y-4">
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3">
@@ -550,7 +604,9 @@ const ProjectProgress: React.FC = () => {
                   <CheckCircle className="w-4 h-4 text-green-600" />
                 </div>
                 <div>
-                  <div className="font-medium text-gray-900">Issues Completed</div>
+                  <div className="font-medium text-gray-900">
+                    Issues Completed
+                  </div>
                   <div className="text-sm text-gray-500">Total resolved</div>
                 </div>
               </div>
@@ -558,7 +614,7 @@ const ProjectProgress: React.FC = () => {
                 {stats.closedIssues}
               </div>
             </div>
-            
+
             <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
@@ -566,7 +622,9 @@ const ProjectProgress: React.FC = () => {
                 </div>
                 <div>
                   <div className="font-medium text-gray-900">Active Work</div>
-                  <div className="text-sm text-gray-500">Currently in progress</div>
+                  <div className="text-sm text-gray-500">
+                    Currently in progress
+                  </div>
                 </div>
               </div>
               <div className="text-2xl font-bold text-blue-600">
@@ -587,8 +645,8 @@ const ProjectProgress: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
             <div className="bg-white p-4 rounded-lg">
               <div className="font-medium text-gray-900 mb-1">
-                {metrics.overall.completionRate > 50 
-                  ? '🎯 Project on Track' 
+                {metrics.overall.completionRate > 50
+                  ? '🎯 Project on Track'
                   : '⚡ Needs Attention'}
               </div>
               <div className="text-gray-600">
@@ -599,8 +657,8 @@ const ProjectProgress: React.FC = () => {
             </div>
             <div className="bg-white p-4 rounded-lg">
               <div className="font-medium text-gray-900 mb-1">
-                {metrics.activeSprint.isActive 
-                  ? '🚀 Sprint Active' 
+                {metrics.activeSprint.isActive
+                  ? '🚀 Sprint Active'
                   : '📋 No Active Sprint'}
               </div>
               <div className="text-gray-600">
@@ -611,8 +669,8 @@ const ProjectProgress: React.FC = () => {
             </div>
             <div className="bg-white p-4 rounded-lg">
               <div className="font-medium text-gray-900 mb-1">
-                {stats.inProgressIssues > 0 
-                  ? '💪 Team Active' 
+                {stats.inProgressIssues > 0
+                  ? '💪 Team Active'
                   : '🔄 Ready for Work'}
               </div>
               <div className="text-gray-600">

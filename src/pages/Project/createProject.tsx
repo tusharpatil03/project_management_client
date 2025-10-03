@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { CREATE_PROJECT } from '../../../graphql/Mutation/project';
+import { CREATE_PROJECT } from '../../graphql/Mutation/project';
 import {
   CreateProjectInput,
   CreateProjectResponse,
-} from '../../../types/types';
+} from '../../types/types';
 import { useNavigate } from 'react-router-dom';
 
 interface CreateProjectProps {

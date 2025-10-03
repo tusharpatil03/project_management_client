@@ -1,5 +1,5 @@
 import IssueTable from '../Issues/IssuesTable';
-import { InterfaceSprint } from '../../../types/types';
+import { InterfaceSprint } from '../../types/types';
 import CreateIssue from '../Issues/CreateIssue';
 import { useMemo, useState } from 'react';
 import CreateIssuesInSprint from './CreateIssue';

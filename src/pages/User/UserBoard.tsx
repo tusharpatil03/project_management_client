@@ -1,16 +1,16 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_USER_BY_ID } from '../../../graphql/Query/user';
-import { Gender, InterfaceUser } from '../../../types/types';
-import { useDashboard } from '../DashBoard';
+import { GET_USER_BY_ID } from '../../graphql/Query/user';
+import { Gender, InterfaceUser } from '../../types/types';
+import { useDashboard } from '../Dashboard/DashBoard';
 import UserProfileHeader from './UserProfileHeader';
 import UserAbout from './UserAbout';
 import UserActivities from './UserActivities';
 import UserProjects from './UserProjects';
 import UpdateProfile from './UpdateProfile/UpdateProfile';
-import ErrorState from '../../../components/ErrorState';
-import { useMessage } from '../../../components/ShowMessage';
-import Loader from '../../../components/Loader';
+import ErrorState from '../../components/ErrorState';
+import { useMessage } from '../../components/ShowMessage';
+import Loader from '../../components/Loader';
 
 // Type definitions
 export interface UserData {

@@ -5,16 +5,16 @@ import {
   InterfaceUser,
   IssueType,
   InterfaceSprint,
-} from '../../../types/types';
+} from '../../types/types';
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_ISSUE } from '../../../graphql/Mutation/issue';
-import InputField from '../../../components/InputField/InputField';
-import Button from '../../../components/Button/Button';
-import TextAreaField from '../../../components/InputField/TextArea';
-import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
-import Members from '../../../components/Team/Members';
+import { CREATE_ISSUE } from '../../graphql/Mutation/issue';
+import InputField from '../../components/InputField/InputField';
+import Button from '../../components/Button/Button';
+import TextAreaField from '../../components/InputField/TextArea';
+import { GET_ALL_MEMBERS } from '../../graphql/Query/team';
+import Members from '../../components/Team/Members';
 import { Search, Type, User, X, Plus, Minus } from 'lucide-react';
-import Avatar from '../../../components/Profile/Avatar';
+import Avatar from '../../components/Profile/Avatar';
 
 interface CreateIssuesInSprintProps {
   sprint: InterfaceSprint;
@@ -97,16 +97,18 @@ const CreateIssuesInSprint: React.FC<CreateIssuesInSprintProps> = ({
         variables: {
           input: {
             ...formData,
-            dueDate: formData.dueDate ? new Date(formData.dueDate).toISOString() : undefined,
+            dueDate: formData.dueDate
+              ? new Date(formData.dueDate).toISOString()
+              : undefined,
           },
         },
       });
-      
+
       if (!res?.data?.createIssue || error) {
         setFormError('Failed to create issue. Please try again.');
         return;
       }
-      
+
       setSuccess(true);
       // Reset form but keep sprint context
       setFormData({
@@ -119,10 +121,10 @@ const CreateIssuesInSprint: React.FC<CreateIssuesInSprintProps> = ({
         projectId: projectId,
         dueDate: sprint.dueDate || '',
       });
-      
+
       // Call onSuccess to refetch sprint data
       onSuccess();
-      
+
       // Auto-collapse after successful creation
       setTimeout(() => {
         setIsExpanded(false);
@@ -141,7 +143,7 @@ const CreateIssuesInSprint: React.FC<CreateIssuesInSprintProps> = ({
   return (
     <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg overflow-hidden">
       {/* Toggle Header */}
-      <div 
+      <div
         className="px-4 py-3 cursor-pointer hover:bg-blue-100 transition-colors"
         onClick={() => setIsExpanded(!isExpanded)}
       >
@@ -219,7 +221,7 @@ const CreateIssuesInSprint: React.FC<CreateIssuesInSprintProps> = ({
                   placeholder="Enter issue title"
                 />
               </div>
-              
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
                   Type
@@ -292,15 +294,16 @@ const CreateIssuesInSprint: React.FC<CreateIssuesInSprintProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
                 <div>
                   <span className="text-gray-600">Sprint:</span>
-                  <span className="ml-2 font-medium text-gray-900">{sprint.title}</span>
+                  <span className="ml-2 font-medium text-gray-900">
+                    {sprint.title}
+                  </span>
                 </div>
                 <div>
                   <span className="text-gray-600">Due Date:</span>
                   <span className="ml-2 font-medium text-gray-900">
-                    {sprint.dueDate 
+                    {sprint.dueDate
                       ? new Date(sprint.dueDate).toLocaleDateString()
-                      : 'Not set'
-                    }
+                      : 'Not set'}
                   </span>
                 </div>
               </div>
@@ -317,7 +320,7 @@ const CreateIssuesInSprint: React.FC<CreateIssuesInSprintProps> = ({
               >
                 Add Issue to Sprint
               </Button>
-              
+
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}

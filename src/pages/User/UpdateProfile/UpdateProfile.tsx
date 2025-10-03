@@ -1,9 +1,9 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import { useMutation } from '@apollo/client';
-import { UPDATE_USER_PROFILE } from '../../../../graphql/Mutation/user';
+import { UPDATE_USER_PROFILE } from '../../../graphql/Mutation/user';
 import { UserData } from '../UserBoard';
-import { Gender, Social } from '../../../../types/types';
-import { useMessage } from '../../../../components/ShowMessage';
+import { Gender, Social } from '../../../types/types';
+import { useMessage } from '../../../components/ShowMessage';
 
 interface UpdateProfileProps {
   userData: UserData;

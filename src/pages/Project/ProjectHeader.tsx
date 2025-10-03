@@ -1,4 +1,4 @@
-import { InterfaceProject, ProjectStatus } from '../../../types/types';
+import { InterfaceProject, ProjectStatus } from '../../types/types';
 
 interface ProjectHeaderProps {
   project: InterfaceProject;

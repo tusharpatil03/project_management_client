@@ -1,9 +1,9 @@
 import { useQuery } from '@apollo/client';
-import { GET_ISSUE_BY_ID } from '../../../graphql/Query/issue';
-import Avatar from '../../../components/Profile/Avatar';
-import Loader from '../../../components/Loader';
-import { InterfaceIssue } from '../../../types/types';
-import { useDashboard } from '../DashBoard';
+import { GET_ISSUE_BY_ID } from '../../graphql/Query/issue';
+import Avatar from '../../components/Profile/Avatar';
+import Loader from '../../components/Loader';
+import { InterfaceIssue } from '../../types/types';
+import { useDashboard } from "../Dashboard/DashBoard";
 
 interface ChildProps {
   issueId: string;

@@ -1,11 +1,11 @@
 import { useCallback, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { Outlet, useParams, useLocation, useNavigate } from 'react-router-dom';
-import { GET_PROJECT } from '../../../graphql/Query/project';
+import { GET_PROJECT } from '../../graphql/Query/project';
 import CreateIssue from '../Issues/CreateIssue';
-import ErrorState from '../../../components/ErrorState';
 import ProjectHeader from './ProjectHeader';
-import LoadingState from '../../../components/LoadingState';
+import LoadingState from '../../components/LoadingState';
+import { showError } from '../../utils/showError';
 
 type TabType = 'issues' | 'sprints' | 'progress' | 'timeline';
 
@@ -104,41 +104,12 @@ const ProjectBoard = () => {
 
   // Error state
   if (error) {
-    return (
-      <ErrorState
-        title="Failed to Load Project"
-        message={
-          error.message ||
-          'An unexpected error occurred while loading the project.'
-        }
-        action={
-          <button
-            onClick={() => refetch()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Try Again
-          </button>
-        }
-      />
-    );
+    showError('Something went wrong');
   }
 
   // No project state
   if (!project) {
-    return (
-      <ErrorState
-        title="No Project Found"
-        message="We couldn't find the requested project. Please check the project ID or try refreshing."
-        action={
-          <button
-            onClick={() => refetch()}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Refresh
-          </button>
-        }
-      />
-    );
+    showError('Something went wrong');
   }
 
   return (

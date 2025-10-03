@@ -2,20 +2,21 @@ import DashBoard from './pages/Dashboard/DashBoard';
 import LandingPage from './pages/LandingPage/LandingPage';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Auth from './pages/Auth/Auth';
-import ProjectTable from './pages/Dashboard/Project/Projects';
-import ProjectBoard from './pages/Dashboard/Project/ProjectBoard';
+import ProjectTable from './pages/Project/Projects';
+import ProjectBoard from './pages/Project/ProjectBoard';
 import SecuredRoutes from './components/SecuredRoutes/SecuredRoutes';
-import CreateProject from './pages/Dashboard/Project/createProject';
-import UserBoard from './pages/Dashboard/User/UserBoard';
-import TeamBoard from './pages/Dashboard/Team/TeamBoard';
+import CreateProject from './pages/Project/createProject';
+import UserBoard from './pages/User/UserBoard';
+import TeamBoard from './pages/Team/TeamBoard';
 import EmailVerification from './pages/Auth/EmailVerification';
 import PageNotFound from './pages/PageNotFound/PageNotFound';
-import { ProjectIssues } from './pages/Dashboard/Issues/issues';
-import ProjectProgress from './pages/Dashboard/Progress/Progress';
-import { ProjectSprints } from './pages/Dashboard/Sprint/AllSprints';
-import ProjectTimeline from './pages/Dashboard/Timeline/TimeLine';
+import { ProjectIssues } from './pages/Issues/issues';
+import ProjectProgress from './pages/Progress/Progress';
+import { ProjectSprints } from './pages/Sprint/AllSprints';
+import ProjectTimeline from './pages/Timeline/TimeLine';
 import ProjectRedirect from './pages/Dashboard/Redirect';
-import TeamDetails from './pages/Dashboard/Team/TeamDetails';
+import TeamDetails from './pages/Team/TeamDetails/TeamDetails';
+import CreateTeam from './pages/Team/CreateTeam';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
             <Route path="/people/:userId/inbox" element={<UserBoard />}></Route>
             <Route path="/people/search" element={<UserBoard />}></Route>
             <Route path="/people/teams" element={<TeamBoard />}></Route>
+            <Route path="/people/teams/create" element={<CreateTeam />}></Route>
             <Route
               path="/people/teams/:teamId"
               element={<TeamDetails />}

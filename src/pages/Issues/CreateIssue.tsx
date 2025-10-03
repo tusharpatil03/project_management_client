@@ -4,17 +4,17 @@ import {
   CreateIssueResponse,
   InterfaceUser,
   IssueType,
-} from '../../../types/types';
+} from '../../types/types';
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_ISSUE } from '../../../graphql/Mutation/issue';
-import CreateTab from '../../../components/CreateElements/CreateIssueCard';
-import InputField from '../../../components/InputField/InputField';
-import Button from '../../../components/Button/Button';
-import TextAreaField from '../../../components/InputField/TextArea';
-import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
-import Members from '../../../components/Team/Members';
+import { CREATE_ISSUE } from '../../graphql/Mutation/issue';
+import CreateTab from '../../components/CreateElements/CreateIssueCard';
+import InputField from '../../components/InputField/InputField';
+import Button from '../../components/Button/Button';
+import TextAreaField from '../../components/InputField/TextArea';
+import { GET_ALL_MEMBERS } from '../../graphql/Query/team';
+import Members from '../../components/Team/Members';
 import { Calendar, Search, Type, User, X } from 'lucide-react';
-import Avatar from '../../../components/Profile/Avatar';
+import Avatar from '../../components/Profile/Avatar';
 
 const initialForm: CreateIssueInput = {
   title: '',

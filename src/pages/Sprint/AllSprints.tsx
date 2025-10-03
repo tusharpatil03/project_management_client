@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { InterfaceSprint } from '../../../types/types';
-import { GET_ALL_SPRINTS } from '../../../graphql/Query/sprint';
+import { InterfaceSprint } from '../../types/types';
+import { GET_ALL_SPRINTS } from '../../graphql/Query/sprint';
 import { useQuery } from '@apollo/client';
-import Loader from '../../../components/Loader';
+import Loader from '../../components/Loader';
 import Sprint from './Sprint';
 
 interface SprintsViewProps {
@@ -64,13 +64,23 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
     fetchQuery();
   }, [fetchQuery]);
 
-  const EmptyState: React.FC<{ message: string; showCreate?: boolean }> = ({ 
-    message, 
-    showCreate = false 
+  const EmptyState: React.FC<{ message: string; showCreate?: boolean }> = ({
+    message,
+    showCreate = false,
   }) => (
     <div className="text-center py-12">
-      <svg className="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+      <svg
+        className="w-12 h-12 text-gray-300 mx-auto mb-4"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+        />
       </svg>
       <h3 className="text-lg font-medium text-gray-900 mb-2">{message}</h3>
       {showCreate && (
@@ -78,8 +88,18 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
           onClick={() => setCreateTab(true)}
           className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors duration-200"
         >
-          <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          <svg
+            className="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 4v16m8-8H4"
+            />
           </svg>
           Create Your First Sprint
         </button>
@@ -92,7 +112,7 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
       return (
         <div className="mx-auto px-6 py-6">
           <CreateSprint
-            projectId={projectId} 
+            projectId={projectId}
             setCreatSprintTab={setCreateTab}
             onSuccess={handleCreateSuccess}
           />
@@ -109,7 +129,10 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
           projectId={projectId}
         />
       ) : (
-        <EmptyState message="No active sprints" showCreate={sprints.length === 0} />
+        <EmptyState
+          message="No active sprints"
+          showCreate={sprints.length === 0}
+        />
       );
     }
 
@@ -162,11 +185,23 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
     return (
       <div className="text-center py-12">
         <div className="text-red-500 mb-4">
-          <svg className="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          <svg
+            className="w-12 h-12 mx-auto mb-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
           </svg>
           <p className="text-lg font-medium">Failed to load sprints</p>
-          <p className="text-sm text-gray-500 mt-1">Please try refreshing the page</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Please try refreshing the page
+          </p>
         </div>
         <button
           onClick={fetchQuery}
@@ -188,17 +223,15 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
         setCreateTab={setCreateTab}
       />
 
-      <main className="mx-auto px-6 py-6">
-        {renderContent()}
-      </main>
+      <main className="mx-auto px-6 py-6">{renderContent()}</main>
     </div>
   );
 };
 export default SprintsView;
 
 import { useOutletContext } from 'react-router-dom';
-import { InterfaceProject } from '../../../types/types';
-import TabNavigation from '../../../components/TabNavigation/TabNavigation';
+import { InterfaceProject } from '../../types/types';
+import TabNavigation from '../../components/TabNavigation/TabNavigation';
 import CreateSprint from './CreateSprint';
 
 export interface ProjectContextType {

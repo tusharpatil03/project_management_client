@@ -1,22 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
-import { InterfaceIssue, InterfaceSprint } from '../../../types/types';
+import { InterfaceIssue, InterfaceSprint } from '../../types/types';
 import IssueDetails from './IssueDetails';
-import DeleteTab from '../../../components/Actions/DeleteTab';
+import DeleteTab from '../../components/Actions/DeleteTab';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ASSIGN_ISSUE,
   DELETE_ISSUES,
   REMOVE_ASSIGNEE,
-} from '../../../graphql/Mutation/issue';
-import { showError } from '../../../utils/showError';
+} from '../../graphql/Mutation/issue';
+import { showError } from '../../utils/showError';
 import React from 'react';
-import LoadingState from '../../../components/LoadingState';
-import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
-import Members from '../../../components/Team/Members';
-import BaseTable from '../../../components/Table/BaseTable';
+import LoadingState from '../../components/LoadingState';
+import { GET_ALL_MEMBERS } from '../../graphql/Query/team';
+import Members from '../../components/Team/Members';
+import BaseTable from '../../components/Table/BaseTable';
 import { AlertCircle, CheckCircle, Search, Users, X } from 'lucide-react';
-import Avatar from '../../../components/Profile/Avatar';
-import { useMessage } from '../../../components/ShowMessage';
+import Avatar from '../../components/Profile/Avatar';
+import { useMessage } from '../../components/ShowMessage';
 
 interface IssueTableProps {
   issues: InterfaceIssue[];
@@ -403,7 +403,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [isAssigning, setIsAssigning] = useState(false);
-  const {showSuccess, showError} = useMessage();
+  const { showSuccess, showError } = useMessage();
 
   const { data, loading, error, refetch } = useQuery(GET_ALL_MEMBERS, {
     variables: { projectId },
@@ -435,21 +435,26 @@ const GetMembers: React.FC<GetMembersProps> = ({
     },
   });
 
-  const [removeAssignee, { loading:removeAssigneeLoading }] = useMutation(REMOVE_ASSIGNEE, {
-    errorPolicy: 'all',
-    onCompleted: (data) => {
-      if (data?.removeAssineeOfIssue?.success) {
-        showSuccess('Issues Unassigned');
-        handleClose();
-      } else {
-        showError(data?.removeAssineeOfIssue?.message || 'Failed to assign issue');
-      }
-      setIsAssigning(false);
-    },
-    onError: (error) => {
-      showError(error.message || 'Failed to remove Assignee');
-    },
-  });
+  const [removeAssignee, { loading: removeAssigneeLoading }] = useMutation(
+    REMOVE_ASSIGNEE,
+    {
+      errorPolicy: 'all',
+      onCompleted: (data) => {
+        if (data?.removeAssineeOfIssue?.success) {
+          showSuccess('Issues Unassigned');
+          handleClose();
+        } else {
+          showError(
+            data?.removeAssineeOfIssue?.message || 'Failed to assign issue'
+          );
+        }
+        setIsAssigning(false);
+      },
+      onError: (error) => {
+        showError(error.message || 'Failed to remove Assignee');
+      },
+    }
+  );
 
   const members = data?.getProjectTeamsMembers || [];
 
@@ -485,7 +490,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
     try {
       await removeAssignee({
         variables: {
-          issueId: issueId
+          issueId: issueId,
         },
       });
 
@@ -542,7 +547,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
     }
   }, []);
 
-  if (loading  || removeAssigneeLoading) {
+  if (loading || removeAssigneeLoading) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4">

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
-import { GET_USERS_BY_SEARCH } from '../../../graphql/Query/user';
+import { GET_USERS_BY_SEARCH } from '../../graphql/Query/user';
 
 interface SearchUser {
   id: string;
@@ -14,7 +14,7 @@ interface SearchUser {
 }
 
 interface UserSearchProps {
-  setUser: (userId: string) => void;
+  setUser: Function;
   placeholder?: string;
   maxResults?: number;
 }
@@ -57,8 +57,13 @@ const MemberSearch: React.FC<UserSearchProps> = ({
     return () => clearTimeout(timeoutId);
   }, [searchTerm, searchUsers]);
 
-  const handleUserSelect = (userId: string) => {
-    setUser(userId);
+  const handleUserSelect = (user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    profile: { avatar: string };
+  }) => {
+    setUser(user);
     setSearchTerm('');
     setShowResults(false);
   };
@@ -210,7 +215,7 @@ const MemberSearch: React.FC<UserSearchProps> = ({
                 {users.map((user) => (
                   <div
                     key={user.id}
-                    onClick={() => handleUserSelect(user.id)}
+                    onClick={() => handleUserSelect({ ...user })}
                     className="p-3 hover:bg-gray-50 cursor-pointer transition-colors duration-150 ease-in-out"
                   >
                     <div className="flex items-center space-x-3">

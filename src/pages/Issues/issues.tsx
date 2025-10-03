@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { InterfaceIssue, InterfaceProject } from '../../../types/types';
-import { GET_ALL_ISSUES } from '../../../graphql/Query/issue';
+import { InterfaceIssue, InterfaceProject } from '../../types/types';
+import { GET_ALL_ISSUES } from '../../graphql/Query/issue';
 import { useQuery } from '@apollo/client';
-import Loader from '../../../components/Loader';
+import Loader from '../../components/Loader';
 import IssueTable from './IssuesTable';
 
 interface ChildProps {

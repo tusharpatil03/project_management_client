@@ -1,10 +1,12 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GET_ALL_TEAMS } from '../../../graphql/Query/team';
-import { showError } from '../../../utils/showError';
-import LoadingState from '../../../components/LoadingState';
-import { InterfaceUser } from '../../../types/types';
+import { GET_ALL_TEAMS } from '../../graphql/Query/team';
+import { showError } from '../../utils/showError';
+import LoadingState from '../../components/LoadingState';
+import { InterfaceUser } from '../../types/types';
+import { useDashboard } from '../Dashboard/DashBoard';
+import Button from '../../components/Button/Button';
 
 interface InterfaceTeam {
   id: string;
@@ -22,6 +24,7 @@ interface InterfaceTeam {
 const TeamBoard = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(true);
+  const { user } = useDashboard();
 
   const { data, error } = useQuery(GET_ALL_TEAMS, {
     nextFetchPolicy: 'cache-first',
@@ -54,9 +57,7 @@ const TeamBoard = () => {
   };
 
   const getCurrentUserRole = (team: InterfaceTeam): string => {
-    // This would need the current user's ID from context/auth
-    // For now, assuming you have access to current user ID
-    const currentUserId = 'current_user_id'; // Replace with actual current user ID
+    const currentUserId = user?.id;
     const userInTeam = team.users?.find((u) => u.user?.id === currentUserId);
     return userInTeam?.role || 'Unknown';
   };
@@ -88,11 +89,25 @@ const TeamBoard = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">👥 Team Board</h1>
-        <p className="text-gray-600">
-          Manage and view all teams you're part of
-        </p>
+      <div className="flex items-center justify-between mb-6">
+        <div className="mb-6">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            👥 Team Board
+          </h1>
+          <p className="text-gray-600">
+            Manage and view all teams you're part of
+          </p>
+        </div>
+        <div>
+          <Button
+            onClick={() => {
+              navigate('/people/teams/create');
+            }}
+            size="md"
+          >
+            Create Team
+          </Button>
+        </div>
       </div>
 
       {!data?.getAllTeams?.length ? (

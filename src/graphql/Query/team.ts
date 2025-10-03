@@ -24,6 +24,7 @@ export const GET_TEAM_BY_ID = gql`
         id
         role
         user {
+          id
           email
           firstName
           lastName

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Github, Linkedin, Twitter, Mail, Calendar } from 'lucide-react';
-import Avatar from '../../../components/Profile/Avatar';
-import Button from '../../../components/Button/Button';
+import Avatar from '../../components/Profile/Avatar';
+import Button from '../../components/Button/Button';
 
 interface UserData {
   id: string;

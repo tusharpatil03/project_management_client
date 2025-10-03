@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_ALL_PROJECTS } from '../../../graphql/Query/project';
-import { InterfaceProject, ProjectStatus } from '../../../types/types';
+import { GET_ALL_PROJECTS } from '../../graphql/Query/project';
+import { InterfaceProject, ProjectStatus } from '../../types/types';
 import { useNavigate } from 'react-router-dom';
 
 const getStatusColor = (status: ProjectStatus) => {
