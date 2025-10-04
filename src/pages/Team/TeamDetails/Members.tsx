@@ -1,5 +1,5 @@
 import React from 'react';
-import { Member } from './TeamDetails';
+import { Member } from '../../../types';
 import { MemberCard } from '../Team';
 import { Users } from 'lucide-react';
 
@@ -40,52 +40,57 @@ const MembersTab = ({
   creator: Member;
   currentUserId: string;
   onRemove: (memberId: string) => void;
-}) => (
-  <div className="p-6">
-    {creator && (
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Team Creator
-        </h2>
-        <MemberCard
-          key={creator.id}
-          teamUser={creator}
-          isCreator={false}
-          isCurrentUser={creator.id === currentUserId}
-          onRemove={onRemove}
-        />
-      </div>
-    )}
-
-    {members.length > 0 && (
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-          Team Members ({members.length})
-        </h2>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {members.map((member) => (
-            <MemberCard
-              key={member.id}
-              teamUser={member}
-              isCreator={false}
-              isCurrentUser={member.id === currentUserId}
-              onRemove={onRemove}
-            />
-          ))}
+}) => {
+  
+  return (
+    <div className="p-6">
+      {creator && (
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Team Creator
+          </h2>
+          <MemberCard
+            key={creator.id}
+            teamUser={creator}
+            isCreator={true}
+            isCurrentUser={creator.id === currentUserId}
+            onRemove={onRemove}
+            showRemove={false}
+          />
         </div>
-      </div>
-    )}
+      )}
 
-    {members.length === 0 && (
-      <div className="text-center py-16 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
-        <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-        <p className="text-gray-600 font-medium">No other members yet</p>
-        <p className="text-gray-500 text-sm mt-2">
-          Add team members to start collaborating
-        </p>
-      </div>
-    )}
-  </div>
-);
+      {members.length > 0 && (
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900 mb-4">
+            Team Members ({members.length})
+          </h2>
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {members.map((member) => (
+              <MemberCard
+                key={member.id}
+                teamUser={member}
+                isCreator={false}
+                isCurrentUser={member.id === currentUserId}
+                onRemove={onRemove}
+                showRemove={true}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {members.length === 0 && (
+        <div className="text-center py-16 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
+          <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <p className="text-gray-600 font-medium">No other members yet</p>
+          <p className="text-gray-500 text-sm mt-2">
+            Add team members to start collaborating
+          </p>
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default MembersTab;

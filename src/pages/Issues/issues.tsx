@@ -3,7 +3,7 @@ import { InterfaceIssue, InterfaceProject } from '../../types/types';
 import { GET_ALL_ISSUES } from '../../graphql/Query/issue';
 import { useQuery } from '@apollo/client';
 import Loader from '../../components/Loader';
-import IssueTable from './IssuesTable';
+import IssueTable from './IssueTable/IssuesTable';
 
 interface ChildProps {
   project: InterfaceProject;

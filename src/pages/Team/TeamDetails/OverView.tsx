@@ -1,5 +1,5 @@
 import { MemberCard } from '../Team';
-import { Member } from './TeamDetails';
+import { Member } from '../../../types';
 import { memo } from 'react';
 
 const OverviewTab = memo(({

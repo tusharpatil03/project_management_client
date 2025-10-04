@@ -20,7 +20,7 @@ const initialForm: CreateIssueInput = {
   title: '',
   description: '',
   type: IssueType.TASK,
-  parent: undefined,
+  parentId: undefined,
   sprintId: '',
   assigneeId: '',
   projectId: '',
@@ -207,7 +207,7 @@ const CreateIssue: React.FC<CreateIssueProps> = ({
                 label="parent issue"
                 type="text"
                 name="parent"
-                value={formData.parent || ''}
+                value={formData.parentId || ''}
                 onChange={handleChange}
                 required={false}
                 placeholder="Optional parent issue"

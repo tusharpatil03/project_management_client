@@ -8,18 +8,7 @@ import { InterfaceUser } from '../../types/types';
 import { useDashboard } from '../Dashboard/DashBoard';
 import Button from '../../components/Button/Button';
 
-interface InterfaceTeam {
-  id: string;
-  name: string;
-  creatorId: string;
-  users?: {
-    id: string;
-    role?: string;
-    userId?: string;
-    teamId?: string;
-    user?: InterfaceUser;
-  }[];
-}
+import { InterfaceTeam } from '../../types/team';
 
 const TeamBoard = () => {
   const navigate = useNavigate();

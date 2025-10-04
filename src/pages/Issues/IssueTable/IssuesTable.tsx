@@ -1,27 +1,28 @@
 import { useCallback, useEffect, useState } from 'react';
-import { InterfaceIssue, InterfaceSprint } from '../../types/types';
-import IssueDetails from './IssueDetails';
-import DeleteTab from '../../components/Actions/DeleteTab';
+import { InterfaceIssue, InterfaceSprint, InterfaceUser } from '../../../types/types';
+import IssueDetails from '../IssueDetails/IssueDetails';
+import DeleteTab from '../../../components/Actions/DeleteTab';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   ASSIGN_ISSUE,
   DELETE_ISSUES,
   REMOVE_ASSIGNEE,
-} from '../../graphql/Mutation/issue';
-import { showError } from '../../utils/showError';
+} from '../../../graphql/Mutation/issue';
+import { showError } from '../../../utils/showError';
 import React from 'react';
-import LoadingState from '../../components/LoadingState';
-import { GET_ALL_MEMBERS } from '../../graphql/Query/team';
-import Members from '../../components/Team/Members';
-import BaseTable from '../../components/Table/BaseTable';
-import { AlertCircle, CheckCircle, Search, Users, X } from 'lucide-react';
-import Avatar from '../../components/Profile/Avatar';
-import { useMessage } from '../../components/ShowMessage';
+import LoadingState from '../../../components/LoadingState';
+import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
+import Members from '../../../components/Team/Members';
+import BaseTable from '../../../components/Table/BaseTable';
+import { X, Users, Search, CheckCircle, AlertCircle } from 'lucide-react';
+import { IssueStatusBadge, IssueTableHeader, IssueTableRow, AssignMemberModal } from './components';
+import Avatar from '../../../components/Profile/Avatar';
+import { useMessage } from '../../../components/ShowMessage';
 
 interface IssueTableProps {
   issues: InterfaceIssue[];
   projectId: string;
-  onIssueUpdate?: () => void;
+  onIssueUpdate: () => void;
 }
 
 const IssueTable: React.FC<IssueTableProps> = ({
@@ -34,7 +35,7 @@ const IssueTable: React.FC<IssueTableProps> = ({
   const [selectedIssues, setSelectedIssues] = useState<Set<string>>(new Set());
   const [showDeleteTab, setShowDeleteTab] = useState<boolean>(false);
   const [membersTab, setMemberTab] = useState<boolean>(false);
-  const [currentAssignee, setCurrentAssignee] = useState<string>();
+  const [currentAssignee, setCurrentAssignee] = useState<InterfaceUser | null>();
 
   const [deleteIssue, { loading: deleteLoading, error: deleteError }] =
     useMutation(DELETE_ISSUES, {
@@ -238,25 +239,12 @@ const IssueTable: React.FC<IssueTableProps> = ({
 
       {/* Issues Table */}
       <BaseTable loading={deleteLoading}>
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50">
-          <tr>
-            <th className="px-6 py-3">
-              <input
-                type="checkbox"
-                checked={isAllSelected}
-                onChange={(e) => handleSelectAll(e.target.checked)}
-                className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-              />
-            </th>
-            <th className="px-6 py-3 text-left">Title</th>
-            <th className="px-6 py-3 text-left">Type</th>
-            <th className="px-6 py-3 text-left">Sprint</th>
-            <th className="px-6 py-3 text-left">Assignee</th>
-            <th className="px-6 py-3 text-left">Due Date</th>
-            <th className="px-6 py-3 text-left">Status</th>
-            <th className="px-6 py-3 text-center">Actions</th>
-          </tr>
-        </thead>
+        <IssueTableHeader
+          isAllSelected={isAllSelected}
+          onSelectAll={handleSelectAll}
+          sortConfig={undefined}
+          onSort={undefined}
+        />
         <tbody>
           {issues.length === 0 ? (
             <tr>
@@ -288,55 +276,22 @@ const IssueTable: React.FC<IssueTableProps> = ({
             </tr>
           ) : (
             issues.map((issue) => (
-              <tr
+              <IssueTableRow
                 key={issue.id}
-                className={`border-b hover:bg-gray-50 transition-colors ${
-                  selectedIssues.has(issue.id) ? 'bg-blue-50' : 'bg-white'
-                }`}
-              >
-                <td className="px-6 py-4">
-                  <input
-                    type="checkbox"
-                    checked={selectedIssues.has(issue.id)}
-                    onChange={(e) =>
-                      handleCheckboxChange(issue.id, e.target.checked)
-                    }
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-                  />
-                </td>
-                <td className="px-6 py-4">
-                  <button
-                    onClick={() => handleIssueClick(issue.id)}
-                    className="text-blue-600 hover:text-blue-800 hover:underline text-left font-medium"
-                  >
-                    {issue.title}
-                  </button>
-                </td>
-                <td className="px-6 py-4">{renderIssueType(issue.type)}</td>
-                <td className="px-6 py-4">{renderSprintInfo(issue.sprint)}</td>
-                <td className="px-6 py-4">
-                  {renderAssignee(issue.assignee, issue.id)}
-                </td>
-                <td className="px-6 py-4">
-                  {renderDueDate(String(issue.dueDate))}
-                </td>
-                <td className="px-6 py-4">
-                  <span
-                    className={`px-2 py-1 rounded text-xs font-medium ${
-                      issue.status === 'open'
-                        ? 'bg-green-100 text-green-800'
-                        : issue.status === 'in_progress'
-                          ? 'bg-yellow-100 text-yellow-800'
-                          : issue.status === 'closed'
-                            ? 'bg-gray-100 text-gray-800'
-                            : 'bg-blue-100 text-blue-800'
-                    }`}
-                  >
-                    {issue.status?.replace('_', ' ').toUpperCase() || 'OPEN'}
-                  </span>
-                </td>
-                <td className="px-6 py-4">{renderActions(issue)}</td>
-              </tr>
+                issue={issue}
+                isSelected={selectedIssues.has(issue.id)}
+                onCheckboxChange={handleCheckboxChange}
+                onIssueClick={handleIssueClick}
+                onAssigneeClick={(issueId, assignee) => {
+                  setIssueId(issueId);
+                  setCurrentAssignee(assignee);
+                  setMemberTab(true);
+                }}
+                onDeleteClick={(issueId) => {
+                  setSelectedIssues(new Set([issueId]));
+                  setShowDeleteTab(true);
+                }}
+              />
             ))
           )}
         </tbody>
@@ -355,13 +310,13 @@ const IssueTable: React.FC<IssueTableProps> = ({
         </div>
       )}
 
-      {/**Members tab to assign issue*/}
-      {membersTab && (
-        <GetMembers
-          projectId={projectId}
-          issueId={issueId as string}
-          setMemberTab={setMemberTab}
-          currentAssigneeId={currentAssignee}
+      {membersTab && issueId && (
+        <AssignMemberModal
+          isOpen={membersTab}
+          onClose={() => setMemberTab(false)}
+          issueId={issueId}
+          currentAssignee={currentAssignee}
+          onAssignSuccess={onIssueUpdate}
         />
       )}
 

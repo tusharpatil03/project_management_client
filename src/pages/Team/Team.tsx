@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { InterfaceUser } from '../../types/types';
 import { getRoleBadgeColor } from './helper';
+import { Member } from '../../types';
 
 interface InterfaceUserTeam {
   id: string;
@@ -11,7 +12,7 @@ interface InterfaceUserTeam {
 }
 
 interface MemberCardProps {
-  teamUser: InterfaceUserTeam;
+  teamUser: Member;
   isCreator?: boolean;
   showRemove?: boolean;
   isCurrentUser?: boolean;
@@ -74,11 +75,13 @@ export const MemberCard = ({
   const [showConfirm, setShowConfirm] = useState(false);
 
   const handleRemove = () => {
-    if (onRemove && teamUser.id) {
-      onRemove(teamUser.id);
+    if (onRemove && teamUser.user?.id) {
+      onRemove(teamUser.user?.id);
       setShowConfirm(false);
     }
   };
+
+  
 
   return (
     <div

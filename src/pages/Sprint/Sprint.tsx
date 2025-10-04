@@ -1,4 +1,4 @@
-import IssueTable from '../Issues/IssuesTable';
+import IssueTable from '../Issues/IssueTable/IssuesTable';
 import { InterfaceSprint } from '../../types/types';
 import CreateIssue from '../Issues/CreateIssue';
 import { useMemo, useState } from 'react';
@@ -308,7 +308,7 @@ const Sprint: React.FC<SprintProps> = ({ sprint, refetch, projectId }) => {
                 )} */}
               </div>
               <div className="bg-gray-50 rounded-lg p-1">
-                <IssueTable issues={sprint.issues} projectId={projectId} />
+                <IssueTable issues={sprint.issues} projectId={projectId} onIssueUpdate={refetch} />
               </div>
             </div>
           ) : (

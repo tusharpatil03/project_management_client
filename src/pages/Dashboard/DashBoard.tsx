@@ -162,7 +162,6 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
 
   // Batch multiple dispatches to reduce re-renders
   useEffect(() => {
-    console.log('DashboardProvider useEffect triggered');
     if (loading !== state.loading) {
       dispatch({ type: 'SET_LOADING', payload: loading });
     }
@@ -235,7 +234,6 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <DashboardContext.Provider value={contextValue}>
-      {true?  <>{console.log(contextValue)}</> : <></>}
       {children}
     </DashboardContext.Provider>
   );

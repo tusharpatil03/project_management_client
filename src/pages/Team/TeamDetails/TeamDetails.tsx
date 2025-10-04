@@ -11,28 +11,7 @@ import { useDashboard } from '../../Dashboard/DashBoard';
 import MembersTab from './Members';
 import Loader from '../../../components/Loader';
 
-export interface Member {
-  id: string;
-  role?: string;
-  userId?: string;
-  teamId?: string;
-  user: InterfaceUser;
-}
-
-interface InterfaceTeam {
-  id: string;
-  name: string;
-  description?: string;
-  creatorId: string;
-  users?: Member[];
-}
-
-interface TeamStats {
-  total: number;
-  admins: number;
-  contributors: number;
-  viewers: number;
-}
+import { InterfaceTeam, Member, TeamStats } from '../../../types/team';
 
 // Tab Button Component
 const TabButton = ({
@@ -49,9 +28,7 @@ const TabButton = ({
   <button
     onClick={onClick}
     className={`relative px-4 py-2 rounded-lg font-semibold transition-colors duration-200 text-sm ${
-      isActive
-        ? 'bg-blue-600 text-white'
-        : 'text-gray-600 hover:bg-gray-100'
+      isActive ? 'bg-blue-600 text-white' : 'text-gray-600 hover:bg-gray-100'
     }`}
   >
     <span className="flex items-center gap-2">
@@ -113,7 +90,7 @@ const StatsCard = ({
 
 export const TeamDetails = () => {
   const { teamId } = useParams<{ teamId: string }>();
-  const { user } = useDashboard();
+  const { user, currentProject } = useDashboard();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<'overview' | 'members'>(
     'overview'
@@ -135,6 +112,13 @@ export const TeamDetails = () => {
   const [removeMemberMutation, { loading: removing }] = useMutation(
     REMOVE_TEAM_MEMBER,
     {
+      variables: {
+        input: {
+          memberId: '',
+          teamId: data?.getTeamById.id,
+          projectId: currentProject?.id
+        }
+      },
       onCompleted: () => {
         showSuccess('Member removed successfully');
         refetch();
@@ -142,7 +126,6 @@ export const TeamDetails = () => {
       onError: (err) => showError(err.message),
     }
   );
-
 
   // Memoized calculations
   const teamStats: TeamStats = useMemo(() => {
@@ -172,7 +155,13 @@ export const TeamDetails = () => {
 
     try {
       await removeMemberMutation({
-        variables: { memberId, teamId },
+        variables: {
+          input: {
+            memberId: memberId,
+            teamId: team.id,
+            projectId: currentProject?.id,
+          },
+        },
       });
     } catch (err) {
       console.error('Error removing member:', err);
