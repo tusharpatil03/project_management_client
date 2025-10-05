@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const GET_ISSUE_BY_ID = gql`
-  query GetIssueById($issueId: ID!) {
-    getIssueById(issueId: $issueId) {
+  query GetIssueById($issueId: ID!, $projectId: ID!) {
+    getIssueById(issueId: $issueId, projectId: $projectId) {
       id
       title
       description
@@ -10,8 +10,6 @@ export const GET_ISSUE_BY_ID = gql`
       dueDate
       createdAt
       updatedAt
-      projectId
-      sprintId
       assignee {
         id
         firstName
@@ -22,6 +20,7 @@ export const GET_ISSUE_BY_ID = gql`
         }
       }
       creator {
+        id
         email
         firstName
         lastName

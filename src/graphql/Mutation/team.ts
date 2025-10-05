@@ -47,15 +47,11 @@ export const ADD_TEAM_MEMBER = gql`
   }
 `;
 
+
 export const REMOVE_TEAM_MEMBER = gql`
-  mutation RemoveTeamMember($memberId: ID!, $teamId: ID!) {
-    removeTeamMember(memberId: $memberId, teamId: $teamId) {
+  mutation RemoveTeamMember($input: removeTeamMemberInput!) {
+    removeTeamMember(input: $input) {
       id
-      name
-      members {
-        id
-        email
-      }
     }
   }
 `;

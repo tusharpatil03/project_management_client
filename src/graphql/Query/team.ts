@@ -23,6 +23,8 @@ export const GET_TEAM_BY_ID = gql`
       users {
         id
         role
+        userId
+        teamId
         user {
           id
           email

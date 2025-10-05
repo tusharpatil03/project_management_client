@@ -1,3 +1,5 @@
+import { IssuePriority } from "./issue";
+
 export type SignupInput = {
   firstName: string;
   lastName: string;
@@ -118,9 +120,11 @@ export interface InterfaceIssue {
   title: string;
   description?: string;
   type: IssueType;
+  priority?: IssuePriority;
   creator: InterfaceUser;
   creatorId?: string;
   assignee?: InterfaceUser;
+  assigneeId?: string | null;
   projectId?: string;
   sprintId?: string;
   sprint: InterfaceSprint;
@@ -215,7 +219,7 @@ export type CreateIssueInput = {
   title: string;
   description?: string;
   type: IssueType;
-  parent?: string;
+  parentId?: string;
   assigneeId?: string;
   projectId: string;
   dueDate: string;
@@ -395,8 +399,9 @@ export type LogoutResponse = {
 };
 
 export type RemoveTeamMemberInput = {
-  memberId: string;
-  teamId: string;
+  memberId: string,
+  teamId: string,
+  projectId: string,
 };
 export type RemoveTeamMemberResponse = {
   removeTeamMember: {
