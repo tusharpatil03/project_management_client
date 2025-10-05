@@ -1,7 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { GET_ISSUE_BY_ID } from '../../../graphql/Query/issue';
-import { InterfaceIssue } from '../../../types/types';
+import { InterfaceIssue } from '../../../types/';
 import { useDashboard } from '../../Dashboard/DashBoard';
 import EditIssue from '../EditIssue/EditIssue';
 import {
@@ -13,7 +13,7 @@ import {
   IssuePeople,
   IssueTimeline,
   IssueFooter,
-} from './components';
+} from './';
 
 interface ChildProps {
   issueId: string;

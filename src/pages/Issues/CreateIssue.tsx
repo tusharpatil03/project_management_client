@@ -4,7 +4,7 @@ import {
   CreateIssueResponse,
   InterfaceUser,
   IssueType,
-} from '../../types/types';
+} from '../../types';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_ISSUE } from '../../graphql/Mutation/issue';
 import CreateTab from '../../components/CreateElements/CreateIssueCard';

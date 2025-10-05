@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { InterfaceIssue, InterfaceSprint, InterfaceUser } from '../../../types/types';
+import { InterfaceIssue, InterfaceSprint, InterfaceUser } from '../../../types/';
 import IssueDetails from '../IssueDetails/IssueDetails';
 import DeleteTab from '../../../components/Actions/DeleteTab';
 import { useMutation, useQuery } from '@apollo/client';
@@ -15,7 +15,7 @@ import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
 import Members from '../../../components/Team/Members';
 import BaseTable from '../../../components/Table/BaseTable';
 import { X, Users, Search, CheckCircle, AlertCircle } from 'lucide-react';
-import { IssueStatusBadge, IssueTableHeader, IssueTableRow, AssignMemberModal } from './components';
+import {  IssueTableHeader, IssueTableRow, AssignMemberModal } from './';
 import Avatar from '../../../components/Profile/Avatar';
 import { useMessage } from '../../../components/ShowMessage';
 
@@ -282,12 +282,12 @@ const IssueTable: React.FC<IssueTableProps> = ({
                 isSelected={selectedIssues.has(issue.id)}
                 onCheckboxChange={handleCheckboxChange}
                 onIssueClick={handleIssueClick}
-                onAssigneeClick={(issueId, assignee) => {
+                onAssigneeClick={(issueId:string, assignee:InterfaceUser|undefined) => {
                   setIssueId(issueId);
                   setCurrentAssignee(assignee);
                   setMemberTab(true);
                 }}
-                onDeleteClick={(issueId) => {
+                onDeleteClick={(issueId:string) => {
                   setSelectedIssues(new Set([issueId]));
                   setShowDeleteTab(true);
                 }}

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GET_ALL_TEAMS } from '../../graphql/Query/team';
 import { showError } from '../../utils/showError';
 import LoadingState from '../../components/LoadingState';
-import { InterfaceUser } from '../../types/types';
+import { InterfaceUser } from '../../types';
 import { useDashboard } from '../Dashboard/DashBoard';
 import Button from '../../components/Button/Button';
 

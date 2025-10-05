@@ -1,14 +1,14 @@
 import React from 'react';
-import { InterfaceIssue, IssueType } from '../../../types/types';
+import { InterfaceIssue } from '../../../types';
 import { useMutation } from '@apollo/client';
 import { UPDATE_ISSUE } from '../../../graphql/Mutation/issue';
 import Avatar from '../../../components/Profile/Avatar'; //required to show assginee
 import MemberSearch from '../../User/GetUserBySearch'; // search assignee
 import CreateTab from '../../../components/CreateElements/CreateIssueCard';
 import { useMessage } from '../../../components/ShowMessage';
-import { IssueDetailsForm } from './components/IssueDetailsForm';
-import { IssueMetadata } from './components/IssueMetadata';
-import { FormActions } from './components/FormActions';
+import { IssueDetailsForm } from './';
+import { IssueMetadata } from './';
+import { FormActions } from './';
 import { IssuePriority, UpdateIssueInput } from '../../../types/issue';
 
 interface EditIssueProps {

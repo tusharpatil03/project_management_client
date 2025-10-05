@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_USER_BY_ID } from '../../graphql/Query/user';
-import { Gender, InterfaceUser } from '../../types/types';
+import { Gender, InterfaceUser } from '../../types/';
 import { useDashboard } from '../Dashboard/DashBoard';
 import UserProfileHeader from './UserProfileHeader';
 import UserAbout from './UserAbout';

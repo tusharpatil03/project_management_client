@@ -1,5 +1,5 @@
 import { MemberCard } from '../Team';
-import { Member } from '../../../types';
+import { UserTeam } from '../../../types';
 import { memo } from 'react';
 
 const OverviewTab = memo(({
@@ -8,8 +8,8 @@ const OverviewTab = memo(({
   stats,
   onViewAllMembers,
 }: {
-  creator: Member;
-  recentMembers: Member[];
+  creator: UserTeam;
+  recentMembers: UserTeam[];
   stats: any;
   onViewAllMembers: () => void;
 }) => {

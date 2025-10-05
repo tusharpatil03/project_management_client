@@ -1,14 +1,14 @@
 import { useQuery, useMutation, ApolloError } from '@apollo/client';
 import { Search, Users, X } from 'lucide-react';
 import { useState } from 'react';
-import { InterfaceUser } from '../../../../types/types';
-import { showError } from '../../../../utils/showError';
-import { GET_ALL_MEMBERS } from '../../../../graphql/Query/team';
-import { ASSIGN_ISSUE, REMOVE_ASSIGNEE } from '../../../../graphql/Mutation/issue';
-import Members from '../../../../components/Team/Members';
-import Avatar from '../../../../components/Profile/Avatar';
-import LoadingState from '../../../../components/LoadingState';
-import { useMessage } from '../../../../components/ShowMessage';
+import { InterfaceUser } from '../../../types';
+import { showError } from '../../../utils/showError';
+import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
+import { ASSIGN_ISSUE, REMOVE_ASSIGNEE } from '../../../graphql/Mutation/issue';
+import Members from '../../../components/Team/Members';
+import Avatar from '../../../components/Profile/Avatar';
+import LoadingState from '../../../components/LoadingState';
+import { useMessage } from '../../../components/ShowMessage';
 
 interface AssignMemberModalProps {
   isOpen: boolean;
@@ -72,7 +72,9 @@ export const AssignMemberModal = ({
   };
 
   const filteredMembers = data?.getAllMembers.filter((member: InterfaceUser) =>
-    `${member.firstName} ${member.lastName}`.toLowerCase().includes(searchQuery.toLowerCase())
+    `${member.firstName} ${member.lastName}`
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
   );
 
   if (!isOpen) return null;
@@ -112,7 +114,12 @@ export const AssignMemberModal = ({
                 <p className="mb-2 text-sm text-gray-500">Current Assignee</p>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <Avatar firstName={currentAssignee.firstName} lastName={currentAssignee.lastName} email={currentAssignee.email} size="medium" />
+                    <Avatar
+                      firstName={currentAssignee.firstName}
+                      lastName={currentAssignee.lastName}
+                      email={currentAssignee.email}
+                      size="medium"
+                    />
                     <span className="font-medium">{`${currentAssignee.firstName} ${currentAssignee.lastName}`}</span>
                   </div>
                   <button

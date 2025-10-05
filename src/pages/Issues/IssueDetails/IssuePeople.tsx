@@ -1,6 +1,6 @@
 import React from 'react';
-import Avatar from '../../../../components/Profile/Avatar';
-import { InterfaceUser } from '../../../../types/types';
+import Avatar from '../../../components/Profile/Avatar';
+import { InterfaceUser } from '../../../types';
 
 interface IssuePeopleProps {
   assignee: InterfaceUser | null;

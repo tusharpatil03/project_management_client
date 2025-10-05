@@ -4,7 +4,7 @@ import CheckEmail from '../../components/Auth/CheckEmail';
 import { useMutation } from '@apollo/client';
 import { VERIFY_USER } from '../../graphql/Mutation/user';
 import Loader from '../../components/Loader';
-import { InterfaceAuth } from '../../types/types';
+import { InterfaceAuth } from '../../types/';
 import { useAuth } from '../../contexts/AuthContext';
 import { setRefreshToken } from '../../utils/storage';
 import { useMessage } from '../../components/ShowMessage';

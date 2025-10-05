@@ -10,7 +10,7 @@ import {
   useRef,
 } from 'react';
 import { useQuery } from '@apollo/client';
-import { InterfaceProject, InterfaceUser } from '../../types/types';
+import { InterfaceProject, InterfaceUser } from '../../types/';
 import DashboardLayout from './DashBoardLayout';
 import { GET_USER_INFO } from '../../graphql/Query/user';
 
@@ -177,15 +177,15 @@ export const DashboardProvider = ({ children }: { children: ReactNode }) => {
       const projects = userInfo.projects || [];
 
       const recentProjects = projects
-        .filter((project) => project.updatedAt)
+        .filter((project:InterfaceProject) => project.updatedAt)
         .sort(
-          (a, b) =>
+          (a:InterfaceProject, b:InterfaceProject) =>
             Number(new Date(b.updatedAt)) - Number(new Date(a.updatedAt))
         )
         .slice(0, 4);
 
 
-      const starredProjects = projects.filter((project) => project.starred);
+      const starredProjects = projects.filter((project:InterfaceProject) => project.starred);
       const currentProject = recentProjects[0] || projects[0] || null;
 
       // Use a batch dispatch to update multiple values at once

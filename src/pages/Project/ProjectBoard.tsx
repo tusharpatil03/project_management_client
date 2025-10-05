@@ -5,7 +5,7 @@ import { GET_PROJECT } from '../../graphql/Query/project';
 import CreateIssue from '../Issues/CreateIssue';
 import ProjectHeader from './ProjectHeader';
 import LoadingState from '../../components/LoadingState';
-import { showError } from '../../utils/showError';
+import { useMessage } from '../../components/ShowMessage';
 
 type TabType = 'issues' | 'sprints' | 'progress' | 'timeline';
 
@@ -55,15 +55,14 @@ const ProjectBoard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  console.log('ProjectBoard render - projectId:', projectId);
-
+  const { showError, showSuccess } = useMessage();
   const getActiveTabFromPath = (): TabType => {
     const path = location.pathname;
     if (path.includes('/issues')) return 'issues';
     if (path.includes('/sprints')) return 'sprints';
     if (path.includes('/progress')) return 'progress';
     if (path.includes('/timeline')) return 'timeline';
-    return 'sprints'; // default
+    return 'sprints';
   };
 
   const activeTab = getActiveTabFromPath();
@@ -102,12 +101,10 @@ const ProjectBoard = () => {
     return <LoadingState size="lg" />;
   }
 
-  // Error state
   if (error) {
     showError('Something went wrong');
   }
 
-  // No project state
   if (!project) {
     showError('Something went wrong');
   }

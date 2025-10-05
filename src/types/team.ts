@@ -6,12 +6,11 @@ export interface InterfaceTeam extends BaseEntity {
   name: string;
   description?: string;
   creatorId: string;
-  members: InterfaceUser[];
+  users: UserTeam[];
   projects: InterfaceProject[];
-  users?: Member[];
 }
 
-export interface Member {
+export interface UserTeam {
   id: string;
   role?: string;
   userId?: string;

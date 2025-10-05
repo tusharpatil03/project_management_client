@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { IssueType } from '../../types/types';
 
 export const CREATE_ISSUE = gql`
   mutation CreateIssue($input: CreateIssueInput!) {

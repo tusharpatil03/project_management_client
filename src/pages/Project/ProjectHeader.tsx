@@ -1,4 +1,4 @@
-import { InterfaceProject, ProjectStatus } from '../../types/types';
+import { InterfaceProject, ProjectStatus } from '../../types/';
 
 interface ProjectHeaderProps {
   project: InterfaceProject;
@@ -20,7 +20,7 @@ const ProjectHeader: React.FC<ProjectHeaderProps> = ({
             </span>
             <span
               className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                project.status === ProjectStatus.ACTIVE
+                ProjectStatus[project.status] === ProjectStatus.ACTIVE
                   ? 'bg-green-100 text-green-800'
                   : 'bg-gray-100 text-gray-800'
               }`}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { IssuePriority, UpdateIssueInput } from '../../../../types/issue';
+import { IssuePriority, UpdateIssueInput } from '../../../types/issue';
 
 interface IssueMetadataProps {
   formData: UpdateIssueInput;

@@ -40,3 +40,10 @@ export type UpdateIssueInput = {
   assigneeId?: string;
   priority?: IssuePriority;
 };
+
+export type CreateIssueResponse = {
+  createIssue: {
+    message: string;
+    sucess: boolean;
+  };
+};

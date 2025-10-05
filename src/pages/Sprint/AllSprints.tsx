@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { InterfaceSprint } from '../../types/types';
+import { InterfaceSprint } from '../../types';
 import { GET_ALL_SPRINTS } from '../../graphql/Query/sprint';
 import { useQuery } from '@apollo/client';
 import Loader from '../../components/Loader';
@@ -230,7 +230,7 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
 export default SprintsView;
 
 import { useOutletContext } from 'react-router-dom';
-import { InterfaceProject } from '../../types/types';
+import { InterfaceProject } from '../../types/';
 import TabNavigation from '../../components/TabNavigation/TabNavigation';
 import CreateSprint from './CreateSprint';
 

@@ -4,7 +4,7 @@ import { CREATE_PROJECT } from '../../graphql/Mutation/project';
 import {
   CreateProjectInput,
   CreateProjectResponse,
-} from '../../types/types';
+} from '../../types';
 import { useNavigate } from 'react-router-dom';
 
 interface CreateProjectProps {

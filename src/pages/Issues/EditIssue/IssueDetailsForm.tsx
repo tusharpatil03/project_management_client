@@ -1,7 +1,7 @@
 import React from 'react';
-import InputField from '../../../../components/InputField/InputField';
-import TextAreaField from '../../../../components/InputField/TextArea';
-import { UpdateIssueInput } from '../../../../types/issue';
+import InputField from '../../../components/InputField/InputField';
+import TextAreaField from '../../../components/InputField/TextArea';
+import { UpdateIssueInput } from '../../../types/issue';
 
 interface IssueDetailsFormProps {
   formData: UpdateIssueInput;

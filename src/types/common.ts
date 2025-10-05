@@ -26,6 +26,13 @@ export enum IssueType {
   STORY = 'STORY',
 }
 
+export enum ProjectStatus {
+  ACTIVE,
+  PLANNED,
+  COMPLETE,
+}
+
+
 /**
  * Common interfaces used across multiple modules
  */

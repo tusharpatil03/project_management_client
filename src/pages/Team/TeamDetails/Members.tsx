@@ -1,5 +1,5 @@
 import React from 'react';
-import { Member } from '../../../types';
+import { UserTeam } from '../../../types';
 import { MemberCard } from '../Team';
 import { Users } from 'lucide-react';
 
@@ -31,16 +31,18 @@ import { Users } from 'lucide-react';
 // export default Members;
 
 const MembersTab = ({
-  members,
+  users,
   creator,
   currentUserId,
   onRemove,
 }: {
-  members: Member[];
-  creator: Member;
+  users: UserTeam[];
+  creator: UserTeam;
   currentUserId: string;
   onRemove: (memberId: string) => void;
 }) => {
+
+  // console.log('member: ', users);
   
   return (
     <div className="p-6">
@@ -60,13 +62,13 @@ const MembersTab = ({
         </div>
       )}
 
-      {members.length > 0 && (
+      {users.length > 0 && (
         <div>
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            Team Members ({members.length})
+            Team Members ({users.length})
           </h2>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {members.map((member) => (
+            {users.map((member) => (
               <MemberCard
                 key={member.id}
                 teamUser={member}
@@ -80,7 +82,7 @@ const MembersTab = ({
         </div>
       )}
 
-      {members.length === 0 && (
+      {users.length === 0 && (
         <div className="text-center py-16 bg-gray-50 rounded-xl border-2 border-dashed border-gray-300">
           <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <p className="text-gray-600 font-medium">No other members yet</p>

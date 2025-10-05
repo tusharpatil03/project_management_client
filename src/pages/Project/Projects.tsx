@@ -1,7 +1,7 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_PROJECTS } from '../../graphql/Query/project';
-import { InterfaceProject, ProjectStatus } from '../../types/types';
+import { InterfaceProject, ProjectStatus } from '../../types/';
 import { useNavigate } from 'react-router-dom';
 
 const getStatusColor = (status: ProjectStatus) => {
@@ -126,7 +126,7 @@ const ProjectTable: React.FC = () => {
                           </td>
                           <td className="whitespace-nowrap px-3 py-4 text-sm">
                             <span
-                              className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${getStatusColor(project.status)}`}
+                              className={`inline-flex rounded-full px-2 text-xs font-semibold leading-5 ${getStatusColor(ProjectStatus[project.status])}`}
                             >
                               {ProjectStatus[project.status]}
                             </span>

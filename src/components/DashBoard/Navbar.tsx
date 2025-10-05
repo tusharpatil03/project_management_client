@@ -13,7 +13,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
 
   const toggleUserMenu = () => setUserMenuOpen((prev) => !prev);
 
-  // Close user menu when clicking outside
+  // close user menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LOGIN_USER } from '../../graphql/Mutation/user';
-import { LoginInput, AuthResponce } from '../../types/types';
+import { LoginInput, AuthResponse } from '../../types/';
 import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
 import { useAuth } from '../../contexts/AuthContext';
@@ -15,7 +15,7 @@ export function Login() {
 
   const navigate = useNavigate();
 
-  const [signUser, { loading, error }] = useMutation<AuthResponce>(LOGIN_USER);
+  const [signUser, { loading, error }] = useMutation<AuthResponse>(LOGIN_USER);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

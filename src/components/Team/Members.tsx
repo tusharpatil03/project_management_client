@@ -1,5 +1,5 @@
 import { Search, User, UserPlus } from 'lucide-react';
-import { InterfaceUser } from '../../types/types';
+import { InterfaceUser } from '../../types';
 import Loader from '../Loader';
 import Avatar from '../Profile/Avatar';
 

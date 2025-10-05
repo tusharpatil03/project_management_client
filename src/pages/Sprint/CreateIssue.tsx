@@ -5,7 +5,7 @@ import {
   InterfaceUser,
   IssueType,
   InterfaceSprint,
-} from '../../types/types';
+} from '../../types/';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_ISSUE } from '../../graphql/Mutation/issue';
 import InputField from '../../components/InputField/InputField';

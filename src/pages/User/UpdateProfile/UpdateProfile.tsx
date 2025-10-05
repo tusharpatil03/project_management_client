@@ -2,7 +2,7 @@ import React, { useState, useCallback, useMemo } from 'react';
 import { useMutation } from '@apollo/client';
 import { UPDATE_USER_PROFILE } from '../../../graphql/Mutation/user';
 import { UserData } from '../UserBoard';
-import { Gender, Social } from '../../../types/types';
+import { Gender, Social } from '../../../types';
 import { useMessage } from '../../../components/ShowMessage';
 
 interface UpdateProfileProps {

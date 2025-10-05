@@ -128,3 +128,16 @@ export type LogoutResponse = {
 export type HealthCheckResponse = {
   healthCheck: BaseResponse;
 };
+
+export type CreateProjectResponse = {
+  createProject: {
+    id: string;
+    key: string;
+    name?: string;
+    description?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    status?: string;
+    creatorId: string;
+  };
+};

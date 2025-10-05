@@ -1,7 +1,7 @@
 import React from 'react';
-import { InterfaceIssue, InterfaceUser, InterfaceSprint } from '../../../../types/types';
+import { InterfaceIssue, InterfaceUser, InterfaceSprint } from '../../../types';
 import { IssueStatusBadge } from './IssueStatusBadge';
-import Avatar from '../../../../components/Profile/Avatar';
+import Avatar from '../../../components/Profile/Avatar';
 
 interface IssueTableRowProps {
   issue: InterfaceIssue;

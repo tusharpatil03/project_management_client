@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { CREATE_TEAM } from '../../graphql/Mutation/team';
-import { CreateTeamInput } from '../../types/types';
+import { CreateTeamInput } from '../../types/';
 import { useMutation } from '@apollo/client';
 import { useMessage } from '../../components/ShowMessage';
 import { useNavigate } from 'react-router-dom';

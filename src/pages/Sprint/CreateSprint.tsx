@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMutation } from '@apollo/client';
-import { CreateSprintInput, CreateSprintResponse } from '../../types/types';
+import { CreateSprintInput, CreateSprintResponse } from '../../types';
 import { CREATE_SPRINT } from '../../graphql/Mutation/sprint';
 
 interface CreateSprintProps {

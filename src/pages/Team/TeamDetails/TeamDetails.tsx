@@ -2,7 +2,6 @@ import { useQuery, useMutation } from '@apollo/client';
 import { GET_TEAM_BY_ID } from '../../../graphql/Query/team';
 import { REMOVE_TEAM_MEMBER } from '../../../graphql/Mutation/team';
 import { useParams, useNavigate } from 'react-router-dom';
-import { InterfaceUser } from '../../../types/types';
 import { useState, useMemo } from 'react';
 import OverviewTab from './OverView';
 import { useMessage } from '../../../components/ShowMessage';
@@ -11,7 +10,7 @@ import { useDashboard } from '../../Dashboard/DashBoard';
 import MembersTab from './Members';
 import Loader from '../../../components/Loader';
 
-import { InterfaceTeam, Member, TeamStats } from '../../../types/team';
+import { InterfaceTeam, UserTeam, TeamStats } from '../../../types/team';
 
 // Tab Button Component
 const TabButton = ({
@@ -108,6 +107,8 @@ export const TeamDetails = () => {
     onError: (err) => showError(err.message),
   });
 
+  console.log('team: ', data?.getTeamById);
+
   // Mutation for removing member
   const [removeMemberMutation, { loading: removing }] = useMutation(
     REMOVE_TEAM_MEMBER,
@@ -144,7 +145,7 @@ export const TeamDetails = () => {
     const creatorId = data?.getTeamById?.creatorId;
 
     return {
-      creator: users.find((u) => u.user?.id === creatorId) as Member,
+      creator: users.find((u) => u.user?.id === creatorId) as UserTeam,
       otherMembers: users.filter((u) => u.user?.id !== creatorId),
     };
   }, [data?.getTeamById]);
@@ -348,7 +349,7 @@ export const TeamDetails = () => {
 
           {activeTab === 'members' && (
             <MembersTab
-              members={otherMembers}
+              users={otherMembers}
               creator={creator}
               currentUserId={user?.id || ''}
               onRemove={handleRemoveMember}
