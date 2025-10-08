@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 interface InterfaceProject {
   id: string;
@@ -18,9 +19,9 @@ const UserProjects: React.FC<UserProjectsProps> = ({ projects }) => {
         <h2 className="text-lg font-semibold text-gray-900">Projects</h2>
         {/* Optional: Add "View All" link */}
         {projects && projects.length > 0 && (
-          <a href="/projects" className="text-sm text-blue-600 hover:underline">
+          <Link to="/projects/list" className="text-sm text-blue-600 hover:underline">
             View All
-          </a>
+          </Link>
         )}
       </div>
 

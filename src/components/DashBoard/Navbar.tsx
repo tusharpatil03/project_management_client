@@ -1,5 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useDashboard } from '../../pages/Dashboard/DashBoard';
+import { InterfaceUser } from '../../types';
+import Avatar from '../Profile/Avatar';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -10,6 +13,8 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
   const [isUserMenuOpen, setUserMenuOpen] = useState(false);
   const [notifications] = useState(29);
   const userMenuRef = useRef<HTMLDivElement>(null);
+
+  const { user } = useDashboard();
 
   const toggleUserMenu = () => setUserMenuOpen((prev) => !prev);
 
@@ -97,13 +102,22 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
                 aria-expanded={isUserMenuOpen}
                 aria-haspopup="true"
               >
-                <img
-                  className="w-8 h-8 rounded-lg object-cover"
-                  src="./src/assets/profile1.png"
-                  alt="User profile"
-                />
+                {user?.profile?.avatar ? (
+                  <img
+                    className="w-10 h-10 rounded-lg object-cover"
+                    src="./src/assets/profile1.png"
+                    alt="User profile"
+                  />
+                ) : (
+                  <Avatar
+                    firstName={user?.firstName}
+                    lastName={user?.lastName}
+                    name={user?.firstName + ' ' + user?.lastName}
+                    size="small"
+                  />
+                )}
                 <span className="hidden lg:block text-gray-700 dark:text-gray-300 font-medium">
-                  Tushar Patil
+                  {user?.firstName + " " + user?.lastName}
                 </span>
                 <i
                   className={`hidden lg:block fa-solid fa-chevron-down text-xs text-gray-500 transition-transform duration-200 ${
@@ -113,6 +127,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
               </button>
 
               <UserMenuTab
+                user={user}
                 isOpen={isUserMenuOpen}
                 onClose={() => setUserMenuOpen(false)}
               />
@@ -125,11 +140,12 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
 };
 
 interface UserMenuTabProps {
+  user: InterfaceUser | null;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const UserMenuTab = ({ isOpen, onClose }: UserMenuTabProps) => {
+const UserMenuTab = ({ user, isOpen, onClose }: UserMenuTabProps) => {
   if (!isOpen) return null;
 
   const menuItems = [
@@ -144,17 +160,26 @@ const UserMenuTab = ({ isOpen, onClose }: UserMenuTabProps) => {
       {/* User Info */}
       <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-700">
         <div className="flex items-center space-x-3">
-          <img
-            className="w-10 h-10 rounded-lg object-cover"
-            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-            alt="User profile"
-          />
+          {user?.profile?.avatar ? (
+            <img
+              className="w-10 h-10 rounded-lg object-cover"
+              src="./src/assets/profile1.png"
+              alt="User profile"
+            />
+          ) : (
+            <Avatar
+              firstName={user?.firstName}
+              lastName={user?.lastName}
+              name={user?.firstName + ' ' + user?.lastName}
+              size="small"
+            />
+          )}
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900 dark:text-white truncate">
-              Neil Sims
+              {user?.firstName + ' ' + user?.lastName}
             </p>
             <p className="text-sm text-gray-500 dark:text-gray-400 truncate">
-              neil.sims@flowbite.com
+              {user?.email}
             </p>
           </div>
         </div>

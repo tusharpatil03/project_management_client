@@ -26,7 +26,9 @@ const getAvatarColor = (name?: string): string => {
     'bg-orange-500',
   ];
   if (!name) return palette[0];
-  const idx = name.charCodeAt(0) % palette.length;
+  // use first char code of name as seed, fallback to 0
+  const seed = name.trim().length > 0 ? name.trim().charCodeAt(0) : 0;
+  const idx = Math.abs(seed) % palette.length;
   return palette[idx];
 };
 
@@ -35,11 +37,21 @@ const getUserInitials = (
   lastName?: string,
   email?: string
 ): string => {
+  // prefer first and last, then name parts from email, then fallback
   if (firstName && lastName) {
     return `${firstName[0]}${lastName[0]}`.toUpperCase();
   }
   if (firstName) return firstName[0].toUpperCase();
-  if (email) return email[0].toUpperCase();
+
+  if (email) {
+    const local = email.split('@')[0];
+    const parts = local.split(/[._-]/).filter(Boolean);
+    if (parts.length >= 2) {
+      return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+    }
+    if (parts.length === 1 && parts[0].length > 0) return parts[0][0].toUpperCase();
+  }
+
   return 'U';
 };
 
@@ -53,13 +65,20 @@ const Avatar: React.FC<AvatarProps> = ({
   bgColor,
 }) => {
   // support legacy 'name' prop
-  const resolvedFirst = firstName || (name ? name.split(' ')[0] : undefined);
-  const resolvedLast = lastName || (name ? name.split(' ')[1] : undefined);
+  let resolvedFirst = firstName;
+  let resolvedLast = lastName;
 
-  const initials = getUserInitials(resolvedFirst, resolvedLast, email || name);
+  if (!resolvedFirst && name) {
+    const parts = name.trim().split(' ');
+    resolvedFirst = parts[0];
+    if (parts.length > 1) {
+      resolvedLast = parts[parts.length - 1];
+    }
+  }
+
+  const initials = getUserInitials(resolvedFirst, resolvedLast, email);
   const avatarBg = bgColor || getAvatarColor(resolvedFirst);
 
-  // size handling: allow numeric px value or predefined sizes
   let sizeClasses = '';
   if (typeof size === 'number') {
     sizeClasses = '';
@@ -70,7 +89,11 @@ const Avatar: React.FC<AvatarProps> = ({
   return (
     <div
       className={`relative rounded-full flex items-center justify-center font-bold text-white ${sizeClasses}`}
-      style={typeof size === 'number' ? { width: size, height: size, fontSize: size / 2 } : undefined}
+      style={
+        typeof size === 'number'
+          ? { width: size, height: size, fontSize: size / 2 }
+          : undefined
+      }
     >
       {src ? (
         <img

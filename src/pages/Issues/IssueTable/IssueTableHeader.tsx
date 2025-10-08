@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface IssueTableHeaderProps {
-  isAllSelected: boolean;
-  onSelectAll: (checked: boolean) => void;
+  isAllSelected?: boolean;
+  onSelectAll?: (checked: boolean) => void;
   sortConfig?: {
     key: string;
     direction: 'asc' | 'desc';
@@ -32,14 +32,6 @@ export const IssueTableHeader = ({
   return (
     <thead className="text-xs text-gray-700 uppercase bg-gray-50">
       <tr>
-        <th className="px-6 py-3">
-          <input
-            type="checkbox"
-            checked={isAllSelected}
-            onChange={(e) => onSelectAll(e.target.checked)}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500"
-          />
-        </th>
         <th 
           className="px-6 py-3 text-left cursor-pointer"
           onClick={() => handleSort('title')}
