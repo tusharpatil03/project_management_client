@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useDashboard } from '../../pages/Dashboard/DashBoard';
-import Loader from '../Loader';
+import LoadingState from '../LoadingState';
 
 interface BaseNavItem {
   title: string;
@@ -224,7 +224,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
       return (
         <li className="px-2.5 py-1.5">
           <div className="flex items-center gap-3">
-            <Loader size="lg" />
+            <LoadingState size="lg" fullScreen={false} />
           </div>
         </li>
       );

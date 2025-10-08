@@ -9,8 +9,11 @@ import UserActivities from './UserActivities';
 import UserProjects from './UserProjects';
 import UpdateProfile from './UpdateProfile/UpdateProfile';
 import ErrorState from '../../components/ErrorState';
-import { useMessage } from '../../components/ShowMessage';
-import Loader from '../../components/Loader';
+import LoadingState from '../../components/LoadingState';
+import ErrorBoundary, {
+  withErrorBoundary,
+} from '../../components/ErrorBoundary/ErrorBoundary';
+import SmallFallback from '../../components/ErrorBoundary/SmallFallback';
 
 // Type definitions
 export interface UserData {
@@ -64,7 +67,6 @@ const formatUserData = (user: InterfaceUser): UserData => ({
 
 const UserBoard: React.FC = () => {
   const { user: currentUser } = useDashboard();
-  const { showSuccess, showError, showInfo } = useMessage();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -153,7 +155,7 @@ const UserBoard: React.FC = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-          <Loader />
+          <LoadingState fullScreen={false} />
         </div>
       </div>
     );
@@ -215,21 +217,33 @@ const UserBoard: React.FC = () => {
 
       {isEditing ? (
         <div className="py-8 px-4 sm:px-6 lg:px-8">
-          <UpdateProfile
-            userData={userData}
-            toggleEdit={handleEditingToggle}
-            refetch={handleRefetch}
-          />
+          <ErrorBoundary
+            fallbackRender={({ error, resetError }) => (
+              <SmallFallback error={error} onRetry={resetError} />
+            )}
+          >
+            <UpdateProfile
+              userData={userData}
+              toggleEdit={handleEditingToggle}
+              refetch={handleRefetch}
+            />
+          </ErrorBoundary>
         </div>
       ) : (
         <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
           {/* Profile Header with animation */}
           <div className="animate-fadeIn">
-            <UserProfileHeader
-              user={userData}
-              authorized={isAuthorized}
-              toggleEdit={handleEditingToggle}
-            />
+            <ErrorBoundary
+              fallbackRender={({ error, resetError }) => (
+                <SmallFallback error={error} onRetry={resetError} />
+              )}
+            >
+              <UserProfileHeader
+                user={userData}
+                authorized={isAuthorized}
+                toggleEdit={handleEditingToggle}
+              />
+            </ErrorBoundary>
           </div>
 
           {/* Main Content Grid with staggered animations */}
@@ -237,21 +251,39 @@ const UserBoard: React.FC = () => {
             {/* Left Column - About & Activities */}
             <div className="lg:col-span-2 space-y-6">
               <div className="animate-slideInLeft">
-                <UserAbout
-                  profile={userData.profile}
-                  email={userData.email}
-                  createdAt={userData.createdAt}
-                />
+                <ErrorBoundary
+                  fallbackRender={({ error, resetError }) => (
+                    <SmallFallback error={error} onRetry={resetError} />
+                  )}
+                >
+                  <UserAbout
+                    profile={userData.profile}
+                    email={userData.email}
+                    createdAt={userData.createdAt}
+                  />
+                </ErrorBoundary>
               </div>
               <div className="animate-slideInLeft animation-delay-200">
-                <UserActivities activities={userData.activities} />
+                <ErrorBoundary
+                  fallbackRender={({ error, resetError }) => (
+                    <SmallFallback error={error} onRetry={resetError} />
+                  )}
+                >
+                  <UserActivities activities={userData.activities} />
+                </ErrorBoundary>
               </div>
             </div>
 
             {/* Right Column - Projects & Teams */}
             <div className="lg:col-span-1 space-y-6">
               <div className="animate-slideInRight">
-                <UserProjects projects={userData.projects} />
+                <ErrorBoundary
+                  fallbackRender={({ error, resetError }) => (
+                    <SmallFallback error={error} onRetry={resetError} />
+                  )}
+                >
+                  <UserProjects projects={userData.projects} />
+                </ErrorBoundary>
               </div>
               {userData.teams && userData.teams.length > 0 && (
                 <div className="animate-slideInRight animation-delay-200">
@@ -326,4 +358,29 @@ const UserBoard: React.FC = () => {
   );
 };
 
-export default UserBoard;
+const PageFallback = ({
+  error,
+  resetError,
+}: {
+  error?: Error;
+  resetError?: () => void;
+}) => (
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+    <ErrorState
+      title="User Page Error"
+      message={
+        error?.message || 'Something went wrong while loading the user page.'
+      }
+      onRetry={() => {
+        resetError?.();
+      }}
+      showRetry
+    />
+  </div>
+);
+
+export default withErrorBoundary(UserBoard, {
+  fallbackRender: ({ error, resetError }) => (
+    <PageFallback error={error} resetError={resetError} />
+  ),
+});

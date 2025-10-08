@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { InterfaceIssue, InterfaceProject } from '../../types/';
 import { GET_ALL_ISSUES } from '../../graphql/Query/issue';
 import { useQuery } from '@apollo/client';
-import Loader from '../../components/Loader';
+import LoadingState from '../../components/LoadingState';
+import { useMessage } from '../../components/ShowMessage';
 import IssueTable from './IssueTable/IssuesTable';
 
 interface ChildProps {
@@ -43,16 +44,18 @@ const IssueBoard: React.FC<ChildProps> = ({ project }) => {
     fetchIssues();
   }, [fetchIssues]);
 
+  const { showError } = useMessage();
+
   if (loader)
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <Loader size="lg" />
+        <LoadingState size="lg" fullScreen={false} />
       </div>
     );
-  if (error)
-    return (
-      <div className="text-center text-red-500">Failed to load issues.</div>
-    );
+  if (error) {
+    showError('Failed to load issues.');
+    return null;
+  }
 
   return (
     <div>

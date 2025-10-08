@@ -1,8 +1,6 @@
 import React from 'react';
 
 interface IssueTableHeaderProps {
-  isAllSelected?: boolean;
-  onSelectAll?: (checked: boolean) => void;
   sortConfig?: {
     key: string;
     direction: 'asc' | 'desc';
@@ -11,8 +9,6 @@ interface IssueTableHeaderProps {
 }
 
 export const IssueTableHeader = ({
-  isAllSelected,
-  onSelectAll,
   sortConfig,
   onSort,
 }: IssueTableHeaderProps) => {

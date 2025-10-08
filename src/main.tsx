@@ -7,12 +7,13 @@ import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient.tsx';
 import { AuthProvider } from './contexts/AuthContext';
 import { MessageProvider } from './components/ShowMessage.tsx';
+import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
 
 const fallbackLoader = <div className="loader"></div>;
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <MessageProvider>
-    <Suspense fallback={fallbackLoader}>
+    <ErrorBoundary >
       <ApolloProvider client={client}>
         <AuthProvider>
           <BrowserRouter>
@@ -20,6 +21,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           </BrowserRouter>
         </AuthProvider>
       </ApolloProvider>
-    </Suspense>
+    </ErrorBoundary>
   </MessageProvider>
 );

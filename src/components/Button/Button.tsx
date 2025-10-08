@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import Loader from '../Loader';
+import LoadingState from '../LoadingState';
 
 type ButtonSize = 'sm' | 'md' | 'lg';
 type ButtonVariant = 'primary' | 'secondary' | 'tab' | 'danger';
@@ -53,7 +53,7 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled || loading}
       {...rest}
     >
-      {loading ? <Loader /> : children}
+  {loading ? <LoadingState fullScreen={false} size="sm" /> : children}
     </button>
   );
 };

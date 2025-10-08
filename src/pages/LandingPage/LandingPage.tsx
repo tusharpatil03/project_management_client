@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { AuthTab } from '../../components/Auth/AuthTab';
 import Navbar from '../../components/Navbar';
-import Loader from '../../components/Loader';
+import LoadingState from '../../components/LoadingState';
 import Demo from './Demo';
 import Footer from './Footer';
 import Features from './Features';
@@ -41,7 +41,7 @@ const LandingPage = () => {
 
   return loaderComponent ? (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <Loader size="xl" />
+      <LoadingState size="xl" fullScreen={false} />
     </div>
   ) : (
     <div>

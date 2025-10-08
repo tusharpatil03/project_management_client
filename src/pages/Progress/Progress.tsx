@@ -30,6 +30,7 @@ import {
 } from 'lucide-react';
 import { GET_PROJECT_STAT } from '../../graphql/Query/project';
 import LoadingState from '../../components/LoadingState';
+import { useMessage } from '../../components/ShowMessage';
 
 interface ActiveSprintStat {
   totalIssues: number;
@@ -231,6 +232,8 @@ const ProjectProgress: React.FC = () => {
     ];
   }, [stats]);
 
+  const { showError } = useMessage();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -240,17 +243,8 @@ const ProjectProgress: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <AlertCircle className="w-12 h-12 text-red-400 mx-auto mb-4" />
-          <div className="text-red-500 font-medium mb-2">
-            Failed to load project statistics
-          </div>
-          <div className="text-red-400 text-sm">{error.message}</div>
-        </div>
-      </div>
-    );
+    showError('Failed to load project statistics');
+    return null;
   }
 
   if (!stats || !metrics) {

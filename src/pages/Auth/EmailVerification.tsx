@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate} from 'react-router-dom';
 import CheckEmail from '../../components/Auth/CheckEmail';
 import { useMutation } from '@apollo/client';
 import { VERIFY_USER } from '../../graphql/Mutation/user';
-import Loader from '../../components/Loader';
+import LoadingState from '../../components/LoadingState';
 import { InterfaceAuth } from '../../types/';
 import { useAuth } from '../../contexts/AuthContext';
 import { setRefreshToken } from '../../utils/storage';
@@ -59,9 +59,9 @@ const EmailVerification: React.FC = () => {
   return (
     <>
       {token ? (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-          <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full text-center">
-            {loading && <Loader size="lg" />}
+                <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+                  <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full text-center">
+                    {loading && <LoadingState size="lg" fullScreen={false} />}
             {!loading && <p>Verifying your email, please wait...</p>}
           </div>
         </div>

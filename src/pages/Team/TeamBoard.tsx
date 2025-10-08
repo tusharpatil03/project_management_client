@@ -2,13 +2,14 @@ import { useQuery } from '@apollo/client';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GET_ALL_TEAMS } from '../../graphql/Query/team';
-import { showError } from '../../utils/showError';
+import { useMessage } from '../../components/ShowMessage';
 import LoadingState from '../../components/LoadingState';
-import { InterfaceUser } from '../../types';
 import { useDashboard } from '../Dashboard/DashBoard';
 import Button from '../../components/Button/Button';
 
 import { InterfaceTeam } from '../../types/team';
+import ErrorState from '../../components/ErrorState';
+import { withErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
 
 const TeamBoard = () => {
   const navigate = useNavigate();
@@ -23,6 +24,8 @@ const TeamBoard = () => {
       }, 1000);
     },
   });
+
+  const { showError } = useMessage();
 
   if (error) {
     showError('Unable to fetch server');
@@ -262,4 +265,32 @@ const TeamBoard = () => {
   );
 };
 
-export default TeamBoard;
+const PageFallback = ({
+  error,
+  resetError,
+}: {
+  error?: Error;
+  resetError?: () => void;
+}) => (
+  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+    <ErrorState
+      title="Team Page Error"
+      message={
+        error?.message || 'Something went wrong while loading the user page.'
+      }
+      onRetry={() => {
+        resetError?.();
+      }}
+      showRetry
+    />
+  </div>
+);
+
+export default withErrorBoundary(TeamBoard, {
+  fallbackRender: ({ error, resetError }) => (
+    <PageFallback error={error} resetError={resetError} />
+  ),
+});
+
+
+//export default TeamBoard;

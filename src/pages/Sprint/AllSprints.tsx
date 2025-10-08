@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { InterfaceSprint } from '../../types';
 import { GET_ALL_SPRINTS } from '../../graphql/Query/sprint';
 import { useQuery } from '@apollo/client';
-import Loader from '../../components/Loader';
+import LoadingState from '../../components/LoadingState';
+import { useMessage } from '../../components/ShowMessage';
 import Sprint from './Sprint';
 
 interface SprintsViewProps {
@@ -176,41 +177,16 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
   if (loader) {
     return (
       <div className="min-h-96 flex items-center justify-center">
-        <Loader size="lg" />
+        <LoadingState size="lg" fullScreen={false} />
       </div>
     );
   }
 
+  const { showError } = useMessage();
+
   if (error) {
-    return (
-      <div className="text-center py-12">
-        <div className="text-red-500 mb-4">
-          <svg
-            className="w-12 h-12 mx-auto mb-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <p className="text-lg font-medium">Failed to load sprints</p>
-          <p className="text-sm text-gray-500 mt-1">
-            Please try refreshing the page
-          </p>
-        </div>
-        <button
-          onClick={fetchQuery}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700"
-        >
-          Try Again
-        </button>
-      </div>
-    );
+    showError('Failed to load sprints');
+    return null;
   }
 
   return (

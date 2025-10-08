@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { GET_ALL_PROJECTS } from '../../graphql/Query/project';
 import { InterfaceProject, ProjectStatus } from '../../types/';
 import { useNavigate } from 'react-router-dom';
+import { useMessage } from '../../components/ShowMessage';
 
 const getStatusColor = (status: ProjectStatus) => {
   const colors: Record<ProjectStatus, string> = {
@@ -19,6 +20,8 @@ const ProjectTable: React.FC = () => {
 
   const projects: InterfaceProject[] = data?.getAllProjects || [];
 
+  const { showError } = useMessage();
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -28,11 +31,8 @@ const ProjectTable: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="text-red-500">{error.message}</span>
-      </div>
-    );
+    showError('Failed to load projects');
+    return null;
   }
 
   return (

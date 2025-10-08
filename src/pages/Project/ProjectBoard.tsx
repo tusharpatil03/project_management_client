@@ -56,6 +56,7 @@ const ProjectBoard = () => {
   const navigate = useNavigate();
 
   const { showError, showSuccess } = useMessage();
+
   const getActiveTabFromPath = (): TabType => {
     const path = location.pathname;
     if (path.includes('/issues')) return 'issues';
@@ -103,10 +104,12 @@ const ProjectBoard = () => {
 
   if (error) {
     showError('Something went wrong');
+    return null;
   }
 
   if (!project) {
     showError('Something went wrong');
+    return null;
   }
 
   return (

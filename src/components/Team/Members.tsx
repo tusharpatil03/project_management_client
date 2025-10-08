@@ -1,6 +1,7 @@
 import { Search, User, UserPlus } from 'lucide-react';
 import { InterfaceUser } from '../../types';
-import Loader from '../Loader';
+import LoadingState from '../LoadingState';
+import { useMessage } from '../ShowMessage';
 import Avatar from '../Profile/Avatar';
 
 interface ChildProps {
@@ -27,25 +28,19 @@ const Members: React.FC<ChildProps> = ({
         user.lastName?.toLowerCase().includes(searchTerm.toLowerCase())
     ) || [];
 
+  const { showError } = useMessage();
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
-        <Loader size="sm" />
+        <LoadingState size="sm" fullScreen={false} />
       </div>
     );
   }
 
   if (error) {
-    return (
-      <div className="bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-red-200 flex items-center justify-center">
-            !
-          </div>
-          {error}
-        </div>
-      </div>
-    );
+    showError(error);
+    return null;
   }
 
   if (!members || members.length === 0) {
