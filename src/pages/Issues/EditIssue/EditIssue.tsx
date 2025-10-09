@@ -2,14 +2,14 @@ import React from 'react';
 import { InterfaceIssue } from '../../../types';
 import { useMutation } from '@apollo/client';
 import { UPDATE_ISSUE } from '../../../graphql/Mutation/issue';
-import Avatar from '../../../components/Profile/Avatar'; //required to show assginee
-import MemberSearch from '../../User/GetUserBySearch'; // search assignee
 import CreateTab from '../../../components/CreateElements/CreateIssueCard';
 import { useMessage } from '../../../components/ShowMessage';
 import { IssueDetailsForm } from './';
 import { IssueMetadata } from './';
 import { FormActions } from './';
-import { IssuePriority, UpdateIssueInput } from '../../../types/issue';
+import {  UpdateIssueInput } from '../../../types/issue';
+import GetMembers from '../IssueTable/GetMember';
+import Avatar from '../../../components/Profile/Avatar';
 
 interface EditIssueProps {
   issue: InterfaceIssue;
@@ -37,6 +37,10 @@ const EditIssue: React.FC<EditIssueProps> = ({
       : '',
     assigneeId: issue.assignee?.id || undefined,
   });
+
+  // Track assignee for display (update on assignment)
+  const [assignee, setAssignee] = React.useState(issue.assignee || null);
+  const [assigneeTab, setAssigneeTab] = React.useState(false);
 
   const { showSuccess, showError } = useMessage();
 
@@ -83,7 +87,64 @@ const EditIssue: React.FC<EditIssueProps> = ({
               formData={formData} 
               onChange={handleChange} 
             />
-            
+
+            {/* Assignee section */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Assignee</label>
+              <div
+                className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border border-gray-200 cursor-pointer hover:bg-blue-50 transition"
+                onClick={() => setAssigneeTab(true)}
+                tabIndex={0}
+                role="button"
+                aria-label="Change assignee"
+              >
+                {assignee ? (
+                  <>
+                    <Avatar
+                      firstName={assignee.firstName}
+                      lastName={assignee.lastName}
+                      src={assignee.profile?.avatar || ''}
+                    />
+                    <span className="font-medium text-gray-900">
+                      {assignee.firstName} {assignee.lastName}
+                    </span>
+                  </>
+                ) : (
+                  <span className="text-gray-500 italic">Unassigned</span>
+                )}
+                <span className="ml-auto text-xs text-blue-600 underline">Change</span>
+              </div>
+              {assigneeTab && (
+                <GetMembers
+                  projectId={projectId}
+                  issueId={issue.id}
+                  setMemberTab={setAssigneeTab}
+                  currentAssigneeId={assignee?.id}
+                  onAssignmentChange={(newAssigneeId: string, memberName: string) => {
+                    // Set a minimal InterfaceUser object for display; ideally refetch issue after assignment for full data
+                    setAssignee((prev) => ({
+                      id: newAssigneeId,
+                      firstName: memberName.split(' ')[0] || '',
+                      lastName: memberName.split(' ').slice(1).join(' ') || '',
+                      email: prev?.email || '',
+                      isVerified: false,
+                      projects: [],
+                      sprints: [],
+                      activities: [],
+                      teams: [],
+                      createdAt: '',
+                      updatedAt: '',
+                      profile: prev?.profile || {},
+                      createdTeams: [],
+                      createdIssues: [],
+                      assignedIssues: [],
+                    }));
+                    setFormData((prev) => ({ ...prev, assigneeId: newAssigneeId }));
+                  }}
+                />
+              )}
+            </div>
+
             <IssueMetadata 
               formData={formData}
               onChange={handleChange}

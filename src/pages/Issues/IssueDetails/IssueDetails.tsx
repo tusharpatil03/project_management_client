@@ -108,12 +108,14 @@ const IssueDetails: React.FC<ChildProps> = ({
       onClick={handleClose}
     >
       {editIssue && (
-        <EditIssue
-          issue={issue}
-          toggleTab={toggleEdit}
-          onIssueUpdated={onIssueUpdates}
-          projectId={currentProject?.id || ''}
-        />
+        <div onClick={(e) => e.stopPropagation()}>
+          <EditIssue
+            issue={issue}
+            toggleTab={toggleEdit}
+            onIssueUpdated={onIssueUpdates}
+            projectId={currentProject?.id || ''}
+          />
+        </div>
       )}
       <div
         className={`relative w-full max-w-3xl bg-white rounded-xl shadow-2xl my-8 transition-transform duration-200 ${isClosing ? 'scale-95' : 'scale-100'}`}

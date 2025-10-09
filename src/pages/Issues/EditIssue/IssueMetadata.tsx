@@ -1,5 +1,5 @@
 import React from 'react';
-import { IssuePriority, UpdateIssueInput } from '../../../types/issue';
+import { IssuePriority, IssueStatus, UpdateIssueInput } from '../../../types/';
 
 interface IssueMetadataProps {
   formData: UpdateIssueInput;
@@ -17,9 +17,7 @@ export const IssueMetadata: React.FC<IssueMetadataProps> = ({
     <div className="space-y-4">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className={labelClassName}>
-            Type
-          </label>
+          <label className={labelClassName}>Type</label>
           <select
             name="type"
             value={formData.type}
@@ -33,44 +31,36 @@ export const IssueMetadata: React.FC<IssueMetadataProps> = ({
           </select>
         </div>
         <div>
-          <label className={labelClassName}>
-            Status
-          </label>
+          <label className={labelClassName}>Status</label>
           <select
             name="status"
             value={formData.status}
             onChange={onChange}
             className={inputClassName}
           >
-            <option value="BACKLOG">Backlog</option>
-            <option value="TODO">To Do</option>
-            <option value="IN_PROGRESS">In Progress</option>
-            <option value="DONE">Done</option>
-            <option value="CANCELED">Canceled</option>
+            <option value={IssueStatus.DONE}>{IssueStatus.DONE}</option>
+            <option value={IssueStatus.IN_PROGRESS}>{IssueStatus.IN_PROGRESS}</option>
+            <option value={IssueStatus.TODO}>{IssueStatus.TODO}</option>
           </select>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div>
-          <label className={labelClassName}>
-            Priority
-          </label>
+          <label className={labelClassName}>Priority</label>
           <select
             name="priority"
             value={formData.priority}
             onChange={onChange}
             className={inputClassName}
           >
-            <option value={IssuePriority.LOW}>Low</option>
-            <option value={IssuePriority.MEDIUM}>Medium</option>
-            <option value={IssuePriority.HIGH}>High</option>
+            <option value={IssuePriority.LOW}>{IssuePriority.LOW}</option>
+            <option value={IssuePriority.MEDIUM}>{IssuePriority.MEDIUM}</option>
+            <option value={IssuePriority.HIGH}>{IssuePriority.HIGH}</option>
           </select>
         </div>
         <div>
-          <label className={labelClassName}>
-            Due Date
-          </label>
+          <label className={labelClassName}>Due Date</label>
           <input
             type="datetime-local"
             name="dueDate"

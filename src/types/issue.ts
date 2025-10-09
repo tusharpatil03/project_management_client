@@ -1,4 +1,4 @@
-import { BaseEntity, IssueStatus, IssueType } from './common';
+import { BaseEntity, IssuePriority, IssueStatus, IssueType } from './common';
 import { InterfaceUser } from './user';
 import { InterfaceSprint } from './sprint';
 
@@ -23,19 +23,13 @@ export interface IssueRef {
   title: string | null;
 }
 
-export enum IssuePriority {
-  LOW = 'Low',
-  MEDIUM = 'Medium',
-  HIGH = 'High'
-}
-
 export type UpdateIssueInput = {
   issueId: string;
   projectId: string;
   title?: string;
   description?: string;
   type?: IssueType;
-  status?: string;
+  status?: IssueStatus;
   dueDate?: string;
   assigneeId?: string;
   priority?: IssuePriority;

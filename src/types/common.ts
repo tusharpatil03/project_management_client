@@ -19,6 +19,13 @@ export enum IssueStatus {
   DONE = 'DONE',
 }
 
+export enum IssuePriority{
+  LOW = "LOW",
+  MEDIUM = "MEDIUM",
+  HIGH = "HIGH",
+  CRITICAL = "CRITICAL",
+}
+
 export enum IssueType {
   TASK = 'TASK',
   BUG = 'BUG',
