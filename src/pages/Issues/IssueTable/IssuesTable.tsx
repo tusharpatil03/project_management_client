@@ -1,10 +1,17 @@
 import { useEffect, useState } from 'react';
-import { InterfaceIssue, InterfaceSprint, InterfaceUser } from '../../../types/';
+import {
+  InterfaceIssue,
+  InterfaceSprint,
+  InterfaceUser,
+} from '../../../types/';
 import IssueDetails from '../IssueDetails/IssueDetails';
 import React from 'react';
 import BaseTable from '../../../components/Table/BaseTable';
-import {  IssueTableHeader, IssueTableRow} from './';
+import { IssueTableHeader, IssueTableRow } from './';
 import GetMembers from './GetMember';
+import { useMutation } from '@apollo/client';
+import { DELETE_ISSUES } from '../../../graphql/Mutation/issue';
+import { useMessage } from '../../../components/ShowMessage';
 
 interface IssueTableProps {
   issues: InterfaceIssue[];
@@ -18,14 +25,41 @@ const IssueTable: React.FC<IssueTableProps> = ({
   onIssueUpdate,
 }) => {
   const [viewIssueTab, setViewIssueTab] = useState<boolean>(false);
-  const [issueId, setIssueId] = useState<string>();
+  const [issueId, setIssueId] = useState<string | null>();
   const [membersTab, setMemberTab] = useState<boolean>(false);
-  const [currentAssignee, setCurrentAssignee] = useState<InterfaceUser | null>();
+  const [currentAssignee, setCurrentAssignee] =
+    useState<InterfaceUser | null>();
 
+  const { showError, showSuccess } = useMessage();
   // Event handlers
   const handleIssueClick = (issueId: string) => {
     setIssueId(issueId);
     setViewIssueTab(true);
+  };
+
+  const [deleteIssue, { error, loading }] = useMutation(DELETE_ISSUES, {
+    onCompleted: () => {
+      showSuccess('Issue deleted');
+      setIssueId(null);
+    },
+    onError: () => {
+      showError('Failed to Delete Issue');
+    },
+  });
+
+  const handleDeleteClick = async (issueId: string) => {
+    try {
+      await deleteIssue({
+        variables: {
+          input: {
+            issueId: issueId,
+            projectId: projectId,
+          },
+        },
+      });
+    } catch (e) {
+      showError('Server Error');
+    }
   };
 
   return (
@@ -75,7 +109,8 @@ const IssueTable: React.FC<IssueTableProps> = ({
                   setCurrentAssignee(assignee);
                   setMemberTab(true);
                 }}
-                onEditClick={setIssueId}
+                onEditClick={handleIssueClick}
+                onDeletClick={handleDeleteClick}
               />
             ))
           )}

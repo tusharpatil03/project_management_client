@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { InterfaceIssue, InterfaceUser, InterfaceSprint } from '../../../types';
 import { IssueStatusBadge } from './IssueStatusBadge';
+import { Edit, Trash2 } from 'lucide-react';
 
 interface IssueTableRowProps {
   issue: InterfaceIssue;
   onIssueClick: (issueId: string) => void;
   onAssigneeClick: (issueId: string, currentAssignee?: InterfaceUser) => void;
   onEditClick: (issueId: string) => void;
+  onDeletClick: (issueId: string) => void;
 }
 
 export const IssueTableRow = ({
@@ -13,6 +16,7 @@ export const IssueTableRow = ({
   onIssueClick,
   onAssigneeClick,
   onEditClick,
+  onDeletClick,
 }: IssueTableRowProps) => {
   // Helper functions
   const formatDate = (dateString: string) => {
@@ -23,11 +27,6 @@ export const IssueTableRow = ({
       day: 'numeric',
     });
   };
-
-  //when assignee changes
-  // const onAssigneeChange = ()=> {
-  //   issue.assignee = ;
-  // }
 
   // Render helpers
   const renderIssueType = (type: string) => (
@@ -110,17 +109,33 @@ export const IssueTableRow = ({
   };
 
   const renderActions = (issue: InterfaceIssue) => (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-2">
       <button
         onClick={(e) => {
-          console.log('IssuesId: ', issue.id);
           e.stopPropagation();
           onEditClick(issue.id);
         }}
-        className="p-1 text-blue-600 hover:bg-blue-50 rounded hover:underline"
+        className="inline-flex items-center justify-center p-2 bg-white border border-gray-200 rounded-md text-blue-600 hover:bg-blue-50 transition"
         title="Edit Issue"
+        aria-label="Edit Issue"
       >
-        Edit
+        <Edit className="w-4 h-4" />
+      </button>
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          // small safeguard: confirm deletion
+          const ok = window.confirm(
+            'Are you sure you want to delete this issue?'
+          );
+          if (ok) onDeletClick(issue.id);
+        }}
+        className="inline-flex items-center justify-center p-2 bg-white border border-gray-200 rounded-md text-red-600 hover:bg-red-50 transition"
+        title="Delete Issue"
+        aria-label="Delete Issue"
+      >
+        <Trash2 className="w-4 h-4" />
       </button>
     </div>
   );
@@ -144,9 +159,7 @@ export const IssueTableRow = ({
       <td className="px-6 py-4">
         <IssueStatusBadge status={issue.status} />
       </td>
-      <td className="px-6 py-4 text-center">
-        {renderActions(issue)}
-      </td>
+      <td className="px-6 py-4 text-center">{renderActions(issue)}</td>
     </tr>
   );
 };
