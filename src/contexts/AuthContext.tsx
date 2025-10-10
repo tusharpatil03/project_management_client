@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { performRefresh } from '../utils/refreshService';
 import { getRefreshToken } from '../utils/storage';
 import tokenStore from '../utils/tokenStore';
@@ -16,8 +22,6 @@ type AuthContextType = {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // Keep compatibility with current behavior by reading token from localStorage.
-  // This will be migrated to keep access token in-memory only in a subsequent change.
   const [accessToken, setAccessTokenState] = useState<string | null>(() =>
     localStorage.getItem('token')
   );
@@ -30,13 +34,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const setAccessToken = (token: string | null) => {
     setAccessTokenState(token);
     tokenRef.current = token;
-    // Persist for backward compatibility; will remove this later when migration is complete
     if (token) {
-  // store refresh token still in localStorage; access token kept in-memory
-  // keep tokenStore in sync for modules that read from it (apollo link)
-  tokenStore.setToken(token);
+      tokenStore.setToken(token);
     } else {
-  tokenStore.setToken(null);
+      tokenStore.setToken(null);
     }
   };
 
@@ -68,9 +69,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = () => {
     setAccessToken(null);
-  // clear refresh token and other stored data
-  localStorage.clear();
-  window.dispatchEvent(new Event('app:logout'));
+    // clear refresh token and other stored data
+    localStorage.clear();
+  };
+
+  const emitSingOutEvent = () => {
+    window.dispatchEvent(new Event('app:logout'));
   };
 
   // register handlers for external modules (e.g. apolloClient) to call
@@ -85,8 +89,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    // If we don't have an access token but we have a refresh token, try to refresh silently.
-  if (!accessToken && getRefreshToken()) {
+    // if we don't have an access token but we have a refresh token, try to refresh silently.
+    if (!accessToken && getRefreshToken()) {
       // attempt silent refresh using provider's deduped refresh
       refresh().catch(() => {
         /* ignore */
@@ -97,7 +101,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ accessToken, setAccessToken, getAccessToken, isAuthenticated, refresh, signOut }}
+      value={{
+        accessToken,
+        setAccessToken,
+        getAccessToken,
+        isAuthenticated,
+        refresh,
+        signOut,
+      }}
     >
       {children}
     </AuthContext.Provider>

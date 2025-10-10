@@ -13,16 +13,6 @@ export const SIGNUP_USER = gql`
 export const LOGIN_USER = gql`
   mutation Login($input: LoginInput!) {
     login(input: $input) {
-      user {
-        id
-        email
-        firstName
-        lastName
-        isVerified
-         profile {
-         avatar
-      }
-      }
       accessToken
       refreshToken
     }
@@ -43,22 +33,7 @@ export const VERIFY_USER = gql`
   mutation VerifyUser($token: String!) {
     verifyUser(token: $token) {
       accessToken
-      profile {
-        id
-        avatar
-      }
       refreshToken
-      user {
-        email
-        firstName
-        lastName
-        isVerified
-        id
-        profile {
-          id
-          avatar
-        }
-      }
     }
   }
 `;

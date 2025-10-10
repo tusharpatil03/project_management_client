@@ -1,4 +1,3 @@
-// apolloClient.js
 import {
   ApolloClient,
   ApolloLink,

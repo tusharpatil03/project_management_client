@@ -1,3 +1,5 @@
+//auth bridge is for using auth methods out of the context provider
+
 import { performRefresh } from './refreshService';
 
 type RefreshFn = () => Promise<string | null>;
@@ -14,6 +16,7 @@ export const setSignOutHandler = (fn: SignOutFn | null) => {
   signOutHandler = fn;
 };
 
+
 export const callRefresh = async (): Promise<string | null> => {
   if (refreshHandler) return refreshHandler();
   const res = await performRefresh();
@@ -22,9 +25,11 @@ export const callRefresh = async (): Promise<string | null> => {
 
 export const callSignOut = (): void => {
   if (signOutHandler) return signOutHandler();
-  // fallback signout: clear storage and dispatch event
-  localStorage.clear();
+  // // fallback signout: clear storage and dispatch event
+  // localStorage.clear();
   window.dispatchEvent(new Event('app:logout'));
 };
+
+
 
 export default { setRefreshHandler, setSignOutHandler, callRefresh, callSignOut };

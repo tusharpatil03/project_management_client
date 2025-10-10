@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSearchParams, useNavigate} from 'react-router-dom';
-import CheckEmail from '../../components/Auth/CheckEmail';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { VERIFY_USER } from '../../graphql/Mutation/user';
 import LoadingState from '../../components/LoadingState';
@@ -54,20 +53,18 @@ const EmailVerification: React.FC = () => {
     if (token) {
       verifyEmail();
     }
-  }, [token, verifyUser, navigate, auth, showSuccess, showError]);
+  }, [token]);
 
   return (
     <>
-      {token ? (
-                <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-                  <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full text-center">
-                    {loading && <LoadingState size="lg" fullScreen={false} />}
-            {!loading && <p>Verifying your email, please wait...</p>}
-          </div>
+      (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
+        <div className="bg-white shadow-md rounded-lg p-6 max-w-md w-full text-center">
+          {loading && <LoadingState size="lg" fullScreen={false} />}
+          {!loading && <p>Verifying your email, please wait...</p>}
         </div>
-      ) : (
-        <CheckEmail />
-      )}
+      </div>
+      )
     </>
   );
 };

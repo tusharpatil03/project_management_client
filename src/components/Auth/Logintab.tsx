@@ -5,7 +5,8 @@ import { LoginInput, AuthResponse } from '../../types/';
 import { useMutation } from '@apollo/client';
 import AuthInputField from './AuthinputFields';
 import { useAuth } from '../../contexts/AuthContext';
-import { setRefreshToken } from '../../utils/storage';
+import { setRefreshToken, UserData } from '../../utils/storage';
+import { useMessage } from '../ShowMessage';
 
 export function Login() {
   const [formData, setFormData] = useState<LoginInput>({
@@ -23,7 +24,7 @@ export function Login() {
   };
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
+  const { showError, showSuccess, showInfo } = useMessage();
 
   const auth = useAuth();
 
@@ -31,28 +32,25 @@ export function Login() {
     e.preventDefault();
     try {
       const res = await signUser({ variables: { input: formData } });
-      const data = res.data?.login;
-      if (!data) {
-        throw new Error('Data not Recieved');
-      }
-      const accessToken = res.data?.login.accessToken;
-      const refreshToken = res.data?.login.refreshToken;
+
+      const accessToken = res?.data?.login.accessToken;
+      const refreshToken = res?.data?.login.refreshToken;
 
       if (!accessToken || !refreshToken) {
-        throw new Error('Token not Recieved');
-      }
+        throw new Error('Token not received');
+      }      
 
-      if (!data.user.isVerified) {
-        navigate('/signup/verify');
-      } else {
-  setRefreshToken(refreshToken);
-  // set token centrally via provider
-  auth.setAccessToken(accessToken);
-      }
-
+      setRefreshToken(refreshToken);
+      UserData.setEmail(formData.email);
+      auth.setAccessToken(accessToken);
+      showSuccess('Login successful');
       navigate('/projects');
-    } catch (err) {
-      console.error(`Login error:`, err);
+    } catch (err: any) {
+      console.error('Login error:', err);
+
+      if (err.message === 'EMAIL_NOT_VERIFIED') {
+        navigate('/signup/checkEmail');
+      }
     }
   };
 
@@ -104,7 +102,7 @@ export function Login() {
         {/* Error Message */}
         {error && (
           <p className="text-sm text-red-500 text-center mt-2">
-            {error.message}
+            {error.message.slice(0,100)}
           </p>
         )}
       </form>

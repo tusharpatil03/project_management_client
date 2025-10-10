@@ -18,6 +18,8 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
   const [sprints, setSprints] = useState<InterfaceSprint[]>([]);
   const [createTab, setCreateTab] = useState<boolean>(false);
 
+  const { showError } = useMessage();
+
   const { error, refetch } = useQuery<{
     getAllSprints: InterfaceSprint[];
   }>(GET_ALL_SPRINTS, {
@@ -181,8 +183,6 @@ const SprintsView: React.FC<SprintsViewProps> = ({ projectId }) => {
       </div>
     );
   }
-
-  const { showError } = useMessage();
 
   if (error) {
     showError('Failed to load sprints');

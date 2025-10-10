@@ -86,12 +86,12 @@ export function SignUp() {
         throw new Error('Internal Server Error');
       }
 
-      localStorage.setItem('email', formData.email);
-      navigate('/signup/verify');
     } catch (err) {
       console.error('SignUp error:', err);
       throw new Error('Internal Server Error');
     }
+
+    navigate("/signup/checkEmail");
   };
 
   return (

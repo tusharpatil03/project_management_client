@@ -2,16 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { MailCheck } from 'lucide-react';
 import { SEND_VERIFICATION_LINK } from '../../graphql/Mutation/user';
 import { useMutation } from '@apollo/client';
-import { getEmail } from '../../utils/storage';
+import { useMessage } from '../ShowMessage';
+import { UserData } from '../../utils/storage';
 
-const CheckEmail: React.FC = () => {
+const CheckEmail = () => {
   const [message, setMessage] = useState<string | null>(null);
-  const [sendLink, { loading, error }] = useMutation(SEND_VERIFICATION_LINK);
+  const { showError, showSuccess } = useMessage();
+
+  const email = UserData.getEmail();
+
+  const [sendLink, { loading, error }] = useMutation(SEND_VERIFICATION_LINK, {
+    onCompleted: () => {
+      showSuccess('Varification Email Send');
+    },
+    onError: () => {
+      showError('Failed to send Email');
+      console.log("Email:",email)
+    },
+  });
 
   const handleSend = async () => {
     try {
-  const email = getEmail();
-
       const res = await sendLink({ variables: { email: email } });
       if (res.data?.sendVerificationLink?.success) {
         setMessage('Verification link sent again successfully.');
@@ -25,9 +36,6 @@ const CheckEmail: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    handleSend();
-  }, []);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
@@ -49,7 +57,7 @@ const CheckEmail: React.FC = () => {
             className="text-blue-600 underline cursor-pointer"
             onClick={handleSend}
           >
-            {loading ? 'Sending...' : 'send the link'}
+            {loading ? 'Sending...' : 'resend'}
           </span>
         </p>
         {error && (

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDashboard } from '../../pages/Dashboard/DashBoard';
 import { InterfaceUser } from '../../types';
 import Avatar from '../Profile/Avatar';
+import { callSignOut } from '../../utils/authBridge';
 
 interface NavbarProps {
   toggleSidebar: () => void;
@@ -117,7 +118,7 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }: NavbarProps) => {
                   />
                 )}
                 <span className="hidden lg:block text-gray-700 dark:text-gray-300 font-medium">
-                  {user?.firstName + " " + user?.lastName}
+                  {user?.firstName + ' ' + user?.lastName}
                 </span>
                 <i
                   className={`hidden lg:block fa-solid fa-chevron-down text-xs text-gray-500 transition-transform duration-200 ${
@@ -152,7 +153,14 @@ const UserMenuTab = ({ user, isOpen, onClose }: UserMenuTabProps) => {
     { label: 'Profile', path: '/profile', icon: 'fa-user' },
     { label: 'Settings', path: '/settings', icon: 'fa-cog' },
     { label: 'Help & Support', path: '/help', icon: 'fa-question-circle' },
-    { label: 'Sign out', path: '/logout', icon: 'fa-sign-out-alt' },
+    {
+      label: 'Sign out',
+      path: '/',
+      icon: 'fa-sign-out-alt',
+      onclick: () => {
+        callSignOut();
+      },
+    },
   ];
 
   return (
@@ -191,7 +199,10 @@ const UserMenuTab = ({ user, isOpen, onClose }: UserMenuTabProps) => {
           <Link
             key={item.label}
             to={item.path}
-            onClick={onClose}
+            onClick={() => {
+              if (item.onclick) item.onclick();
+              else onClose();
+            }}
             className={`flex items-center px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-150 ${
               index === menuItems.length - 1
                 ? 'text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20'
