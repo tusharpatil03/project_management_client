@@ -1,6 +1,6 @@
 directive @auth on FIELD_DEFINITION
 
-directive @role(requires: MemberRole) on FIELD_DEFINITION
+directive @role(requires: [MemberRole]!) on FIELD_DEFINITION
 
 """
 Indicates exactly one field must be supplied and this field must not be `null`.
@@ -8,8 +8,6 @@ Indicates exactly one field must be supplied and this field must not be `null`.
 directive @oneOf on INPUT_OBJECT
 
 type AuthData {
-  user: User!
-  profile: profile!
   accessToken: String!
   refreshToken: String!
 }
@@ -22,27 +20,46 @@ type ExtendSession {
 type User {
   id: ID!
   email: EmailAddress!
+  firstName: String!
+  lastName: String!
+  isVerified: Boolean
   createdAt: DateTime
   updatedAt: DateTime
   projects: [Project]
-  sprints: [Sprint]
-  teams: [Team]
+  teams: [UserTeam]
   createdTeams: [Team]
   createdIssues: [Issue]
   assignedIssues: [Issue]
   profile: profile
+  activities: [Activity]
+  comments: [Comment]
+}
+
+type Activity {
+  id: ID!
+  action: ActivityAction!
+  entityType: EntityType!
+  entityId: String
+  entityName: String
+  description: String
+  user: User
+  project: Project
+  sprint: Sprint
+  issue: Issue
+  team: Team
+  createdAt: DateTime
 }
 
 type profile {
   id: ID!
-  firstName: String!
-  lastName: String!
-  avatar: String
-  phone: String
   gender: Gender
+  phone: String
+  avatar: String
+  bio: String
   social: Social
   createdAt: DateTime
   updatedAt: DateTime
+  userId: ID
   user: User
 }
 
@@ -52,101 +69,106 @@ type Social {
   facebook: String
   twitter: String
   linkedin: String
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 type Project {
   id: ID!
   key: String!
-  name: String
+  name: String!
   description: String
+  starred: Boolean
+  creator: User
+  creatorId: ID
+  status: ProjectStatus
   createdAt: DateTime
   updatedAt: DateTime
-  issues: [Issue]
+  teams: [ProjectTeam]
   sprints: [Sprint]
-  status: ProjectStatus
-  creatorId: String!
-}
-
-type ProjectTeam {
-  id: ID!
-  projectId: ID!
-  teamId: ID!
-  project: Project
-  team: Team
-  joinedAt: DateTime
-}
-
-type UserTeam {
-  id: ID!
-  userId: ID
-  teamId: ID
-  role: MemberRole
-  joinedAt: DateTime
-  user: User
-  team: Team
+  issues: [Issue]
+  activities: [Activity]
 }
 
 type Team {
   id: ID!
   name: String
-  creatorId: String
-  users: [UserTeam]
-  projects: [Project]
+  creatorId: ID
+  creator: User
   createdAt: DateTime
   updatedAt: DateTime
+  projects: [ProjectTeam]
+  users: [UserTeam]
+  activities: [Activity]
+}
+
+type UserTeam {
+  id: ID!
+  user: User
+  userId: ID
+  teamId: ID
+  team: Team
+  role: MemberRole
+  joinedAt: DateTime
+}
+
+type ProjectTeam {
+  id: ID!
+  project: Project
+  team: Team
+  joinedAt: DateTime
+  projectId: ID
+  teamId: ID
 }
 
 type Issue {
-  id: String!
+  id: ID!
+  key: String!
   title: String!
   description: String
-  type: IssueType
   status: IssueStatus
-  dueDate: DateTime!
+  priority: IssuePriority
   createdAt: DateTime
   updatedAt: DateTime
-  projectId: String
-  creatorId: String
-  creator: IssueCreator
-  assignee: IssueAssignee
-  sprintId: String
-  parentId: String
-  parent: Issue
-  childrens: [Issue]
+  dueDate: DateTime
+  type: IssueType
+  creator: User
+  creatorId: ID
+  assigneeId: ID
+  assignee: User
+  projectId: ID
+  project: Project
+  sprintId: ID
+  sprint: Sprint
+  comments: [Comment]
+  activities: [Activity]
 }
 
-type IssueCreator {
+type Comment {
   id: ID!
-  firstName: String
-  lastName: String
-  email: String
-}
-
-type IssueAssignee {
-  id: ID!
-  firstName: String
-  lastName: String
-  email: String
-  avatar: String
+  content: String!
+  issue: Issue
+  author: User
   createdAt: DateTime
   updatedAt: DateTime
 }
 
 type Sprint {
   id: ID!
-  title: String!
+  key: String!
+  startDate: DateTime
+  dueDate: DateTime
+  title: String
   description: String
-  status: SprintStatus!
+  status: SprintStatus
   createdAt: DateTime
   updatedAt: DateTime
-  dueDate: DateTime!
+  creatorId: ID
   creator: User
+  projectId: ID
   project: Project
-  projectId: String
-  creatorId: String
-  issues: [Issue]!
+  issues: [Issue]
+  activities: [Activity]
 }
 
 type ResponseMessage {
@@ -155,27 +177,25 @@ type ResponseMessage {
   message: String
 }
 
-type Auth {
-  user: User
-  token: String
-  accessToken: String
-  expiresIn: Int
-  tokenType: String
-  scope: String
-  idToken: String
-  authData: AuthData
-  userId: String
-  email: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  firstName: String
-  lastName: String
-  phone: String
+type activeSprintStat {
+  totalIssues: Int
+  openIssues: Int
+  closedIssues: Int
+  inProgressIssues: Int
+}
+
+type ProjectStat {
+  totalIssues: Int
+  openIssues: Int
+  closedIssues: Int
+  inProgressIssues: Int
+  totalSprints: Int
+  activeSprintStat: activeSprintStat
 }
 
 input LoginInput {
   email: EmailAddress!
-  password: Password!
+  password: String!
 }
 
 input SignupInput {
@@ -246,16 +266,51 @@ input addTeamMemberInput {
   memberId: ID!
   teamId: ID!
   role: String!
+  projectId: ID!
 }
 
 input removeTeamMemberInput {
   memberId: ID!
   teamId: ID!
+  projectId: ID!
 }
 
 input addProjectTeamInput {
   projectId: ID!
   teamId: ID!
+}
+
+input UpdateProfileInput {
+  firstName: String
+  lastName: String
+  profile: ProfileInput
+}
+
+input ProfileInput {
+  bio: String
+  phone: String
+  gender: String
+  avatar: String
+  social: SocialInput
+}
+
+input SocialInput {
+  github: String
+  linkedin: String
+  twitter: String
+  facebook: String
+}
+
+input UpdateIssueInput {
+  issueId: String!
+  projectId: String!
+  title: String
+  description: String
+  status: IssueStatus
+  priority: IssuePriority
+  dueDate: DateTime
+  type: IssueType
+  assigneeId: String
 }
 
 """
@@ -280,46 +335,56 @@ Custom scalar for password validation
 """
 scalar Password
 
+scalar Name
+
 type Query {
-  healthCheck: ResponseMessage!
-  getUserById(userId: ID!): User!
-  getProjectById(projectId: ID!): Project!
+  getUserById(userId: ID!): User
+  getUserInfo: User
+  checkAuth: User
+  getUsersBySearch(search: String!): [User]!
   getTeamById(teamId: ID!): Team!
-  getIssueById(issueId: ID!): Issue!
-  getSprintById(id: ID!, projectId: ID!): Sprint!
-  getAllProjects: [Project]
-  getAllIssues(projectId: ID!): [Issue]
-  getAllSprints(projectId: ID!): [Sprint]!
+  getAllTeams: [Team]
   getAllUserTeams: [UserTeam]!
+  getProjectTeamsMembers(projectId: ID!): [User]
+  getIssueById(issueId: ID!, projectId: ID!): Issue!
+  getAllIssues(projectId: ID!, sprintId: String): [Issue]
+  getAllSprints(projectId: ID!): [Sprint]
+  getActiveSprint(projectId: ID!): Sprint
+  getSprintById(id: ID!, projectId: ID!): Sprint!
   getRecentProject: Project
-  getUserByEmail(email: String!): User!
-  getProjectTeamsMembers(projectId: ID!): [Team]
+  getAllProjects: [Project]
+  getProject(projectKey: String, projectId: String): Project
+  getProjectStat(projectId: ID!): ProjectStat
 }
 
 type Mutation {
-  createProject(input: CreateProjectInput!): Project!
+  createProject(input: CreateProjectInput!): ResponseMessage!
   createTeam(input: CreateTeamInput!): Team!
-  createIssue(input: CreateIssueInput!): Issue!
-  createSprint(input: CreateSprintInput!): Sprint!
+  createIssue(input: CreateIssueInput!): ResponseMessage!
+  createSprint(input: CreateSprintInput!): ResponseMessage!
   updateIssueStatus(
     projectId: ID!
     issueId: ID!
     status: IssueStatus!
   ): ResponseMessage!
   assineIssue(input: AssignIssueInput!): ResponseMessage!
-  signup(input: SignupInput!): AuthData!
-  login(input: LoginInput!): AuthData!
+  signup(input: SignupInput!): ResponseMessage!
+  login(input: LoginInput!): AuthData
   removeProject(projectId: ID!): ResponseMessage
   removeIssue(input: removeIssueInput!): ResponseMessage
   removeSprint(input: removeSprintInput!): ResponseMessage
   removeAssineeOfIssue(issueId: ID!): ResponseMessage
   removeTeam(teamId: ID!): ResponseMessage
-  addTeamMember(input: addTeamMemberInput!): Team!
+  addTeamMember(input: addTeamMemberInput!): UserTeam!
   logout: Boolean!
   removeTeamMember(input: removeTeamMemberInput!): Team!
   refreshToken(refreshToken: String!): ExtendSession!
   addIssueInSprint(input: addIssueInput!): ResponseMessage
   addProjectTeam(input: addProjectTeamInput!): ResponseMessage
+  sendVerificationLink(email: String!): ResponseMessage
+  verifyUser(token: String!): AuthData!
+  updateUserProfile(input: UpdateProfileInput!): ResponseMessage!
+  updateIssue(input: UpdateIssueInput!): ResponseMessage!
 }
 
 enum IssueStatus {
@@ -329,15 +394,15 @@ enum IssueStatus {
 }
 
 enum SprintStatus {
-  TODO
-  IN_PROGRESS
-  DONE
+  PLANNED
+  ACTIVE
+  COMPLETE
 }
 
 enum ProjectStatus {
-  TODO
-  IN_PROGRESS
-  DONE
+  PLANNED
+  ACTIVE
+  COMPLETE
 }
 
 enum Gender {
@@ -357,6 +422,52 @@ enum IssueType {
   STORY
   TASK
   BUG
+}
+
+enum IssuePriority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum ActivityAction {
+  LOGGED_TIME
+  SPRINT_CREATED
+  SPRINT_STARTED
+  SPRINT_COMPLETED
+  SPRINT_UPDATED
+  SPRINT_REMOVED
+  ISSUE_ADDED_TO_SPRINT
+  ISSUE_REMOVED_FROM_SPRINT
+  ISSUE_CREATED
+  ISSUE_UPDATED
+  ISSUE_DELETED
+  ISSUE_ASSIGNED
+  ISSUE_UNASSIGNED
+  ISSUE_STATUS_CHANGED
+  ISSUE_PRIORITY_CHANGED
+  PROJECT_CREATED
+  PROJECT_UPDATED
+  PROJECT_DELETED
+  PROJECT_TEAM_ADDED
+  PROJECT_TEAM_REMOVED
+  TEAM_CREATED
+  TEAM_UPDATED
+  TEAM_MEMBER_ADDED
+  TEAM_MEMBER_REMOVED
+  TEAM_MEMBER_ROLE_CHANGED
+  COMMENTED
+  COMMENT_DELETED
+}
+
+enum EntityType {
+  PROJECT
+  TEAM
+  SPRINT
+  ISSUE
+  COMMENT
+  USER
 }
 
 interface Error {

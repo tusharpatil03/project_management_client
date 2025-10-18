@@ -26,7 +26,6 @@ export type CreateIssueInput = {
   title: string;
   description?: string;
   type: IssueType;
-  parentId?: string;
   assigneeId?: string;
   projectId: string;
   dueDate: string;

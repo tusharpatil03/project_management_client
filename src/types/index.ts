@@ -13,9 +13,7 @@ export * from './sprint';
 export * from './team';
 export * from './activity';
 
-/**
- * GraphQL Types
- */
+
 export * from './inputs';
 export * from './responses';
 
@@ -30,5 +28,4 @@ declare global {
   };
 }
 
-// Ensure this is treated as a module
 export {};

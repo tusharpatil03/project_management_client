@@ -245,7 +245,8 @@ const GetMembers: React.FC<GetMembersProps> = ({
                             email={currentAssignee.email}
                           />
                           <span className="text-sm text-blue-800">
-                            {currentAssignee.firstName} {currentAssignee.lastName}
+                            {currentAssignee.firstName}{' '}
+                            {currentAssignee.lastName}
                           </span>
                         </div>
                       )

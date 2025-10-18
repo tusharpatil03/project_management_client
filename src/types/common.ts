@@ -1,6 +1,3 @@
-/**
- * Common enums used across the application
- */
 
 export enum Gender {
   MALE = "MALE",
@@ -40,9 +37,7 @@ export enum ProjectStatus {
 }
 
 
-/**
- * Common interfaces used across multiple modules
- */
+
 
 export interface Social {
   id?: string | null;

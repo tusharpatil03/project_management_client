@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { InterfaceIssue, InterfaceUser, InterfaceSprint } from '../../../types';
 import { IssueStatusBadge } from './IssueStatusBadge';
 import { Edit, Trash2 } from 'lucide-react';
