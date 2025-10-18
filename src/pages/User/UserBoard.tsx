@@ -8,12 +8,12 @@ import UserAbout from './UserAbout';
 import UserActivities from './UserActivities';
 import UserProjects from './UserProjects';
 import UpdateProfile from './UpdateProfile/UpdateProfile';
-import ErrorState from '../../components/ErrorState';
+import ErrorState from '../../components/Error/ErrorState';
 import LoadingState from '../../components/LoadingState';
 import ErrorBoundary, {
   withErrorBoundary,
-} from '../../components/ErrorBoundary/ErrorBoundary';
-import SmallFallback from '../../components/ErrorBoundary/SmallFallback';
+} from '../../components/Error/ErrorBoundary';
+import SmallFallback from '../../components/Error/SmallFallback';
 
 // Type definitions
 export interface UserData {

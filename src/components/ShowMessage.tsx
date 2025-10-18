@@ -1,3 +1,5 @@
+//Provider → Hook → Consumer → UI chain
+
 import { createPortal } from 'react-dom';
 import {
   createContext,
@@ -10,6 +12,7 @@ import {
 
 export type MessageType = 'success' | 'error' | 'warning' | 'info';
 
+//interface of the message
 interface Message {
   id: string;
   text: string;
@@ -22,9 +25,11 @@ interface ShowMessageProps {
   onClose: () => void;
 }
 
+// React component that will get render is message it trigged in context provider
 const ShowMessage: React.FC<ShowMessageProps> = ({ message, onClose }) => {
   const [isVisible, setIsVisible] = useState(false);
 
+  // if message state is changed by context proiders (showMessage)
   useEffect(() => {
     if (message) {
       setIsVisible(true);
@@ -93,6 +98,7 @@ const ShowMessage: React.FC<ShowMessageProps> = ({ message, onClose }) => {
     return icons[message.type];
   };
 
+  // this it the popup window for the message
   return createPortal(
     <div className="fixed top-4 right-4 z-50 max-w-md">
       <div className={getStyles()}>
@@ -119,6 +125,8 @@ const ShowMessage: React.FC<ShowMessageProps> = ({ message, onClose }) => {
   );
 };
 
+
+// type definition of context
 interface MessageContextType {
   showMessage: (text: string, type: MessageType, duration?: number) => void;
   showSuccess: (text: string, duration?: number) => void;
@@ -129,6 +137,7 @@ interface MessageContextType {
 
 const MessageContext = createContext<MessageContextType | undefined>(undefined);
 
+//useMessage() → gets the contextValue object.
 export const useMessage = () => {
   const context = useContext(MessageContext);
   if (!context) {
@@ -137,11 +146,13 @@ export const useMessage = () => {
   return context;
 };
 
+//message provider take a react component (Node) as a input
 export const MessageProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
   const [messages, setMessages] = useState<Message[]>([]);
 
+  //updates provider state (messages[]).
   const showMessage = useCallback(
     (text: string, type: MessageType, duration?: number) => {
       const id = Date.now().toString();
@@ -151,18 +162,23 @@ export const MessageProvider: React.FC<{ children: ReactNode }> = ({
     []
   );
 
+  //onclose -> after timeout
   const removeMessage = useCallback((id: string) => {
     setMessages((prev) => prev.filter((msg) => msg.id !== id));
   }, []);
 
   const contextValue: MessageContextType = {
     showMessage,
+
+    // this all triggers showMessage() inside the provider
     showSuccess: (text, duration) => showMessage(text, 'success', duration),
     showError: (text, duration) => showMessage(text, 'error', duration),
     showWarning: (text, duration) => showMessage(text, 'warning', duration),
     showInfo: (text, duration) => showMessage(text, 'info', duration),
   };
 
+  //It returns children → all your other components continue rendering normally.
+  // It also renders UI (ShowMessage) for visible messages on top of everything else.
   return (
     <MessageContext.Provider value={contextValue}>
       {children}

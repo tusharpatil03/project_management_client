@@ -3,10 +3,10 @@ import Avatar from '../../../components/Profile/Avatar';
 import Members from '../../../components/Team/Members';
 import LoadingState from '../../../components/LoadingState';
 import { useCallback, useEffect, useState } from 'react';
-import { ASSIGN_ISSUE, REMOVE_ASSIGNEE } from '../../../graphql/Mutation/issue';
-import { useMutation, useQuery } from '@apollo/client';
 import { useMessage } from '../../../components/ShowMessage';
-import { GET_ALL_MEMBERS } from '../../../graphql/Query/team';
+import { useProjectMembers } from '../../../hooks/ProjectMember';
+import { UserTeam } from '../../../types';
+import { useRemoveAssignee, useAssignee } from '../../../hooks/AssigneIssue';
 
 interface GetMembersProps {
   projectId: string;
@@ -23,67 +23,24 @@ const GetMembers: React.FC<GetMembersProps> = ({
   currentAssigneeId,
   onAssignmentChange,
 }) => {
-  const [searchTerm, setSearchTerm] = useState('');
   const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
   const [isAssigning, setIsAssigning] = useState(false);
   const { showSuccess, showError } = useMessage();
 
-  const { data, loading, error, refetch } = useQuery(GET_ALL_MEMBERS, {
-    variables: { projectId },
-    errorPolicy: 'all',
-    notifyOnNetworkStatusChange: true,
-  });
+  const {
+    members,
+    filteredMembers,
+    loading,
+    error,
+    refetch,
+    searchTerm,
+    setSearchTerm,
+  } = useProjectMembers();
 
-  const [changeAssignee] = useMutation(ASSIGN_ISSUE, {
-    errorPolicy: 'all',
-    onCompleted: () => {
-      const assignedMember = members?.find(
-        (m: any) => m.id === selectedMemberId
-      );
-      const memberName = assignedMember
-        ? `${assignedMember.firstName} ${assignedMember.lastName}`
-        : 'Unknown';
+  const { changeAssignee, assignError, assignLoading } = useAssignee();
 
-      showSuccess(`Issue successfully assigned to ${memberName}`);
-      onAssignmentChange?.(selectedMemberId!, memberName);
-      handleClose();
-      setIsAssigning(false);
-    },
-    onError: (error) => {
-      showError(error.message || 'Failed to assign issue');
-    },
-  });
-
-  const [removeAssignee, { loading: removeAssigneeLoading }] = useMutation(
-    REMOVE_ASSIGNEE,
-    {
-      errorPolicy: 'all',
-      onCompleted: (data) => {
-        if (data?.removeAssineeOfIssue?.success) {
-          showSuccess('Issues Unassigned');
-          handleClose();
-        } else {
-          showError(
-            data?.removeAssineeOfIssue?.message || 'Failed to assign issue'
-          );
-        }
-        setIsAssigning(false);
-      },
-      onError: (error) => {
-        showError(error.message || 'Failed to remove Assignee');
-      },
-    }
-  );
-
-  const members = data?.getProjectTeamsMembers || [];
-
-  // Filter members based on search term
-  const filteredMembers = members.filter((member: any) => {
-    const fullName = `${member.firstName} ${member.lastName}`.toLowerCase();
-    const email = member.email?.toLowerCase() || '';
-    const search = searchTerm.toLowerCase();
-    return fullName.includes(search) || email.includes(search);
-  });
+  const { removeAssignee, removeAssigneErr, removeAssigneeLoad } =
+    useRemoveAssignee();
 
   const handleMemberClick = useCallback(
     (memberId: string) => {
@@ -114,7 +71,23 @@ const GetMembers: React.FC<GetMembersProps> = ({
     setIsAssigning(true);
     try {
       // onCompleted of the mutation will handle UI updates and parent notification
-      await removeAssignee({ variables: { issueId } });
+      await removeAssignee({
+        variables: { issueId },
+        onCompleted: (data) => {
+          if (data?.removeAssineeOfIssue?.success) {
+            showSuccess('Issues Unassigned');
+            handleClose();
+          } else {
+            showError(
+              data?.removeAssineeOfIssue?.message || 'Failed to assign issue'
+            );
+          }
+          setIsAssigning(false);
+        },
+        onError: (error) => {
+          showError(error.message || 'Failed to remove Assignee');
+        },
+      });
     } catch (error) {
       showError('Failed to unassign issue');
       setIsAssigning(false);
@@ -136,6 +109,18 @@ const GetMembers: React.FC<GetMembersProps> = ({
           },
         },
       });
+
+      // Component-specific logic
+      const assignedMember = members.find(
+        (m: UserTeam) => m.id === selectedMemberId
+      );
+      const memberName = assignedMember
+        ? `${assignedMember.firstName} ${assignedMember.lastName}`
+        : 'Unknown';
+
+      showSuccess(`Issue successfully assigned to ${memberName}`);
+      onAssignmentChange?.(selectedMemberId, memberName);
+      handleClose();
     } catch (error) {
       console.error('Assignment error:', error);
       setIsAssigning(false);
@@ -164,7 +149,7 @@ const GetMembers: React.FC<GetMembersProps> = ({
     }
   }, []);
 
-  if (loading || removeAssigneeLoading) {
+  if (loading || removeAssigneeLoad) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-white rounded-xl p-8 max-w-md w-full mx-4">

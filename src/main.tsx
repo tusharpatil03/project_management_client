@@ -7,7 +7,7 @@ import { ApolloProvider } from '@apollo/client';
 import client from './apolloClient.tsx';
 import { AuthProvider } from './contexts/AuthContext';
 import { MessageProvider } from './components/ShowMessage.tsx';
-import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
+import ErrorBoundary from './components/Error/ErrorBoundary.tsx';
 
 const fallbackLoader = <div className="loader"></div>;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { InterfaceIssue } from '../../../types';
 import { useMutation } from '@apollo/client';
 import { UPDATE_ISSUE } from '../../../graphql/Mutation/issue';
-import CreateTab from '../../../components/CreateElements/CreateIssueCard';
+import CreateTab from '../../../components/Cards/CreateIssueCard';
 import { useMessage } from '../../../components/ShowMessage';
 import { IssueDetailsForm } from './';
 import { IssueMetadata } from './';

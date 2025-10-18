@@ -8,8 +8,8 @@ import { useDashboard } from '../Dashboard/DashBoard';
 import Button from '../../components/Button/Button';
 
 import { InterfaceTeam } from '../../types/team';
-import ErrorState from '../../components/ErrorState';
-import { withErrorBoundary } from '../../components/ErrorBoundary/ErrorBoundary';
+import ErrorState from '../../components/Error/ErrorState';
+import { withErrorBoundary } from '../../components/Error/ErrorBoundary';
 
 const TeamBoard = () => {
   const navigate = useNavigate();

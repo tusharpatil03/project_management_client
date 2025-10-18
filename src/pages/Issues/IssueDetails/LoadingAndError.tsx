@@ -1,6 +1,6 @@
 import React from 'react';
 import SharedLoadingState from '../../../components/LoadingState';
-import SharedErrorState from '../../../components/ErrorState';
+import SharedErrorState from '../../../components/Error/ErrorState';
 
 // Thin wrappers to keep the same signatures used across the IssueDetails folder
 export const LoadingState: React.FC<{ message?: string }> = ({ message }) => (
