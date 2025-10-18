@@ -1,5 +1,5 @@
 import authPageImage from '../../assets/authPageImage.png';
-import { SignUp } from '../../components/Auth/SignupTab';
+import { AuthTab } from './AuthTab';
 
 function Auth() {
   return (
@@ -17,12 +17,10 @@ function Auth() {
         {/* Auth Tab Section */}
         <div className="md:w-[45%] flex items-center justify-center bg-white p-10">
           <div className="w-full max-w-lg">
-            <h2 className="text-4xl font-extrabold text-blue-700 mb-8 text-center drop-shadow-md">
+            <h2 className="text-4xl font-extrabold text-blue-700 mb-8 text-center">
               Welcome to Agile Platform
             </h2>
-            <div className="bg-blue-50 p-8 rounded-3xl shadow-md border border-blue-200">
-              <SignUp />
-            </div>
+            <AuthTab/>
             <p className="text-sm text-gray-400 mt-6 text-center italic">
               Empowering your productivity with agility.
             </p>

@@ -1,12 +1,10 @@
 import { useState } from 'react';
 import { Login } from './Logintab';
 import { SignUp } from './SignupTab';
-//import AuthFormWrapper from './FormWrapper';
 
 export function AuthTab() {
   const [tab, setTab] = useState<'LOGIN' | 'SIGNUP'>('LOGIN');
   const isLogin = tab === 'LOGIN';
-
 
   return (
     <div className="max-w-md mx-auto p-8 bg-white rounded-xl shadow-lg">

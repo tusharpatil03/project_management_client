@@ -36,7 +36,7 @@ const EmailVerification: React.FC = () => {
           throw new Error('No response from server during verification.');
         }
 
-        if (result.user.isVerified) {
+        if (result?.accessToken && result?.refreshToken) {
           const { accessToken, refreshToken } = result;
           setRefreshToken(refreshToken);
           auth.setAccessToken(accessToken);
@@ -50,9 +50,7 @@ const EmailVerification: React.FC = () => {
       }
     };
 
-    if (token) {
-      verifyEmail();
-    }
+    verifyEmail();
   }, [token]);
 
   return (

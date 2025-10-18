@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AuthTab } from '../../components/Auth/AuthTab';
+import { AuthTab } from '../Auth/AuthTab';
 import Navbar from '../../components/Navbar';
 import LoadingState from '../../components/LoadingState';
 import Demo from './Demo';

@@ -1,18 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LOGIN_USER } from '../../graphql/Mutation/user';
-import { LoginInput, AuthResponse } from '../../types/';
+import { LoginInput, AuthResponse } from '../../types';
 import { useMutation } from '@apollo/client';
-import AuthInputField from './AuthinputFields';
+import AuthInputField from '../../components/Auth/AuthinputFields';
 import { useAuth } from '../../contexts/AuthContext';
 import { setRefreshToken, UserData } from '../../utils/storage';
-import { useMessage } from '../ShowMessage';
+import { useMessage } from '../../components/ShowMessage';
 
 export function Login() {
   const [formData, setFormData] = useState<LoginInput>({
     email: '',
     password: '',
   });
+  const [showCheckEmail, setShowCheckEmail] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -24,7 +25,7 @@ export function Login() {
   };
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { showError, showSuccess, showInfo } = useMessage();
+  const { showInfo, showSuccess} = useMessage();
 
   const auth = useAuth();
 
@@ -49,7 +50,8 @@ export function Login() {
       console.error('Login error:', err);
 
       if (err.message === 'EMAIL_NOT_VERIFIED') {
-        navigate('/signup/checkEmail');
+        showInfo("please verify your email first, check your inbox");
+        setShowCheckEmail(true);
       }
     }
   };

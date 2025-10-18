@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { SIGNUP_USER } from '../../graphql/Mutation/user';
 import { SignupInput, AuthResponse } from '../../types/';
 import { useMutation } from '@apollo/client';
-import AuthInputField from './AuthinputFields';
+import AuthInputField from '../../components/Auth/AuthinputFields';
 
 export function SignUp() {
   const [step, setStep] = useState<1 | 2>(1);

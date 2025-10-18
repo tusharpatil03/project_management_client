@@ -36,7 +36,7 @@ const Navbar = ({ onChange }: any) => {
             </Link>
             <Link
               onClick={onChange}
-              to="/signup"
+              to="/auth"
               className="text-sm text-white bg-blue-600 px-4 py-2 rounded hover:bg-blue-700"
             >
               Sign Up
@@ -94,7 +94,7 @@ const Navbar = ({ onChange }: any) => {
             Sign In
           </Link>
           <Link
-            to="/signup"
+            to="/auth"
             className="block text-white bg-blue-600 px-4 py-2 rounded text-sm text-center hover:bg-blue-700"
             onClick={toggleMenu}
           >

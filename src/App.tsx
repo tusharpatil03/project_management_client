@@ -17,16 +17,14 @@ import ProjectTimeline from './pages/Timeline/TimeLine';
 import ProjectRedirect from './pages/Dashboard/Redirect';
 import TeamDetails from './pages/Team/TeamDetails/TeamDetails';
 import CreateTeam from './pages/Team/CreateTeam';
-import CheckEmail from './components/Auth/CheckEmail';
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<LandingPage />}></Route>
-        <Route path="/signup" element={<Auth />} />
-        <Route path="/signup/checkEmail" element={<CheckEmail />} />
-        <Route path="/signup/verify" element={<EmailVerification />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/verify" element={<EmailVerification />} />
 
         <Route element={<SecuredRoutes />}>
           <Route path="/projects/create" element={<CreateProject />}></Route>
