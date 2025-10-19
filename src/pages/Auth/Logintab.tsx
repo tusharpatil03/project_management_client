@@ -1,23 +1,15 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { LOGIN_USER } from '../../graphql/Mutation/user';
-import { LoginInput, AuthResponse } from '../../types';
-import { useMutation } from '@apollo/client';
+import { LoginInput } from '../../types';
 import AuthInputField from '../../components/Auth/AuthinputFields';
-import { useAuth } from '../../contexts/AuthContext';
-import { setRefreshToken, UserData } from '../../utils/storage';
-import { useMessage } from '../../components/ShowMessage';
+import { useLogin } from '../../hooks/login';
 
 export function Login() {
   const [formData, setFormData] = useState<LoginInput>({
     email: '',
     password: '',
   });
-  const [showCheckEmail, setShowCheckEmail] = useState<boolean>(false);
 
-  const navigate = useNavigate();
-
-  const [signUser, { loading, error }] = useMutation<AuthResponse>(LOGIN_USER);
+  const { login, loading, error } = useLogin();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -25,36 +17,6 @@ export function Login() {
   };
 
   const [showPassword, setShowPassword] = useState<boolean>(false);
-  const { showInfo, showSuccess} = useMessage();
-
-  const auth = useAuth();
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const res = await signUser({ variables: { input: formData } });
-
-      const accessToken = res?.data?.login.accessToken;
-      const refreshToken = res?.data?.login.refreshToken;
-
-      if (!accessToken || !refreshToken) {
-        throw new Error('Token not received');
-      }      
-
-      setRefreshToken(refreshToken);
-      UserData.setEmail(formData.email);
-      auth.setAccessToken(accessToken);
-      showSuccess('Login successful');
-      navigate('/projects');
-    } catch (err: any) {
-      console.error('Login error:', err);
-
-      if (err.message === 'EMAIL_NOT_VERIFIED') {
-        showInfo("please verify your email first, check your inbox");
-        setShowCheckEmail(true);
-      }
-    }
-  };
 
   const isFormValid = (): boolean => {
     return formData.email.trim() !== '' && formData.password.trim() !== '';
@@ -62,7 +24,13 @@ export function Login() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={(e: React.FormEvent) => {
+          e.preventDefault();
+          login(formData);
+        }}
+        className="space-y-4"
+      >
         {/* Email Input */}
         <AuthInputField
           label="Email"
@@ -104,7 +72,7 @@ export function Login() {
         {/* Error Message */}
         {error && (
           <p className="text-sm text-red-500 text-center mt-2">
-            {error.message.slice(0,100)}
+            {error?.message.toLowerCase() ?? 'Something went wrong'}
           </p>
         )}
       </form>

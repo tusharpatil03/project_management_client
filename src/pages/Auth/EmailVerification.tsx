@@ -1,12 +1,11 @@
 import React, { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useMutation } from '@apollo/client';
-import { VERIFY_USER } from '../../graphql/Mutation/user';
 import LoadingState from '../../components/LoadingState';
-import { InterfaceAuth } from '../../types/';
 import { useAuth } from '../../contexts/AuthContext';
 import { setRefreshToken } from '../../utils/storage';
 import { useMessage } from '../../components/ShowMessage';
+import { useVerify } from '../../hooks/verifyUser';
+
 
 const EmailVerification: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -15,9 +14,7 @@ const EmailVerification: React.FC = () => {
 
   const token = searchParams.get('token');
 
-  const [verifyUser, { loading }] = useMutation<{
-    verifyUser: InterfaceAuth;
-  }>(VERIFY_USER);
+  const {verifyUser, error, loading} = useVerify();
 
   const auth = useAuth();
 

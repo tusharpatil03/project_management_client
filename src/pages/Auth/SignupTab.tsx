@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { SIGNUP_USER } from '../../graphql/Mutation/user';
-import { SignupInput, AuthResponse } from '../../types/';
-import { useMutation } from '@apollo/client';
+import { SignupInput } from '../../types/';
 import AuthInputField from '../../components/Auth/AuthinputFields';
+import { useSignup } from '../../hooks/signup';
 
 export function SignUp() {
   const [step, setStep] = useState<1 | 2>(1);
@@ -16,9 +14,6 @@ export function SignUp() {
   });
 
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-
-  const [signUser, { loading, error }] = useMutation<AuthResponse>(SIGNUP_USER);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -71,32 +66,17 @@ export function SignUp() {
       : formData.firstName !== '' && formData.lastName !== '';
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (step === 1) {
-      setStep(2);
-      return;
-    }
-
-    try {
-      const res = await signUser({ variables: { input: formData } });
-
-      if (!res.data?.signup.success) {
-        throw new Error('Internal Server Error');
-      }
-
-    } catch (err) {
-      console.error('SignUp error:', err);
-      throw new Error('Internal Server Error');
-    }
-
-    navigate("/signup/checkEmail");
-  };
+  const { signUp, error, loading } = useSignup();
 
   return (
     <div>
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={(e: React.FormEvent) => {
+          e.preventDefault();
+          signUp(step, setStep, formData);
+        }}
+        className="space-y-4"
+      >
         {step === 1 ? (
           <>
             <AuthInputField
