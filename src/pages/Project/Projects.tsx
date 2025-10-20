@@ -1,9 +1,10 @@
-import React from 'react';
-import { useQuery } from '@apollo/client';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from '@apollo/client';
 import { GET_ALL_PROJECTS } from '../../graphql/Query/project';
 import { InterfaceProject, ProjectStatus } from '../../types/';
 import { useNavigate } from 'react-router-dom';
 import { useMessage } from '../../components/ShowMessage';
+import { REMOVE_PROJECT } from '../../graphql/Mutation/project';
 
 const getStatusColor = (status: ProjectStatus) => {
   const colors: Record<ProjectStatus, string> = {
@@ -14,13 +15,51 @@ const getStatusColor = (status: ProjectStatus) => {
   return colors[status] || 'bg-gray-100 text-gray-800';
 };
 
+function useDeleteProject() {
+  const [remove] = useMutation(REMOVE_PROJECT);
+
+  const { showError, showSuccess } = useMessage();
+
+  const deleteProject = async (projectId: string) => {
+    try {
+      const res = await remove({
+        variables: {
+          projectId: projectId,
+        },
+      });
+
+      showSuccess("Project Deleted");
+    } catch (e) {
+      showError('Something went wrong');
+    }
+  };
+
+  return { deleteProject };
+}
+
+interface AllProjectRes {
+  getAllProjects: InterfaceProject[];
+}
+
 const ProjectTable: React.FC = () => {
-  const { data, loading, error } = useQuery(GET_ALL_PROJECTS);
+  const [projects, setProjects] = useState<InterfaceProject[]>([]);
+  const { data, loading, error } = useQuery<AllProjectRes>(GET_ALL_PROJECTS);
+
+  const removeFromSate = (projectId: string) => {
+    setProjects((prev) => {
+      return prev.filter((p) => p.id === projectId);
+    });
+  };
+
+  useEffect(() => {
+    setProjects(data?.getAllProjects || []);
+  }, [data]);
+
   const navigate = useNavigate();
 
-  const projects: InterfaceProject[] = data?.getAllProjects || [];
-
   const { showError } = useMessage();
+
+  const { deleteProject } = useDeleteProject();
 
   if (loading) {
     return (
@@ -165,6 +204,20 @@ const ProjectTable: React.FC = () => {
                               }}
                             >
                               View
+                              <span className="sr-only">, {project.name}</span>
+                            </button>
+                          </td>
+                          <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                            <button
+                              type="button"
+                              className="text-blue-600 hover:text-blue-900"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                deleteProject(project?.id);
+                                removeFromSate(project?.id);
+                              }}
+                            >
+                              Delete
                               <span className="sr-only">, {project.name}</span>
                             </button>
                           </td>
