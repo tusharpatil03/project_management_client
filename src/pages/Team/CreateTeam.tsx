@@ -16,7 +16,7 @@ function CreateTeam() {
   const [createTeam, { loading }] = useMutation(CREATE_TEAM, {
     onCompleted: () => {
       setTimeout(() => {
-        navigate('/poeple/teams');
+        navigate('/people/teams');
       }, 100);
     },
   });
