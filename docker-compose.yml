@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_PUBLIC_PATH: '/'
+    ports:
+      - "3000:80"
+    env_file:
+      - .env
+    restart: unless-stopped
