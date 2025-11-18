@@ -8,7 +8,7 @@ const Demo = () => {
           <h2 className="text-4xl font-bold text-gray-800 mb-6">
             Powerful tools to manage your workflow
           </h2>
-          <p className="text-gray-600 mb-6 leading-relaxed">
+          <p className="text-gray-600 mb-6 leading-relaxed text-lg">
             Collaborate seamlessly, assign tasks, track progress, and stay
             organized with our intuitive dashboard. Designed to adapt to teams
             of any size.
@@ -35,12 +35,12 @@ const Demo = () => {
               },
             ].map((item, index) => (
               <li key={index} className="flex items-start gap-3">
-                <div className="text-2xl">{item.icon}</div>
-                <div>
-                  <p className="font-semibold text-gray-800">{item.title}</p>
-                  <p className="text-gray-500 text-sm">{item.description}</p>
-                </div>
-              </li>
+                  <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center text-xl">{item.icon}</div>
+                  <div>
+                    <p className="font-semibold text-gray-800">{item.title}</p>
+                    <p className="text-gray-500 text-sm">{item.description}</p>
+                  </div>
+                </li>
             ))}
           </ul>
         </div>
@@ -49,7 +49,7 @@ const Demo = () => {
           <img
             src={demoImg}
             alt="Demo Screenshot"
-            className="w-full rounded-3xl shadow-2xl transform hover:scale-105 transition duration-500 ease-in-out"
+              className="w-full rounded-3xl shadow-2xl transform hover:scale-105 transition duration-500 ease-in-out max-h-[520px] object-cover"
           />
           <span className="absolute bottom-4 right-4 bg-white px-3 py-1 text-xs rounded-full shadow text-blue-600 font-medium">
             Live Preview

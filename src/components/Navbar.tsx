@@ -21,10 +21,10 @@ const Navbar = ({ onChange }: any) => {
             <Link to="/" className="text-gray-700 hover:text-blue-600">
               Home
             </Link>
-            <Link to="/features" className="text-gray-700 hover:text-blue-600">
+            <Link to="/" className="text-gray-700 hover:text-blue-600">
               Features
             </Link>
-            <Link to="/pricing" className="text-gray-700 hover:text-blue-600">
+            <Link to="/" className="text-gray-700 hover:text-blue-600">
               Pricing
             </Link>
             <Link
@@ -73,7 +73,7 @@ const Navbar = ({ onChange }: any) => {
             Home
           </Link>
           <Link
-            to="/features"
+            to="/featuresz"
             className="block text-gray-700 hover:text-blue-600"
             onClick={toggleMenu}
           >
