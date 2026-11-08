@@ -2,33 +2,74 @@ name: Continuous Integration
 
 # 1. Define when the workflow will run (Triggers)
 on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 # 2. Define the execution environment and sequential tasks
 jobs:
-  build-and-test:
-    name: Build and Test Application
-    runs-on: ubuntu-latest # Uses a GitHub-hosted virtual machine
+    build-and-test:
+        name: Build and Test Application
+        runs-on: ubuntu-latest # Uses a GitHub-hosted virtual machine
 
-    steps:
-      # Step 1: Download a copy of your repository code onto the runner
-      - name: Checkout Code
-        uses: actions/checkout@v4
+        steps:
+            # Step 1: Download a copy of your repository code onto the runner
+            - name: Checkout Code
+              uses: actions/checkout@v4
 
-      # Step 2: Provision the required runtime environment (e.g., Node.js)
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20'
-          cache: 'npm' # Speeds up subsequent runs by caching dependencies
+            # Step 2: Provision the required runtime environment (e.g., Node.js)
+            - name: Setup Node.js
+              uses: actions/setup-node@v3
+              with:
+                  node-version: "22"
+                  cache: "npm" # Speeds up subsequent runs by caching dependencies
 
-      # Step 3: Install application dependencies cleanly
-      - name: Install Dependencies
-        run: npm ci
+            # Step 3: Install application dependencies cleanly
+            - name: Install Dependencies
+              run: npm ci
 
-      # Step 4: Run your compiler/build tool (optional)
-      - name: Build Application
-        run: npm run build --if-present
+            # Step 4: Run your compiler/build tool (optional)
+            - name: Build Application
+              run: npm run build
+
+    deploy-client:
+        name: Deploy client to Vercel
+        needs: build-and-test
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+        runs-on: ubuntu-latest
+        env:
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v4
+
+            - name: Install npm
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+
+            - name: Set up Node.js 22
+              uses: actions/setup-node@v4
+              with:
+                  node-version: "22"
+                  cache: "npm"
+                  cache-dependency-path: package-lock.json
+
+            - name: Install Vercel CLI
+              run: npm install --global vercel@latest
+
+            - name: Pull Vercel environment
+              working-directory: ./
+              run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
+
+            - name: Build project artifacts
+              working-directory: ./
+              run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+
+            - name: Deploy prebuilt artifacts
+              working-directory: ./
+              run: vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
