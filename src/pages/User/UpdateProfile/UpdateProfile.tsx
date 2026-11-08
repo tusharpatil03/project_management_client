@@ -44,9 +44,9 @@ const SOCIAL_PLATFORMS = [
   { key: 'twitter', label: 'Twitter', placeholder: 'twitter.com/username' },
 ] as const;
 
-const PHONE_REGEX = /^[\d\s\-\+\(\)]+$/;
+const PHONE_REGEX = /^[\d\s\-+()]+$/;
 const URL_REGEX =
-  /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+  /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
 const NAME_REGEX = /^[a-zA-Z\s'-]+$/;
 
 const UpdateProfile: React.FC<UpdateProfileProps> = ({

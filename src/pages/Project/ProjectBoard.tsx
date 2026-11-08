@@ -55,7 +55,7 @@ const ProjectBoard = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { showError, showSuccess } = useMessage();
+  const { showError } = useMessage();
 
   const getActiveTabFromPath = (): TabType => {
     const path = location.pathname;
@@ -68,7 +68,7 @@ const ProjectBoard = () => {
 
   const activeTab = getActiveTabFromPath();
 
-  const { data, loading, error, refetch } = useQuery(GET_PROJECT, {
+  const { data, loading, error } = useQuery(GET_PROJECT, {
     errorPolicy: 'all',
     notifyOnNetworkStatusChange: true,
     variables: {
@@ -96,7 +96,7 @@ const ProjectBoard = () => {
   const handleCreateSuccess = useCallback(() => {
     setCreateTab(false);
     navigate(`/projects/${projectId}/issues`);
-  }, [projectId, navigate, createTab, refetch]);
+  }, [projectId, navigate]);
 
   if (loading) {
     return <LoadingState size="lg" />;

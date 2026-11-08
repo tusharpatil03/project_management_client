@@ -83,8 +83,6 @@ export const MemberCard = ({
     }
   };
 
-  
-
   return (
     <div
       className={`p-4 rounded-lg border transition-all duration-200 hover:shadow-md ${
@@ -96,7 +94,7 @@ export const MemberCard = ({
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center space-x-3 flex-1 min-w-0">
           <div className="relative flex-shrink-0">
-            {false ? (
+            {teamUser.user.profile?.avatar ? (
               <img
                 className={`w-12 h-12 rounded-full object-cover ${
                   isCreator ? 'ring-4 ring-purple-200' : 'ring-2 ring-gray-200'

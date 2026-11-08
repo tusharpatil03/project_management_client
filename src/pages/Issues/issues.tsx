@@ -12,13 +12,14 @@ interface ChildProps {
 const IssueBoard: React.FC<ChildProps> = ({ project }) => {
   const [issues, setIssues] = useState<InterfaceIssue[]>([]);
   const [loader, setLoader] = useState(true);
+  const [page, setPage] = useState(1);
 
   const projectId = project.id;
 
   const { error, refetch } = useQuery<{ getAllIssues: InterfaceIssue[] }>(
     GET_ALL_ISSUES,
     {
-      variables: { projectId },
+      variables: { projectId, page: page, pageSize: 10 },
       skip: true,
     }
   );
@@ -59,7 +60,11 @@ const IssueBoard: React.FC<ChildProps> = ({ project }) => {
 
   return (
     <div>
-      <IssueTable issues={issues} projectId={projectId} onIssueUpdate={refetch}/>
+      <IssueTable
+        issues={issues}
+        projectId={projectId}
+        onIssueUpdate={refetch}
+      />
     </div>
   );
 };

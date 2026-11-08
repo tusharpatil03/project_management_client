@@ -10,9 +10,7 @@ import UserProjects from './UserProjects';
 import UpdateProfile from './UpdateProfile/UpdateProfile';
 import ErrorState from '../../components/Error/ErrorState';
 import LoadingState from '../../components/LoadingState';
-import ErrorBoundary, {
-  withErrorBoundary,
-} from '../../components/Error/ErrorBoundary';
+import ErrorBoundary from '../../components/Error/ErrorBoundary';
 import SmallFallback from '../../components/Error/SmallFallback';
 
 // Type definitions
@@ -131,7 +129,7 @@ const UserBoard: React.FC = () => {
       await refetch();
       console.log('Profile refreshed');
     } catch (error) {
-      console.error('Failed to refresh profile');
+      console.error('Failed to refresh profile', error);
     }
   }, [refetch]);
 
@@ -358,29 +356,4 @@ const UserBoard: React.FC = () => {
   );
 };
 
-const PageFallback = ({
-  error,
-  resetError,
-}: {
-  error?: Error;
-  resetError?: () => void;
-}) => (
-  <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
-    <ErrorState
-      title="User Page Error"
-      message={
-        error?.message || 'Something went wrong while loading the user page.'
-      }
-      onRetry={() => {
-        resetError?.();
-      }}
-      showRetry
-    />
-  </div>
-);
-
-export default withErrorBoundary(UserBoard, {
-  fallbackRender: ({ error, resetError }) => (
-    <PageFallback error={error} resetError={resetError} />
-  ),
-});
+export default UserBoard;

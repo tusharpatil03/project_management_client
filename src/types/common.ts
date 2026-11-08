@@ -1,7 +1,7 @@
 
 export enum Gender {
-  MALE = "MALE",
-  FEMALE = "FEMALE"
+  MALE = "Male",
+  FEMALE = "Female"
 }
 
 export enum Status {

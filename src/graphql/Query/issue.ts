@@ -33,8 +33,8 @@ export const GET_ISSUE_BY_ID = gql`
 `;
 
 export const GET_ALL_ISSUES = gql`
-  query GetAllIssues($projectId: ID!) {
-    getAllIssues(projectId: $projectId) {
+  query GetAllIssues($projectId: ID!, $page: Int!, $pageSize: Int!) {
+    getAllIssues(projectId: $projectId, page: $page, pageSize: $pageSize) {
       id
       title
       description

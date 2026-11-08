@@ -161,7 +161,7 @@ export const Sidebar = ({ isOpen, onClose }: SidebarProps) => {
     };
 
     expandParentItems();
-  }, [currentPath, recentProjects, starredProjects]);
+  }, [currentPath, recentProjects, starredProjects, navItems, location.pathname]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
